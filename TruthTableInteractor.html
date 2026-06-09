@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wahrheitstabellen-Interaktor - AP Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .truth-table th, .truth-table td {
+            border: 1px solid #334155;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .truth-table th {
+            background-color: #1e293b;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .val-true { color: #4ade80; font-weight: bold; } /* green-400 */
+        .val-false { color: #f87171; font-weight: bold; } /* red-400 */
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-pink-400">🔢</span> Wahrheitstabellen-Interaktor
+                </h1>
+            </div>
+            <div class="text-sm text-slate-400">Logik in C#</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Left: Builder -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col gap-6">
+
+                <div>
+                    <h2 class="text-lg font-bold text-white mb-2">Ausdruck (Expression)</h2>
+                    <p class="text-sm text-slate-400 mb-4">Wähle eine vordefinierte Logik-Operation oder wende De Morgan an.</p>
+
+                    <select id="exprSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 font-mono transition-colors">
+                        <optgroup label="Grundlagen">
+                            <option value="A && B">A && B (AND)</option>
+                            <option value="A || B">A || B (OR)</option>
+                            <option value="!A">!A (NOT)</option>
+                            <option value="A ^ B">A ^ B (XOR)</option>
+                        </optgroup>
+                        <optgroup label="De Morgan'sche Gesetze">
+                            <option value="!(A && B)">!(A && B)  [= !A || !B]</option>
+                            <option value="!(A || B)">!(A || B)  [= !A && !B]</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="bg-[#0d1117] rounded-xl border border-slate-700 p-6 flex-grow flex items-center justify-center">
+                    <div id="visualExpr" class="text-3xl font-bold font-mono text-pink-400 tracking-wider">
+                        A && B
+                    </div>
+                </div>
+
+                <div id="deMorganHint" class="hidden bg-slate-800/50 border border-slate-700 rounded-lg p-4 text-sm">
+                    <span class="text-pink-400 font-bold mb-1 block">De Morgan Regel angewendet:</span>
+                    <span id="deMorganEquivalent" class="font-mono text-slate-300"></span>
+                </div>
+
+            </div>
+
+            <!-- Right: Truth Table -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    Wahrheitstabelle
+                </h2>
+
+                <div class="overflow-x-auto flex-grow">
+                    <table class="truth-table w-full text-sm font-mono" id="truthTable">
+                        <thead>
+                            <tr id="ttHead">
+                                <!-- Headers injected via JS -->
+                            </tr>
+                        </thead>
+                        <tbody id="ttBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const exprSelect = document.getElementById('exprSelect');
+        const visualExpr = document.getElementById('visualExpr');
+        const ttHead = document.getElementById('ttHead');
+        const ttBody = document.getElementById('ttBody');
+        const deMorganHint = document.getElementById('deMorganHint');
+        const deMorganEquivalent = document.getElementById('deMorganEquivalent');
+
+        function generateTable(expr) {
+            ttHead.innerHTML = '';
+            ttBody.innerHTML = '';
+
+            let variables = [];
+            let columns = [];
+            let rows = [];
+
+            // Setup based on expression
+            if (expr === '!A') {
+                variables = ['A'];
+                columns = ['A', '!A'];
+                rows = [[true], [false]];
+                hideDeMorgan();
+            } else if (expr === 'A && B') {
+                variables = ['A', 'B'];
+                columns = ['A', 'B', 'A && B'];
+                rows = [[true, true], [true, false], [false, true], [false, false]];
+                hideDeMorgan();
+            } else if (expr === 'A || B') {
+                variables = ['A', 'B'];
+                columns = ['A', 'B', 'A || B'];
+                rows = [[true, true], [true, false], [false, true], [false, false]];
+                hideDeMorgan();
+            } else if (expr === 'A ^ B') {
+                variables = ['A', 'B'];
+                columns = ['A', 'B', 'A ^ B'];
+                rows = [[true, true], [true, false], [false, true], [false, false]];
+                hideDeMorgan();
+            } else if (expr === '!(A && B)') {
+                variables = ['A', 'B'];
+                columns = ['A', 'B', 'A && B', '!(A && B)', '!A || !B'];
+                rows = [[true, true], [true, false], [false, true], [false, false]];
+                showDeMorgan('!(A && B)', '!A || !B');
+            } else if (expr === '!(A || B)') {
+                variables = ['A', 'B'];
+                columns = ['A', 'B', 'A || B', '!(A || B)', '!A && !B'];
+                rows = [[true, true], [true, false], [false, true], [false, false]];
+                showDeMorgan('!(A || B)', '!A && !B');
+            }
+
+            // Draw Headers
+            columns.forEach(col => {
+                const th = document.createElement('th');
+                th.innerText = col;
+                // Highlight final result columns
+                if (col === expr || (col === '!A || !B') || (col === '!A && !B')) {
+                    th.classList.add('text-pink-400');
+                }
+                ttHead.appendChild(th);
+            });
+
+            // Draw Rows
+            rows.forEach(rowVals => {
+                const tr = document.createElement('tr');
+                const A = rowVals[0];
+                const B = rowVals.length > 1 ? rowVals[1] : null;
+
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    let val = evaluate(col, A, B);
+
+                    td.innerText = val ? 'true' : 'false';
+                    td.className = val ? 'val-true' : 'val-false';
+
+                    // Highlight backgrounds for final results
+                    if (col === expr || (col === '!A || !B') || (col === '!A && !B')) {
+                        td.classList.add('bg-slate-800/80');
+                    }
+
+                    tr.appendChild(td);
+                });
+                ttBody.appendChild(tr);
+            });
+        }
+
+        function evaluate(expr, a, b) {
+            switch(expr) {
+                case 'A': return a;
+                case 'B': return b;
+                case '!A': return !a;
+                case '!B': return !b;
+                case 'A && B': return a && b;
+                case 'A || B': return a || b;
+                case 'A ^ B': return a !== b; // XOR logic
+                case '!(A && B)': return !(a && b);
+                case '!(A || B)': return !(a || b);
+                case '!A || !B': return !a || !b;
+                case '!A && !B': return !a && !b;
+                default: return false;
+            }
+        }
+
+        function showDeMorgan(orig, equiv) {
+            deMorganHint.classList.remove('hidden');
+            deMorganEquivalent.innerText = `${orig}   ist logisch äquivalent zu   ${equiv}`;
+        }
+
+        function hideDeMorgan() {
+            deMorganHint.classList.add('hidden');
+        }
+
+        exprSelect.addEventListener('change', (e) => {
+            const expr = e.target.value;
+            visualExpr.innerText = expr;
+            generateTable(expr);
+        });
+
+        // Init
+        generateTable(exprSelect.value);
+    </script>
+</body>
+</html>

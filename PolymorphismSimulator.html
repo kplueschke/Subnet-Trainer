@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymorphie-Schaltzentrale - AP Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .signal-line {
+            position: absolute;
+            background: #cbd5e1;
+            transform-origin: left center;
+            z-index: 0;
+            opacity: 0.2;
+        }
+        .signal-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #f97316; /* orange-500 */
+            border-radius: 50%;
+            top: -3px; /* Center on line */
+            left: 0;
+            opacity: 0;
+            box-shadow: 0 0 10px #f97316;
+            z-index: 10;
+        }
+        @keyframes travel {
+            0% { left: 0; opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+        .reaction-bubble {
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .reaction-bubble.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-orange-400">🎭</span> Polymorphie-Schaltzentrale
+                </h1>
+            </div>
+            <div class="text-sm text-slate-400">Vielgestaltigkeit</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
+
+        <!-- Explanation -->
+        <div class="glass-card rounded-2xl p-6 text-center">
+            <p class="text-slate-300 max-w-3xl mx-auto">
+                <strong>Polymorphie</strong> bedeutet "Vielgestaltigkeit". Wir können eine Liste von verschiedenen Objekten (Hund, Katze, Faxgerät) haben, die alle eine gemeinsame Basisklasse oder ein Interface (<span class="mono text-orange-300">IEmpfaenger</span>) teilen. Wir rufen auf allen die <em>gleiche</em> Methode (<span class="mono text-blue-400">Reagieren()</span>) auf, aber jedes Objekt verhält sich <em>unterschiedlich</em>.
+            </p>
+        </div>
+
+        <!-- Simulation Area -->
+        <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col items-center relative overflow-hidden min-h-[500px]">
+
+            <!-- Central Caller -->
+            <div id="caller" class="z-20 flex flex-col items-center mt-8 mb-16 relative">
+                <button id="callBtn" class="w-24 h-24 rounded-full bg-orange-600 hover:bg-orange-500 border-4 border-orange-400/50 flex flex-col items-center justify-center text-white font-bold shadow-xl shadow-orange-600/30 transition-all hover:scale-105 active:scale-95 group">
+                    <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                    <span>CALL</span>
+                </button>
+                <div class="mt-4 bg-slate-800 border border-slate-700 px-4 py-2 rounded-lg mono text-sm text-slate-300 z-20 shadow-lg">
+                    <span class="text-blue-400">foreach</span> (<span class="text-teal-300">IEmpfaenger</span> e <span class="text-blue-400">in</span> liste)<br>
+                    &nbsp;&nbsp;e.<span class="text-yellow-200">Reagieren</span>();
+                </div>
+            </div>
+
+            <!-- Receivers Container -->
+            <div class="w-full flex justify-around items-end relative z-20 mt-auto mb-8 px-4" id="receiversContainer">
+
+                <!-- Receiver 1: Dog -->
+                <div class="receiver flex flex-col items-center relative" id="rec-dog">
+                    <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-2xl rounded-bl-none font-bold text-center shadow-lg border-2 border-slate-200">
+                        "Wuff! Wuff!" 🐕
+                    </div>
+                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-dog">
+                        🐕
+                    </div>
+                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                        class Hund
+                    </div>
+                </div>
+
+                <!-- Receiver 2: Human -->
+                <div class="receiver flex flex-col items-center relative" id="rec-human">
+                    <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-2xl rounded-b-none font-bold text-center shadow-lg border-2 border-slate-200">
+                        "Hallo, wer da?" 👤
+                    </div>
+                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-human">
+                        👨‍💼
+                    </div>
+                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                        class Mensch
+                    </div>
+                </div>
+
+                <!-- Receiver 3: Fax -->
+                <div class="receiver flex flex-col items-center relative" id="rec-fax">
+                    <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-2xl rounded-br-none font-bold text-center shadow-lg border-2 border-slate-200">
+                        *Piep krrrrz* 📠
+                    </div>
+                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-fax">
+                        📠
+                    </div>
+                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                        class FaxGeraet
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SVG for drawing connecting lines -->
+            <svg id="connections" class="absolute inset-0 w-full h-full pointer-events-none z-0">
+                <!-- Lines will be drawn here by JS -->
+            </svg>
+
+        </div>
+
+    </main>
+
+    <script>
+        const callBtn = document.getElementById('callBtn');
+        const callerBtn = document.getElementById('callBtn'); // using the button as origin
+        const targets = [
+            { id: 'target-dog', parentId: 'rec-dog' },
+            { id: 'target-human', parentId: 'rec-human' },
+            { id: 'target-fax', parentId: 'rec-fax' }
+        ];
+        const svgCanvas = document.getElementById('connections');
+        const container = svgCanvas.parentElement;
+
+        let isAnimating = false;
+
+        function drawLines() {
+            svgCanvas.innerHTML = ''; // clear existing
+
+            const callerRect = callerBtn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            // Calculate origin point (bottom center of button)
+            const originX = callerRect.left - containerRect.left + (callerRect.width / 2);
+            const originY = callerRect.top - containerRect.top + callerRect.height;
+
+            targets.forEach(target => {
+                const el = document.getElementById(target.id);
+                const rect = el.getBoundingClientRect();
+
+                // Calculate destination point (top center of target)
+                const destX = rect.left - containerRect.left + (rect.width / 2);
+                const destY = rect.top - containerRect.top;
+
+                // Create SVG Line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', originX);
+                line.setAttribute('y1', originY);
+                line.setAttribute('x2', destX);
+                line.setAttribute('y2', destY);
+                line.setAttribute('stroke', '#475569'); // slate-600
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('stroke-dasharray', '5,5');
+                line.setAttribute('opacity', '0.5');
+
+                svgCanvas.appendChild(line);
+
+                // Store coordinates for animation
+                target.path = { x1: originX, y1: originY, x2: destX, y2: destY };
+            });
+        }
+
+        function triggerCall() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Hide old bubbles
+            document.querySelectorAll('.reaction-bubble').forEach(b => b.classList.remove('show'));
+
+            // Button effect
+            callBtn.classList.add('scale-95', 'bg-orange-700');
+            setTimeout(() => callBtn.classList.remove('scale-95', 'bg-orange-700'), 150);
+
+            let completedAnimations = 0;
+
+            // Animate signal dots along the paths
+            targets.forEach((target, index) => {
+                const p = target.path;
+
+                // Calculate distance and angle
+                const dx = p.x2 - p.x1;
+                const dy = p.y2 - p.y1;
+                const distance = Math.sqrt(dx*dx + dy*dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+                // Create a container for the dot that we can rotate
+                const lineContainer = document.createElement('div');
+                lineContainer.className = 'signal-line';
+                lineContainer.style.left = `${p.x1}px`;
+                lineContainer.style.top = `${p.y1}px`;
+                lineContainer.style.width = `${distance}px`;
+                lineContainer.style.height = '2px';
+                lineContainer.style.transform = `rotate(${angle}deg)`;
+
+                // Create the animated dot
+                const dot = document.createElement('div');
+                dot.className = 'signal-dot';
+
+                // Set animation with slight stagger based on index
+                const delay = index * 0.1;
+                const duration = 0.6;
+                dot.style.animation = `travel ${duration}s ease-in ${delay}s forwards`;
+
+                lineContainer.appendChild(dot);
+                container.appendChild(lineContainer);
+
+                // Show reaction bubble when dot arrives
+                setTimeout(() => {
+                    const parent = document.getElementById(target.parentId);
+                    const bubble = parent.querySelector('.reaction-bubble');
+                    const targetEl = document.getElementById(target.id);
+
+                    // Pop effect on target
+                    targetEl.classList.add('scale-110', 'border-orange-500');
+                    setTimeout(() => targetEl.classList.remove('scale-110', 'border-orange-500'), 300);
+
+                    bubble.classList.add('show');
+
+                    // Cleanup line container
+                    lineContainer.remove();
+
+                    completedAnimations++;
+                    if (completedAnimations === targets.length) {
+                        isAnimating = false;
+                    }
+                }, (delay + duration) * 1000);
+            });
+        }
+
+        // Initialize
+        window.addEventListener('resize', drawLines);
+        // Small delay to ensure layout is complete
+        setTimeout(drawLines, 100);
+
+        callBtn.addEventListener('click', triggerCall);
+    </script>
+</body>
+</html>
