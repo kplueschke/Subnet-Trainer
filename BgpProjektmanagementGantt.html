@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projektmanagement-Gantt-Bauer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gantt-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(12, 1fr);
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .gantt-cell {
+            background: rgba(30, 41, 59, 0.9);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .gantt-header {
+            background: rgba(15, 23, 42, 0.9);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .gantt-row-label {
+            background: rgba(15, 23, 42, 0.9);
+            padding-left: 10px;
+            font-weight: 500;
+        }
+        .active-cell {
+            background: #6366f1; /* indigo-500 */
+        }
+        .active-cell.error {
+            background: #ef4444; /* red-500 */
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <!-- Header -->
+    <div class="container mx-auto px-4 py-8 max-w-5xl relative z-10">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
+                Projektmanagement-Gantt-Bauer
+            </h1>
+            <p class="mt-4 text-slate-400">Ordne die Projektphasen zeitlich so an, dass logische Abhängigkeiten (Kritischer Pfad) nicht verletzt werden.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 mb-8 border border-orange-500/30">
+            <h3 class="text-xl font-bold mb-2 text-indigo-300">Projektbeschreibung: "Neues Firmen-Intranet"</h3>
+            <p class="text-sm text-slate-300">
+                Ordne die Phasen im Gantt-Diagramm an (Klick auf die Kästchen, um Wochen zu markieren).<br><br>
+                <strong>Bedingungen:</strong><br>
+                1. <strong>Analyse</strong> dauert 2 Wochen.<br>
+                2. <strong>Design</strong> dauert 3 Wochen und kann erst beginnen, wenn die Analyse komplett abgeschlossen ist.<br>
+                3. <strong>Implementierung</strong> dauert 4 Wochen und startet direkt nach dem Design.<br>
+                4. <strong>Test</strong> dauert 2 Wochen. Kann teilweise parallel zur Implementierung laufen, aber frühestens in der Mitte (Woche 3) der Implementierung starten.
+            </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 overflow-x-auto">
+            <div class="gantt-grid w-full min-w-[800px] border border-slate-700 rounded-lg overflow-hidden" id="gantt">
+                <!-- Header Row -->
+                <div class="gantt-cell gantt-header">Projektphase</div>
+                <script>
+                    for(let i=1; i<=12; i++) {
+                        document.write(`<div class="gantt-cell gantt-header">Woche ${i}</div>`);
+                    }
+                </script>
+            </div>
+
+            <div class="mt-6 flex justify-between items-center">
+                <button onclick="resetGantt()" class="px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 font-medium transition-colors">
+                    Zurücksetzen
+                </button>
+                <button onclick="validateGantt()" class="px-6 py-2 rounded bg-orange-600 hover:bg-orange-500 font-bold transition-colors">
+                    Plan prüfen
+                </button>
+            </div>
+
+            <div id="feedback" class="mt-4 p-4 rounded hidden font-medium"></div>
+        </div>
+    </div>
+
+    <script>
+        const phases = ['Analyse', 'Design', 'Implementierung', 'Test'];
+        const grid = document.getElementById('gantt');
+        let state = {
+            'Analyse': Array(12).fill(false),
+            'Design': Array(12).fill(false),
+            'Implementierung': Array(12).fill(false),
+            'Test': Array(12).fill(false)
+        };
+
+        // Render Rows
+        phases.forEach((phase) => {
+            const labelCell = document.createElement('div');
+            labelCell.className = 'gantt-cell gantt-row-label';
+            labelCell.innerText = phase;
+            grid.appendChild(labelCell);
+
+            for(let i=0; i<12; i++) {
+                const cell = document.createElement('div');
+                cell.className = `gantt-cell phase-${phase} week-${i}`;
+                cell.onclick = () => toggleCell(phase, i, cell);
+                grid.appendChild(cell);
+            }
+        });
+
+        function toggleCell(phase, weekIndex, cellElement) {
+            state[phase][weekIndex] = !state[phase][weekIndex];
+            if(state[phase][weekIndex]) {
+                cellElement.classList.add('active-cell');
+            } else {
+                cellElement.classList.remove('active-cell');
+            }
+        }
+
+        function resetGantt() {
+            phases.forEach(phase => state[phase].fill(false));
+            document.querySelectorAll('.active-cell').forEach(el => el.classList.remove('active-cell', 'error'));
+            document.getElementById('feedback').classList.add('hidden');
+        }
+
+        function getStartEnd(phaseState) {
+            const start = phaseState.indexOf(true);
+            const end = phaseState.lastIndexOf(true);
+            const duration = phaseState.filter(Boolean).length;
+            const continuous = (end - start + 1) === duration;
+            return { start, end, duration, continuous };
+        }
+
+        function validateGantt() {
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden', 'bg-green-500/20', 'text-green-400', 'bg-red-500/20', 'text-red-400');
+
+            const ana = getStartEnd(state['Analyse']);
+            const des = getStartEnd(state['Design']);
+            const imp = getStartEnd(state['Implementierung']);
+            const tst = getStartEnd(state['Test']);
+
+            let errors = [];
+
+            // Condition 1
+            if (ana.duration !== 2 || !ana.continuous) errors.push("Analyse muss genau 2 zusammenhängende Wochen dauern.");
+
+            // Condition 2
+            if (des.duration !== 3 || !des.continuous) errors.push("Design muss genau 3 zusammenhängende Wochen dauern.");
+            if (des.start <= ana.end && des.duration > 0 && ana.duration > 0) errors.push("Design darf erst nach Abschluss der Analyse beginnen.");
+
+            // Condition 3
+            if (imp.duration !== 4 || !imp.continuous) errors.push("Implementierung muss genau 4 zusammenhängende Wochen dauern.");
+            if (imp.start !== des.end + 1 && imp.duration > 0 && des.duration > 0) errors.push("Implementierung muss direkt nach dem Design starten.");
+
+            // Condition 4
+            if (tst.duration !== 2 || !tst.continuous) errors.push("Test muss genau 2 zusammenhängende Wochen dauern.");
+            if (tst.start < imp.start + 2 && tst.duration > 0 && imp.duration > 0) errors.push("Test darf frühestens ab der 3. Woche der Implementierung starten.");
+
+
+            if (errors.length > 0) {
+                feedback.classList.add('bg-red-500/20', 'text-red-400');
+                feedback.innerHTML = "<strong>Fehler im Plan:</strong><ul class='list-disc pl-5 mt-2'>" + errors.map(e => `<li>${e}</li>`).join('') + "</ul>";
+            } else {
+                feedback.classList.add('bg-green-500/20', 'text-green-400');
+                feedback.innerHTML = "🎉 <strong>Perfekt!</strong> Der Gantt-Plan erfüllt alle Anforderungen des kritischen Pfads.";
+            }
+        }
+    </script>
+</body>
+</html>

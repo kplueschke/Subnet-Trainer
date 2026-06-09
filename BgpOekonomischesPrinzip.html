@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ökonomisches-Prinzip-Zuordner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .draggable {
+            cursor: grab;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+        .droppable.drag-over {
+            background-color: rgba(99, 102, 241, 0.2);
+            border-style: solid;
+            border-color: #818cf8;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-5xl relative z-10">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
+                Ökonomisches-Prinzip-Zuordner
+            </h1>
+            <p class="mt-4 text-slate-400">Ziehe die Fallbeispiele in die richtige Kategorie (Maximalprinzip oder Minimalprinzip).</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- Pool of items to drag -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-1 border-dashed border-2 border-slate-600 droppable min-h-[400px]" id="pool" ondragover="allowDrop(event)" ondrop="drop(event, 'pool')">
+                <h3 class="text-xl font-bold mb-4 text-center border-b border-slate-700 pb-2">Fallbeispiele</h3>
+                <div class="flex flex-col gap-3" id="items-container">
+                    <!-- Items inserted via JS -->
+                </div>
+            </div>
+
+            <!-- Target Categories -->
+            <div class="lg:col-span-2 grid sm:grid-cols-2 gap-6">
+                <!-- Maximalprinzip -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-orange-500/50 transition-colors" id="maximal" ondragover="allowDrop(event)" ondrop="drop(event, 'maximal')">
+                    <h3 class="text-xl font-bold mb-2 text-orange-400">Maximalprinzip</h3>
+                    <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Mit <strong>gegebenem Aufwand</strong> (Mitteln) einen <strong>möglichst großen Ertrag</strong> (Ziel) erzielen.</p>
+                    <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="maximal-list"></div>
+                </div>
+
+                <!-- Minimalprinzip -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-cyan-500/50 transition-colors" id="minimal" ondragover="allowDrop(event)" ondrop="drop(event, 'minimal')">
+                    <h3 class="text-xl font-bold mb-2 text-red-400">Minimalprinzip</h3>
+                    <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Ein <strong>vorgegebenes Ziel</strong> (Ertrag) mit <strong>möglichst geringem Aufwand</strong> (Mitteln) erreichen.</p>
+                    <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="minimal-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center flex justify-center gap-4">
+            <button onclick="resetGame()" class="px-6 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 font-medium transition-colors">Neustart</button>
+            <button onclick="checkAnswers()" class="px-6 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 font-bold transition-colors shadow-lg shadow-indigo-500/30">Lösung prüfen</button>
+        </div>
+
+        <div id="feedback" class="mt-6 text-center font-bold text-lg hidden"></div>
+    </div>
+
+    <script>
+        const cases = [
+            { id: "c1", type: "maximal", text: "Du hast 50€ (festes Budget) und willst davon so viele Getränke wie möglich für eine Party kaufen." },
+            { id: "c2", type: "minimal", text: "Du willst exakt 10 Kisten Cola für die Party haben und versuchst, dafür so wenig Geld wie möglich auszugeben." },
+            { id: "c3", type: "maximal", text: "Ein LKW hat einen festen Tank von 500 Litern. Der Fahrer will damit eine maximal lange Strecke fahren." },
+            { id: "c4", type: "minimal", text: "Die Strecke von Hamburg nach München ist fest vorgegeben. Der Fahrer versucht, dafür so wenig Sprit wie möglich zu verbrauchen." },
+            { id: "c5", type: "maximal", text: "Du hast am Wochenende genau 10 Stunden Zeit zum Lernen und willst in dieser Zeit bestmögliche Noten vorbereiten." },
+            { id: "c6", type: "minimal", text: "Du willst unbedingt in allen Fächern eine '2' schreiben. Dafür willst du den geringstmöglichen Zeitaufwand investieren." }
+        ];
+
+        function init() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            // Shuffle
+            const shuffled = [...cases].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach(c => {
+                const el = document.createElement('div');
+                el.id = c.id;
+                el.className = 'draggable p-3 bg-slate-800 rounded border border-slate-600 text-sm shadow-md';
+                el.draggable = true;
+                el.innerText = c.text;
+                el.dataset.type = c.type;
+
+                el.addEventListener('dragstart', drag);
+                container.appendChild(el);
+            });
+
+            document.getElementById('maximal-list').innerHTML = '';
+            document.getElementById('minimal-list').innerHTML = '';
+            document.getElementById('feedback').classList.add('hidden');
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev, targetId) {
+            ev.preventDefault();
+            const droppables = document.querySelectorAll('.droppable');
+            droppables.forEach(d => d.classList.remove('drag-over'));
+
+            const data = ev.dataTransfer.getData("text");
+            const draggedElement = document.getElementById(data);
+
+            // Remove previous answer states
+            draggedElement.classList.remove('border-green-500', 'border-red-500', 'bg-green-900/30', 'bg-red-900/30');
+            draggedElement.classList.add('border-slate-600', 'bg-slate-800');
+
+            if (targetId === 'pool') {
+                document.getElementById('items-container').appendChild(draggedElement);
+            } else if (targetId === 'maximal') {
+                document.getElementById('maximal-list').appendChild(draggedElement);
+            } else if (targetId === 'minimal') {
+                document.getElementById('minimal-list').appendChild(draggedElement);
+            }
+
+            // Hide feedback if they move something
+            document.getElementById('feedback').classList.add('hidden');
+        }
+
+        // Add dragleave event to remove visual cue
+        document.querySelectorAll('.droppable').forEach(zone => {
+            zone.addEventListener('dragleave', (e) => {
+                e.currentTarget.classList.remove('drag-over');
+            });
+        });
+
+        function checkAnswers() {
+            const poolItems = document.getElementById('items-container').children.length;
+            const feedback = document.getElementById('feedback');
+
+            if(poolItems > 0) {
+                feedback.innerHTML = "⚠️ Bitte ordne zuerst alle Fallbeispiele zu.";
+                feedback.className = "mt-6 text-center font-bold text-lg text-yellow-400";
+                feedback.classList.remove('hidden');
+                return;
+            }
+
+            let errors = 0;
+
+            const checkList = (listId, expectedType) => {
+                const list = document.getElementById(listId);
+                Array.from(list.children).forEach(item => {
+                    item.classList.remove('border-slate-600', 'bg-slate-800');
+                    if(item.dataset.type === expectedType) {
+                        item.classList.add('border-green-500', 'bg-green-900/30');
+                    } else {
+                        item.classList.add('border-red-500', 'bg-red-900/30');
+                        errors++;
+                    }
+                });
+            };
+
+            checkList('maximal-list', 'maximal');
+            checkList('minimal-list', 'minimal');
+
+            feedback.classList.remove('hidden');
+            if(errors === 0) {
+                feedback.innerHTML = "🎉 Perfekt! Alle Prinzipien korrekt zugeordnet.";
+                feedback.className = "mt-6 text-center font-bold text-lg text-green-400 bg-green-500/10 p-3 rounded-lg border border-green-500/30 w-max mx-auto";
+            } else {
+                feedback.innerHTML = `❌ ${errors} Fehler gefunden. Die roten Items sind in der falschen Spalte.`;
+                feedback.className = "mt-6 text-center font-bold text-lg text-red-400 bg-red-500/10 p-3 rounded-lg border border-red-500/30 w-max mx-auto";
+            }
+        }
+
+        function resetGame() {
+            init();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

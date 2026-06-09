@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produktionsfaktoren-Matrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: { curve: 'basis' }
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .factor-btn {
+            transition: all 0.2s;
+        }
+        .factor-btn:hover {
+            transform: translateX(4px);
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+        }
+        .factor-btn.active {
+            background: rgba(99, 102, 241, 0.4);
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
+                Betriebswirtschaftliche Produktionsfaktoren
+            </h1>
+            <p class="mt-4 text-slate-400">Interaktive Übersicht nach Gutenberg. Klicke auf die Elemente im Menü, um Details und Beispiele zu sehen.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6 flex-grow">
+
+            <!-- Navigation -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-1 h-fit">
+                <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Kategorien</h3>
+
+                <div class="space-y-2">
+                    <button class="factor-btn w-full text-left p-3 rounded bg-slate-800 border border-slate-700 font-bold active" onclick="showDetail('all', this)">
+                        📊 Gesamtübersicht
+                    </button>
+
+                    <div class="pt-4 pb-1 text-xs uppercase tracking-wider text-slate-500 font-bold">Dispositiver Faktor</div>
+                    <button class="factor-btn w-full text-left p-3 rounded bg-slate-800 border border-slate-700" onclick="showDetail('dispositiv', this)">
+                        🧠 Dispositiver Faktor (Leitung)
+                    </button>
+
+                    <div class="pt-4 pb-1 text-xs uppercase tracking-wider text-slate-500 font-bold">Elementarfaktoren</div>
+                    <button class="factor-btn w-full text-left p-3 rounded bg-slate-800 border border-slate-700" onclick="showDetail('arbeit', this)">
+                        👷‍♂️ Ausführende Arbeit
+                    </button>
+                    <button class="factor-btn w-full text-left p-3 rounded bg-slate-800 border border-slate-700" onclick="showDetail('betriebsmittel', this)">
+                        🏭 Betriebsmittel
+                    </button>
+                    <button class="factor-btn w-full text-left p-3 rounded bg-slate-800 border border-slate-700" onclick="showDetail('werkstoffe', this)">
+                        📦 Werkstoffe
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col relative min-h-[500px]">
+                <div id="content-area" class="flex-grow">
+                    <!-- Default: Tree Diagram -->
+                    <div id="view-all" class="w-full h-full flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-4">System der Produktionsfaktoren</h3>
+                        <p class="text-slate-300 mb-6">Nach Erich Gutenberg werden die Produktionsfaktoren in der Betriebswirtschaft in den steuernden (dispositiven) Faktor und die ausführenden Elementarfaktoren unterteilt.</p>
+                        <div class="mermaid flex justify-center bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                            graph TD
+                                PF[Produktionsfaktoren] --> DF[Dispositiver Faktor]
+                                PF --> EF[Elementarfaktoren]
+                                DF --> Leitung[Leitung]
+                                DF --> Planung[Planung]
+                                DF --> Organisation[Organisation]
+                                DF --> Kontrolle[Kontrolle]
+                                EF --> AA[Ausführende Arbeit]
+                                EF --> BM[Betriebsmittel]
+                                EF --> WS[Werkstoffe]
+                                WS --> RHB[Roh-, Hilfs-, Betriebsstoffe]
+                                WS --> Z[Zulieferteile]
+                        </div>
+                    </div>
+
+                    <!-- Details via JS -->
+                    <div id="view-detail" class="hidden w-full h-full">
+                        <div class="inline-block px-3 py-1 rounded-full bg-orange-500/20 text-indigo-300 text-sm font-bold mb-4" id="detail-category">Kategorie</div>
+                        <h3 class="text-3xl font-bold text-white mb-6" id="detail-title">Titel</h3>
+
+                        <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 mb-6">
+                            <h4 class="text-lg font-bold text-red-400 mb-2">Definition</h4>
+                            <p class="text-slate-300 leading-relaxed" id="detail-def">Definitionstext...</p>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4" id="detail-subtypes">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            'dispositiv': {
+                cat: 'Leitung & Management',
+                title: 'Der Dispositive Faktor',
+                def: 'Der dispositive Faktor ergänzt die Elementarfaktoren. Er ist die immaterielle Leistung, die für die Kombination und den Einsatz der Elementarfaktoren (Arbeit, Betriebsmittel, Werkstoffe) verantwortlich ist, um die Unternehmensziele zu erreichen.',
+                sub: [
+                    { title: 'Leitung', desc: 'Zielsetzung und grundsätzliche Entscheidungen (Management).' },
+                    { title: 'Planung', desc: 'Gedankliche Vorwegnahme zukünftigen Handelns.' },
+                    { title: 'Organisation', desc: 'Strukturierung der Abläufe und Zuständigkeiten.' },
+                    { title: 'Kontrolle', desc: 'Überwachung der Zielerreichung (Soll-Ist-Vergleich).' }
+                ]
+            },
+            'arbeit': {
+                cat: 'Elementarfaktor',
+                title: 'Ausführende Arbeit',
+                def: 'Objektbezogene menschliche Arbeitsleistung, die unmittelbar am Produkt oder in der Dienstleistung erbracht wird, nach den Vorgaben des dispositiven Faktors.',
+                sub: [
+                    { title: 'Körperliche Arbeit', desc: 'Manuelle Tätigkeiten am Fließband, Montage, Lagerarbeit.' },
+                    { title: 'Geistige ausführende Arbeit', desc: 'Buchhaltung, Programmierung nach Vorgabe, Dateneingabe.' }
+                ]
+            },
+            'betriebsmittel': {
+                cat: 'Elementarfaktor',
+                title: 'Betriebsmittel',
+                def: 'Alle Anlagen, Gegenstände und Rechte, die im Betrieb verwendet werden, um den Produktionsprozess durchzuführen, ohne dabei selbst physisch in das Produkt einzugehen.',
+                sub: [
+                    { title: 'Materielle Betriebsmittel', desc: 'Maschinen, Gebäude, Werkzeuge, Fuhrpark, IT-Hardware.' },
+                    { title: 'Immaterielle Betriebsmittel', desc: 'Lizenzen, Patente, Software, Rechte.' }
+                ]
+            },
+            'werkstoffe': {
+                cat: 'Elementarfaktor',
+                title: 'Werkstoffe',
+                def: 'Alle Stoffe, die bei der Produktion verbraucht werden, physisch in das Endprodukt eingehen oder beim Produktionsprozess vernichtet werden.',
+                sub: [
+                    { title: 'Rohstoffe', desc: 'Hauptbestandteile des Endprodukts (z.B. Holz für Möbel).' },
+                    { title: 'Hilfsstoffe', desc: 'Nebenbestandteile des Endprodukts (z.B. Leim, Schrauben).' },
+                    { title: 'Betriebsstoffe', desc: 'Werden bei der Produktion verbraucht, gehen nicht ins Produkt ein (z.B. Schmieröl, Strom).' },
+                    { title: 'Zulieferteile / Vorprodukte', desc: 'Fertig bezogene Baugruppen (z.B. Motor für Auto).' }
+                ]
+            }
+        };
+
+        function showDetail(id, btn) {
+            // Update active state
+            document.querySelectorAll('.factor-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const viewAll = document.getElementById('view-all');
+            const viewDetail = document.getElementById('view-detail');
+
+            if (id === 'all') {
+                viewDetail.classList.add('hidden');
+                viewAll.classList.remove('hidden');
+            } else {
+                viewAll.classList.add('hidden');
+                viewDetail.classList.remove('hidden');
+
+                const info = data[id];
+                document.getElementById('detail-category').innerText = info.cat;
+                document.getElementById('detail-title').innerText = info.title;
+                document.getElementById('detail-def').innerText = info.def;
+
+                const subContainer = document.getElementById('detail-subtypes');
+                subContainer.innerHTML = '';
+                info.sub.forEach(s => {
+                    subContainer.innerHTML += `
+                        <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                            <h5 class="font-bold text-indigo-300 mb-1">📌 ${s.title}</h5>
+                            <p class="text-sm text-slate-400">${s.desc}</p>
+                        </div>
+                    `;
+                });
+            }
+        }
+    </script>
+</body>
+</html>
