@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APP-Risiko-Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #network-container {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+                APP-Risiko-Dashboard
+            </h1>
+            <p class="mt-4 text-slate-400">Analyse Potenzieller Probleme (APP). Erstelle interaktive Risiko-Graphen für dein Projekt.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6 flex-grow">
+            <!-- Controls Area -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-1 flex flex-col">
+                <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Neues Element hinzufügen</h3>
+
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Typ</label>
+                        <select id="nodeType" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white outline-none focus:border-indigo-500">
+                            <option value="problem">⚠️ Potenzielles Problem (Risiko)</option>
+                            <option value="ursache">🔍 Mögliche Ursache</option>
+                            <option value="praeventiv">🛡️ Präventivmaßnahme (Vorbeugend)</option>
+                            <option value="reaktiv">🚑 Eventualmaßnahme (Reaktiv)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400 block mb-1">Beschreibung</label>
+                        <input type="text" id="nodeLabel" class="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white outline-none focus:border-indigo-500" placeholder="z.B. Serverausfall">
+                    </div>
+                    <button onclick="addNode()" class="w-full px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-500 transition-colors font-bold">
+                        Element erstellen
+                    </button>
+                </div>
+
+                <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Verbindung ziehen</h3>
+                <p class="text-sm text-slate-400 mb-4">
+                    Klicke zuerst auf ein Element, halte die Maus gedrückt und ziehe die Verbindung zu einem anderen Element. (Edit-Mode aktivieren)
+                </p>
+                <div class="flex gap-2 mb-6">
+                    <button onclick="toggleEditMode()" id="editBtn" class="flex-grow px-4 py-2 rounded border border-indigo-500 text-indigo-400 hover:bg-indigo-500/10 transition-colors text-sm font-bold">
+                        Bearbeitungsmodus an
+                    </button>
+                </div>
+
+                <div class="mt-auto">
+                    <button onclick="loadExample()" class="w-full px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 transition-colors text-sm mb-2">Beispiel laden</button>
+                    <button onclick="clearGraph()" class="w-full px-4 py-2 rounded border border-red-500/50 text-red-400 hover:bg-red-500/10 transition-colors text-sm">Alles löschen</button>
+                </div>
+            </div>
+
+            <!-- Graph Area -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col relative bg-slate-900/50 min-h-[500px]">
+                <div class="flex flex-wrap gap-4 mb-4 text-xs font-bold justify-center border-b border-slate-700 pb-4">
+                    <span class="px-2 py-1 bg-red-900/50 border border-red-500 rounded text-red-400">⚠️ Problem</span>
+                    <span class="px-2 py-1 bg-orange-900/50 border border-orange-500 rounded text-orange-400">🔍 Ursache</span>
+                    <span class="px-2 py-1 bg-green-900/50 border border-green-500 rounded text-green-400">🛡️ Präventiv</span>
+                    <span class="px-2 py-1 bg-blue-900/50 border border-blue-500 rounded text-blue-400">🚑 Eventual/Reaktiv</span>
+                </div>
+
+                <div id="network-container" class="flex-grow"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vis.js Data setup
+        const nodes = new vis.DataSet([]);
+        const edges = new vis.DataSet([]);
+        let network = null;
+        let isEditMode = false;
+
+        const typeStyles = {
+            'problem': { color: { background: '#450a0a', border: '#ef4444' }, font: { color: '#fca5a5' } }, // red
+            'ursache': { color: { background: '#431407', border: '#f97316' }, font: { color: '#fdba74' } }, // orange
+            'praeventiv': { color: { background: '#052e16', border: '#22c55e' }, font: { color: '#86efac' } }, // green
+            'reaktiv': { color: { background: '#1e3a8a', border: '#3b82f6' }, font: { color: '#93c5fd' } } // blue
+        };
+
+        function initNetwork() {
+            const container = document.getElementById('network-container');
+            const data = { nodes: nodes, edges: edges };
+            const options = {
+                nodes: {
+                    shape: 'box',
+                    borderWidth: 2,
+                    font: { face: 'Inter', size: 14, multi: true },
+                    margin: 10
+                },
+                edges: {
+                    arrows: 'to',
+                    color: '#64748b',
+                    smooth: { type: 'cubicBezier' }
+                },
+                physics: {
+                    barnesHut: { gravitationalConstant: -2000, centralGravity: 0.1, springLength: 150 }
+                },
+                manipulation: {
+                    enabled: false,
+                    addNode: false,
+                    addEdge: function (data, callback) {
+                        if (data.from !== data.to) {
+                            callback(data);
+                        }
+                    },
+                    deleteNode: true,
+                    deleteEdge: true
+                }
+            };
+            network = new vis.Network(container, data, options);
+        }
+
+        function addNode() {
+            const type = document.getElementById('nodeType').value;
+            const label = document.getElementById('nodeLabel').value;
+
+            if(!label) return alert("Bitte eine Beschreibung eingeben.");
+
+            let prefix = "";
+            if(type === 'problem') prefix = "⚠️ ";
+            if(type === 'ursache') prefix = "🔍 ";
+            if(type === 'praeventiv') prefix = "🛡️ ";
+            if(type === 'reaktiv') prefix = "🚑 ";
+
+            const style = typeStyles[type];
+
+            nodes.add({
+                label: `<b>${prefix}</b>\n${label}`,
+                ...style,
+                group: type // store for semantic logic if needed
+            });
+
+            document.getElementById('nodeLabel').value = '';
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('editBtn');
+            if(isEditMode) {
+                network.setOptions({ manipulation: { enabled: true } });
+                btn.innerText = "Bearbeitungsmodus aus";
+                btn.classList.replace('text-indigo-400', 'text-white');
+                btn.classList.replace('border-indigo-500', 'bg-indigo-600');
+            } else {
+                network.setOptions({ manipulation: { enabled: false } });
+                btn.innerText = "Bearbeitungsmodus an";
+                btn.classList.replace('text-white', 'text-indigo-400');
+                btn.classList.replace('bg-indigo-600', 'border-indigo-500');
+            }
+        }
+
+        function clearGraph() {
+            nodes.clear();
+            edges.clear();
+        }
+
+        function loadExample() {
+            clearGraph();
+            const exNodes = [
+                { id: 1, label: '<b>⚠️</b>\nDatenverlust bei\nMigration', ...typeStyles['problem'] },
+                { id: 2, label: '<b>🔍</b>\nStromausfall\nwährend Skript', ...typeStyles['ursache'] },
+                { id: 3, label: '<b>🔍</b>\nFestplatte voll', ...typeStyles['ursache'] },
+                { id: 4, label: '<b>🛡️</b>\nUSV-Anlage\nanschließen', ...typeStyles['praeventiv'] },
+                { id: 5, label: '<b>🛡️</b>\nSpeicherplatz\nvorher prüfen', ...typeStyles['praeventiv'] },
+                { id: 6, label: '<b>🚑</b>\nBackup\neinspielen', ...typeStyles['reaktiv'] }
+            ];
+
+            const exEdges = [
+                { from: 2, to: 1 },
+                { from: 3, to: 1 },
+                { from: 4, to: 2 },
+                { from: 5, to: 3 },
+                { from: 1, to: 6, dashes: true, color: '#3b82f6' } // visual hint for reactive
+            ];
+
+            nodes.add(exNodes);
+            edges.add(exEdges);
+        }
+
+        window.onload = () => {
+            initNetwork();
+        };
+    </script>
+</body>
+</html>

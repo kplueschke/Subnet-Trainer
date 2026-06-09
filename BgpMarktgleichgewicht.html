@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marktgleichgewichts-Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <!-- Header -->
+    <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+                Marktgleichgewichts-Simulator
+            </h1>
+            <p class="mt-4 text-slate-400">Verschiebe Angebots- und Nachfragekurven und beobachte die Veränderung von Gleichgewichtspreis und -menge.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-4">Szenarien</h3>
+                <div class="space-y-4">
+                    <button onclick="shiftDemand(1)" class="w-full text-left px-4 py-3 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-colors">
+                        📈 Modetrend: Produkt wird beliebter (Nachfrage steigt)
+                    </button>
+                    <button onclick="shiftDemand(-1)" class="w-full text-left px-4 py-3 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-colors">
+                        📉 Wirtschaftskrise: Einkommen sinken (Nachfrage sinkt)
+                    </button>
+                    <button onclick="shiftSupply(1)" class="w-full text-left px-4 py-3 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-colors">
+                        🏭 Neuer Konkurrent tritt in den Markt (Angebot steigt)
+                    </button>
+                    <button onclick="shiftSupply(-1)" class="w-full text-left px-4 py-3 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-colors">
+                        🔥 Rohstoffknappheit (Angebot sinkt)
+                    </button>
+                    <button onclick="resetChart()" class="w-full text-center px-4 py-3 rounded bg-indigo-600 hover:bg-indigo-500 font-bold transition-colors mt-4">
+                        🔄 Zurücksetzen
+                    </button>
+                </div>
+
+                <div class="mt-6 p-4 rounded bg-slate-800 border border-slate-700">
+                    <h4 class="font-bold text-lg mb-2 text-cyan-400">Aktuelles Gleichgewicht</h4>
+                    <p>Preis (P*): <span id="eqPrice" class="font-bold mono text-xl">5.00</span> €</p>
+                    <p>Menge (Q*): <span id="eqQty" class="font-bold mono text-xl">50</span> Stück</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center bg-slate-900">
+                <canvas id="marketChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let demandShift = 0;
+        let supplyShift = 0;
+
+        const ctx = document.getElementById('marketChart').getContext('2d');
+
+        const generateData = () => {
+            const demandData = [];
+            const supplyData = [];
+            for (let q = 0; q <= 100; q += 10) {
+                let pd = 10 - 0.1 * q + demandShift;
+                let ps = 0 + 0.1 * q - supplyShift;
+                demandData.push({x: q, y: pd});
+                supplyData.push({x: q, y: ps});
+            }
+            return { demandData, supplyData };
+        };
+
+        let chart;
+
+        function initChart() {
+            const { demandData, supplyData } = generateData();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Nachfrage',
+                            data: demandData,
+                            borderColor: '#38bdf8', // cyan
+                            backgroundColor: '#38bdf8',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0
+                        },
+                        {
+                            label: 'Angebot',
+                            data: supplyData,
+                            borderColor: '#fbbf24', // amber
+                            backgroundColor: '#fbbf24',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: 'Menge (Q)', color: '#94a3b8' },
+                            min: 0,
+                            max: 100,
+                            grid: { color: '#334155' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            type: 'linear',
+                            title: { display: true, text: 'Preis (P)', color: '#94a3b8' },
+                            min: 0,
+                            max: 15,
+                            grid: { color: '#334155' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc' } }
+                    }
+                }
+            });
+            updateEquilibrium();
+        }
+
+        function updateChart() {
+            const { demandData, supplyData } = generateData();
+            chart.data.datasets[0].data = demandData;
+            chart.data.datasets[1].data = supplyData;
+            chart.update();
+            updateEquilibrium();
+        }
+
+        function updateEquilibrium() {
+            let q = (10 + demandShift + supplyShift) / 0.2;
+            let p = 10 - 0.1 * q + demandShift;
+
+            document.getElementById('eqQty').innerText = q.toFixed(0);
+            document.getElementById('eqPrice').innerText = p.toFixed(2);
+        }
+
+        function shiftDemand(direction) {
+            demandShift += direction * 2;
+            updateChart();
+        }
+
+        function shiftSupply(direction) {
+            supplyShift += direction * 2;
+            updateChart();
+        }
+
+        function resetChart() {
+            demandShift = 0;
+            supplyShift = 0;
+            updateChart();
+        }
+
+        window.onload = initChart;
+    </script>
+</body>
+</html>

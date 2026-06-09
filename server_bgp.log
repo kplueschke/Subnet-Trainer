@@ -1,0 +1,12 @@
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /bgp.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpAppRisiko.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpArbeitszeitgesetz.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpMagischesDreieck.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpMarktgleichgewicht.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpNetzplan.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpOekonomischesPrinzip.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpProduktionsfaktoren.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpProjektPhasen.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpProjektmanagementGantt.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpSmartZiel.html HTTP/1.1" 200 -
+127.0.0.1 - - [09/Jun/2026 16:43:28] "HEAD /BgpWirtschaftskreislauf.html HTTP/1.1" 200 -

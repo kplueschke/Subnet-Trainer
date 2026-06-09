@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magisches Dreieck des Projektmanagements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        svg text {
+            user-select: none;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-5xl relative z-10 flex-grow flex flex-col">
+        <div class="mb-8">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück zu BGP
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+                Magisches Dreieck des Projektmanagements
+            </h1>
+            <p class="mt-4 text-slate-400">Verändere die Parameter (Zeit, Kosten, Qualität/Leistung) mit den Reglern und beobachte die Auswirkungen auf das Projekt-Spannungsfeld.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6 flex-grow">
+            <!-- Canvas/SVG Area -->
+            <div class="glass-card rounded-2xl p-6 flex items-center justify-center bg-slate-900/50 min-h-[400px]">
+                <svg id="triangleSvg" width="400" height="400" viewBox="-50 -50 500 500">
+                    <!-- Base Triangle (Ideal state outline) -->
+                    <polygon points="200,50 50,350 350,350" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-dasharray="5,5" />
+
+                    <!-- Dynamic Triangle -->
+                    <polygon id="dynTriangle" points="200,50 50,350 350,350" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" stroke-width="4" stroke-linejoin="round" />
+
+                    <!-- Nodes/Points -->
+                    <circle id="ptTime" cx="200" cy="50" r="8" fill="#38bdf8" />
+                    <circle id="ptCost" cx="50" cy="350" r="8" fill="#ef4444" />
+                    <circle id="ptQual" cx="350" cy="350" r="8" fill="#22c55e" />
+
+                    <!-- Labels -->
+                    <text id="lblTime" x="200" y="30" fill="white" font-weight="bold" font-size="18" text-anchor="middle" font-family="Inter">Zeit / Termin</text>
+                    <text id="lblCost" x="30" y="375" fill="white" font-weight="bold" font-size="18" text-anchor="middle" font-family="Inter">Kosten</text>
+                    <text id="lblQual" x="370" y="375" fill="white" font-weight="bold" font-size="18" text-anchor="middle" font-family="Inter">Leistung / Qualität</text>
+                </svg>
+            </div>
+
+            <!-- Controls and Explanation -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col">
+                <h3 class="text-xl font-bold mb-6 border-b border-slate-700 pb-2">Parameter-Steuerung</h3>
+
+                <div class="space-y-8 flex-grow">
+                    <!-- Time Control -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="font-bold text-cyan-400">Zeitvorgabe (Termindruck)</label>
+                            <span id="valTime" class="mono text-slate-300">Normal (100%)</span>
+                        </div>
+                        <input type="range" id="rngTime" min="50" max="150" value="100" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-500 mt-1">
+                            <span>Viel Zeit (Entspannt)</span>
+                            <span>Wenig Zeit (Stress)</span>
+                        </div>
+                    </div>
+
+                    <!-- Cost Control -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="font-bold text-red-400">Kosten / Budget</label>
+                            <span id="valCost" class="mono text-slate-300">Normal (100%)</span>
+                        </div>
+                        <input type="range" id="rngCost" min="50" max="150" value="100" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-500 mt-1">
+                            <span>Hohes Budget</span>
+                            <span>Niedriges Budget</span>
+                        </div>
+                    </div>
+
+                    <!-- Quality Control -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="font-bold text-green-400">Leistung / Qualität (Scope)</label>
+                            <span id="valQual" class="mono text-slate-300">Normal (100%)</span>
+                        </div>
+                        <input type="range" id="rngQual" min="50" max="150" value="100" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-500 mt-1">
+                            <span>Geringer Umfang</span>
+                            <span>Hoher Umfang (Max. Qualität)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded bg-slate-800/80 border border-slate-700 h-32 flex items-center justify-center">
+                    <p id="explanation" class="text-sm text-slate-300 text-center leading-relaxed font-medium">
+                        Bewege die Regler. Das magische Dreieck besagt: Man kann nicht an einer Ecke ziehen, ohne dass sich mindestens eine der anderen beiden verändert.
+                    </p>
+                </div>
+
+                <button onclick="resetSliders()" class="w-full mt-4 px-4 py-2 rounded bg-slate-700 hover:bg-slate-600 transition-colors font-bold">
+                    Auf Normalzustand zurücksetzen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rngTime = document.getElementById('rngTime');
+        const rngCost = document.getElementById('rngCost');
+        const rngQual = document.getElementById('rngQual');
+
+        const ptTime = document.getElementById('ptTime');
+        const ptCost = document.getElementById('ptCost');
+        const ptQual = document.getElementById('ptQual');
+
+        const dynTriangle = document.getElementById('dynTriangle');
+        const explanation = document.getElementById('explanation');
+
+        // Base coordinates (100% state)
+        const base = {
+            t: { x: 200, y: 50 },
+            c: { x: 50, y: 350 },
+            q: { x: 350, y: 350 }
+        };
+
+        // Center of the triangle (roughly)
+        const center = { x: 200, y: 250 };
+
+        function updateTriangle() {
+            const vTime = parseInt(rngTime.value); // 50 to 150
+            const vCost = parseInt(rngCost.value);
+            const vQual = parseInt(rngQual.value);
+
+            document.getElementById('valTime').innerText = vTime === 100 ? 'Normal' : (vTime > 100 ? 'Wenig Zeit' : 'Viel Zeit');
+            document.getElementById('valCost').innerText = vCost === 100 ? 'Normal' : (vCost > 100 ? 'Niedriges Budget' : 'Hohes Budget');
+            document.getElementById('valQual').innerText = vQual === 100 ? 'Normal' : (vQual > 100 ? 'Hoher Umfang' : 'Geringer Umfang');
+
+            // Calculate new positions based on pulling away or towards center
+            // > 100 means constraint is tight/high, pull point OUTWARDS (larger distance from center)
+            // < 100 means constraint is loose, push point INWARDS
+
+            const scaleFactor = 1.5; // Visual exaggeration
+
+            const calcPos = (bX, bY, val) => {
+                const diff = (val - 100) * scaleFactor;
+                // Vector from center to base point
+                const vecX = bX - center.x;
+                const vecY = bY - center.y;
+                const len = Math.sqrt(vecX*vecX + vecY*vecY);
+                // Normalize and multiply by diff
+                const normX = vecX / len;
+                const normY = vecY / len;
+                return { x: bX + normX * diff, y: bY + normY * diff };
+            };
+
+            const nT = calcPos(base.t.x, base.t.y, vTime);
+            const nC = calcPos(base.c.x, base.c.y, vCost);
+            const nQ = calcPos(base.q.x, base.q.y, vQual);
+
+            // Update SVG elements
+            ptTime.setAttribute('cx', nT.x);
+            ptTime.setAttribute('cy', nT.y);
+
+            ptCost.setAttribute('cx', nC.x);
+            ptCost.setAttribute('cy', nC.y);
+
+            ptQual.setAttribute('cx', nQ.x);
+            ptQual.setAttribute('cy', nQ.y);
+
+            dynTriangle.setAttribute('points', `${nT.x},${nT.y} ${nC.x},${nC.y} ${nQ.x},${nQ.y}`);
+
+            // Logic for explanation text
+            updateExplanation(vTime, vCost, vQual);
+        }
+
+        function updateExplanation(t, c, q) {
+            let msg = "";
+
+            if (t == 100 && c == 100 && q == 100) {
+                msg = "Ausgeglichener Zustand. Das Projekt ist mit normalem Aufwand planmäßig umsetzbar.";
+            } else if (q > 100 && t <= 100 && c <= 100) {
+                msg = "Du willst höhere Qualität/mehr Features. Das bedeutet in der Praxis fast immer: Es wird länger dauern (Zeit) ODER es wird teurer (Kosten für mehr Personal).";
+            } else if (t > 100 && c <= 100 && q >= 100) {
+                msg = "Die Zeit ist knapp! Um den Termin zu halten, müssen entweder die Kosten steigen (Überstunden, externe Hilfe) oder die Qualität/der Umfang muss sinken.";
+            } else if (c > 100 && t >= 100 && q >= 100) {
+                msg = "Das Budget wurde gekürzt. Wenn du trotzdem pünktlich fertig werden willst, musst du zwangsläufig den Projektumfang (Qualität) reduzieren.";
+            } else if (t > 120 && c > 120 && q > 120) {
+                msg = "🚨 Alarm! Du willst maximale Qualität in minimaler Zeit bei geringstem Budget. Das ist das klassische unrealistische Projekt. Das Dreieck reißt!";
+                dynTriangle.setAttribute('stroke', '#ef4444');
+                dynTriangle.setAttribute('fill', 'rgba(239, 68, 68, 0.2)');
+                return;
+            } else {
+                msg = "Jede Veränderung eines Faktors zieht das Dreieck in eine neue Form. Die Gesamtfläche (das Volumen des Projekts) verschiebt sich, was ständiges Nachjustieren der anderen Parameter erfordert.";
+            }
+
+            dynTriangle.setAttribute('stroke', '#6366f1');
+            dynTriangle.setAttribute('fill', 'rgba(99, 102, 241, 0.2)');
+            explanation.innerText = msg;
+        }
+
+        function resetSliders() {
+            rngTime.value = 100;
+            rngCost.value = 100;
+            rngQual.value = 100;
+            updateTriangle();
+        }
+
+        // Attach listeners
+        rngTime.addEventListener('input', updateTriangle);
+        rngCost.addEventListener('input', updateTriangle);
+        rngQual.addEventListener('input', updateTriangle);
+
+        // Init
+        updateTriangle();
+    </script>
+</body>
+</html>
