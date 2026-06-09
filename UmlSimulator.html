@@ -76,6 +76,7 @@
                             <option value="while">while-Schleife (kopfgesteuert)</option>
                             <option value="do-while">do-while-Schleife (fußgesteuert)</option>
                             <option value="nested-loops">Verschachtelte Schleifen (2D-Arrays)</option>
+                            <option value="custom">Eigener Code (Mermaid)</option>
                         </select>
                     </div>
                     <div>
@@ -203,6 +204,7 @@
         const selCatalog = document.getElementById('catalog-selector');
         const btnCodeToDiag = document.getElementById('mode-code-to-diagram');
         const btnDiagToCode = document.getElementById('mode-diagram-to-code');
+        const modeButtonsContainer = btnCodeToDiag.parentElement.parentElement; // Container to hide in custom mode
 
         const taskContent = document.getElementById('task-content');
         const solutionContent = document.getElementById('solution-content');
@@ -246,6 +248,30 @@
 
         function updateUI() {
             resetSolution();
+
+            if (currentCatalog === 'custom') {
+                modeButtonsContainer.classList.add('hidden');
+                btnShowSolution.classList.add('hidden');
+                solutionOverlay.classList.add('hidden');
+                checklistContainer.classList.add('hidden');
+                taskInstruction.innerText = "Gib deinen Mermaid Code hier ein:";
+
+                const defaultMermaid = "stateDiagram-v2\n    direction TB\n    [*] --> Start\n    Start --> [*]";
+                taskContent.innerHTML = `<textarea id="custom-mermaid-input" class="w-full h-full min-h-[300px] p-4 font-mono text-sm text-green-400 bg-black/50 rounded-lg border border-slate-700 focus:outline-none focus:border-indigo-500 resize-none">${defaultMermaid}</textarea>`;
+
+                const customInput = document.getElementById('custom-mermaid-input');
+                renderDiagram(customInput.value, solutionContent);
+
+                customInput.addEventListener('input', (e) => {
+                    renderDiagram(e.target.value, solutionContent);
+                });
+                return;
+            } else {
+                modeButtonsContainer.classList.remove('hidden');
+                btnShowSolution.classList.remove('hidden');
+                solutionOverlay.classList.remove('hidden');
+            }
+
             const data = catalog[currentCatalog];
 
             // Adjust loop checklist visibility
