@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UML-Ablauf-Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 12px 20px -8px rgba(99, 102, 241, 0.3);
+        }
+        /* Custom styles for mermaid diagrams if needed */
+        .mermaid {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: black;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <!-- Background Decorative Elements -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
+
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="ap.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück zu AP
+            </a>
+        </div>
+
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                UML-Ablauf-Simulator
+            </h1>
+            <p class="mt-4 text-base text-slate-400 max-w-2xl mx-auto">
+                Trainiere das Erstellen von UML-Aktivitätendiagrammen aus C-Code und umgekehrt.
+            </p>
+        </div>
+
+        <!-- App Container -->
+        <div class="flex flex-col gap-6" id="app-container">
+            <!-- Controls -->
+            <div class="glass-card rounded-2xl p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="catalog-selector" class="block text-sm font-medium text-slate-400 mb-2">Ablauf wählen</label>
+                        <select id="catalog-selector" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
+                            <option value="linear">Linearer EVA-Ablauf</option>
+                            <option value="simple-if">Einfache Verzweigung (if)</option>
+                            <option value="if-else">Verzweigung (if-else)</option>
+                            <option value="while">while-Schleife (kopfgesteuert)</option>
+                            <option value="do-while">do-while-Schleife (fußgesteuert)</option>
+                            <option value="nested-loops">Verschachtelte Schleifen (2D-Arrays)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Trainingsmodus</label>
+                        <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                            <button id="mode-code-to-diagram" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium bg-indigo-600 text-white shadow transition-all">Code zu Diagramm</button>
+                            <button id="mode-diagram-to-code" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-all">Diagramm zu Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Training Area -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Task Column -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col h-full">
+                    <h2 class="text-xl font-semibold mb-4 text-white flex items-center justify-between border-b border-slate-700 pb-2">
+                        <span>Aufgabe</span>
+                    </h2>
+
+                    <div id="task-content" class="flex-grow flex items-center justify-center min-h-[300px] bg-slate-900/50 rounded-xl p-4 border border-slate-800">
+                        <!-- Dynamic content (Code or Diagram) injected here -->
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-slate-400 mb-4" id="task-instruction">Zeichne das UML-Aktivitätendiagramm dazu auf Papier.</p>
+                        <button id="show-solution-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors w-full sm:w-auto shadow-lg shadow-indigo-500/20">
+                            Lösung anzeigen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Solution Column -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col h-full relative overflow-hidden" id="solution-container">
+                    <!-- Overlay to hide solution initially -->
+                    <div id="solution-overlay" class="absolute inset-0 bg-slate-800/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300">
+                        <svg class="w-12 h-12 text-slate-500 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2">Lösung verborgen</h3>
+                        <p class="text-slate-400 max-w-sm">Bearbeite die Aufgabe zuerst selbst, bevor du die Lösung zur Kontrolle aufdeckst.</p>
+                    </div>
+
+                    <h2 class="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-2">Lösungskontrolle</h2>
+
+                    <div id="solution-content" class="flex-grow flex flex-col min-h-[300px]">
+                        <!-- Dynamic solution (Diagram or Code) injected here -->
+                    </div>
+
+                    <!-- Interactive Checklist (Only shown in Code -> Diagram mode) -->
+                    <div id="checklist-container" class="mt-6 bg-slate-900/50 rounded-xl p-4 border border-slate-800 hidden">
+                        <h4 class="text-sm font-semibold text-indigo-400 uppercase tracking-wide mb-3">Selbstkontrolle</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-start gap-3">
+                                <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
+                                <span>Haben alle <strong>Aktionsknoten</strong> (Rechtecke) abgerundete Ecken?</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
+                                <span>Hast du <strong>Start- und Endknoten</strong> korrekt gezeichnet (gefüllter Kreis bzw. Doppelkreis)?</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
+                                <span>Sind Bedingungen an den <strong>Rauten (Entscheidungsknoten)</strong> in eckige Klammern <code>[Bedingung]</code> gesetzt?</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
+                                <span>Gibt es zu jeder Raute mindestens zwei abgehende Pfeile mit sich gegenseitig ausschließenden Bedingungen (z.B. <code>[ja]</code> / <code>[nein]</code>)?</span>
+                            </li>
+                            <li class="flex items-start gap-3 loop-check hidden">
+                                <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
+                                <span>Kommt der <strong>Rückpfeil der Schleife</strong> vor der Bedingungsraute an (beim Verbindungs-/Merge-Knoten)?</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-auto">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        // Initialize mermaid
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+        // Data Catalog
+        const catalog = {
+            'linear': {
+                code: `int preis = 100;\nint anzahl = 5;\nint summe = preis * anzahl;\nprintf("Summe: %d", summe);`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> BerechneSumme\n    BerechneSumme: summe = preis * anzahl\n    BerechneSumme --> Ausgabe\n    Ausgabe: Ausgabe "Summe:" + summe\n    Ausgabe --> [*]`
+            },
+            'simple-if': {
+                code: `int alter = 18;\nif (alter >= 18) {\n    printf("Volljährig");\n}`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> Bedingung\n    state Bedingung <<choice>>\n    Bedingung --> Ausgabe: [alter >= 18]\n    Ausgabe: Ausgabe "Volljährig"\n    Ausgabe --> Ende\n    Bedingung --> Ende: [alter < 18]\n    state Ende <<join>>\n    Ende --> [*]`
+            },
+            'if-else': {
+                code: `int note = 2;\nif (note <= 4) {\n    printf("Bestanden");\n} else {\n    printf("Durchgefallen");\n}`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> Bedingung\n    state Bedingung <<choice>>\n    Bedingung --> Bestanden: [note <= 4]\n    Bestanden: Ausgabe "Bestanden"\n    Bedingung --> Durchgefallen: [note > 4]\n    Durchgefallen: Ausgabe "Durchgefallen"\n    Bestanden --> Ende\n    Durchgefallen --> Ende\n    state Ende <<join>>\n    Ende --> [*]`
+            },
+            'while': {
+                code: `int i = 1;\nint summe = 0;\nwhile (i <= 100) {\n    summe = summe + i;\n    i++;\n}`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> Init\n    Init: i = 1, summe = 0\n    Init --> MergeKnoten\n    state MergeKnoten <<join>>\n    MergeKnoten --> Bedingung\n    state Bedingung <<choice>>\n    Bedingung --> Schleifenrumpf: [i <= 100]\n    Schleifenrumpf: summe = summe + i<br> i++\n    Schleifenrumpf --> MergeKnoten\n    Bedingung --> Ende: [i > 100]\n    Ende --> [*]`
+            },
+            'do-while': {
+                code: `int i = 1;\ndo {\n    printf("%d ", i);\n    i++;\n} while(i <= 10);\n`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> Init\n    Init: i = 1\n    Init --> MergeKnoten\n    state MergeKnoten <<join>>\n    MergeKnoten --> Aktion\n    Aktion: Ausgabe i<br> i++\n    Aktion --> Bedingung\n    state Bedingung <<choice>>\n    Bedingung --> MergeKnoten: [i <= 10]\n    Bedingung --> Ende: [i > 10]\n    Ende --> [*]`
+            },
+            'nested-loops': {
+                code: `for(int i=0; i<3; i++) {\n    for(int j=0; j<3; j++) {\n        matrix[i][j] = 0;\n    }\n}`,
+                diagram: `stateDiagram-v2\n    direction TB\n    [*] --> InitI\n    InitI: i = 0\n    InitI --> MergeI\n    state MergeI <<join>>\n    MergeI --> BedI\n    state BedI <<choice>>\n    BedI --> InitJ: [i < 3]\n    InitJ: j = 0\n    InitJ --> MergeJ\n    state MergeJ <<join>>\n    MergeJ --> BedJ\n    state BedJ <<choice>>\n    BedJ --> Aktion: [j < 3]\n    Aktion: matrix[i][j] = 0<br> j++\n    Aktion --> MergeJ\n    BedJ --> IncI: [j >= 3]\n    IncI: i++\n    IncI --> MergeI\n    BedI --> Ende: [i >= 3]\n    Ende --> [*]`
+            }
+        };
+
+        // State Variables
+        let currentMode = 'code-to-diagram'; // 'code-to-diagram' or 'diagram-to-code'
+        let currentCatalog = 'linear';
+        let solutionVisible = false;
+
+        // DOM Elements
+        const selCatalog = document.getElementById('catalog-selector');
+        const btnCodeToDiag = document.getElementById('mode-code-to-diagram');
+        const btnDiagToCode = document.getElementById('mode-diagram-to-code');
+
+        const taskContent = document.getElementById('task-content');
+        const solutionContent = document.getElementById('solution-content');
+
+        const btnShowSolution = document.getElementById('show-solution-btn');
+        const solutionOverlay = document.getElementById('solution-overlay');
+        const taskInstruction = document.getElementById('task-instruction');
+        const checklistContainer = document.getElementById('checklist-container');
+        const loopChecks = document.querySelectorAll('.loop-check');
+        const checkboxes = document.querySelectorAll('#checklist-container input[type="checkbox"]');
+
+        // Functions
+        function resetSolution() {
+            solutionVisible = false;
+            solutionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            // Uncheck all boxes
+            checkboxes.forEach(cb => cb.checked = false);
+        }
+
+        function showSolution() {
+            solutionVisible = true;
+            solutionOverlay.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function formatCode(codeStr) {
+            return `<pre class="w-full h-full p-4 overflow-auto mono text-sm text-green-400 bg-black/50 rounded-lg border border-slate-700 whitespace-pre-wrap"><code>${codeStr}</code></pre>`;
+        }
+
+        async function renderDiagram(diagramStr, container) {
+            container.innerHTML = '<div class="flex items-center justify-center w-full h-full text-slate-500">Generiere Diagramm...</div>';
+            try {
+                // Ensure unique ID that works well with mermaid
+                const id = 'mermaid-' + Math.random().toString(36).substring(2, 9);
+                const { svg } = await mermaid.render(id, diagramStr);
+                container.innerHTML = `<div class="bg-white/10 p-4 rounded-lg flex justify-center overflow-auto w-full h-full items-center">${svg}</div>`;
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<div class="text-red-400 p-4">Fehler beim Generieren des Diagramms: ' + e.message + '</div>';
+            }
+        }
+
+        function updateUI() {
+            resetSolution();
+            const data = catalog[currentCatalog];
+
+            // Adjust loop checklist visibility
+            if (['while', 'do-while', 'nested-loops'].includes(currentCatalog)) {
+                loopChecks.forEach(el => el.classList.remove('hidden'));
+            } else {
+                loopChecks.forEach(el => el.classList.add('hidden'));
+            }
+
+            if (currentMode === 'code-to-diagram') {
+                // UI Toggles
+                btnCodeToDiag.classList.add('text-white', 'bg-indigo-600', 'shadow');
+                btnCodeToDiag.classList.remove('text-slate-400', 'bg-transparent');
+
+                btnDiagToCode.classList.remove('text-white', 'bg-indigo-600', 'shadow');
+                btnDiagToCode.classList.add('text-slate-400', 'bg-transparent');
+
+                taskInstruction.innerText = "Zeichne das UML-Aktivitätendiagramm dazu auf Papier.";
+                checklistContainer.classList.remove('hidden');
+
+                // Content
+                taskContent.innerHTML = formatCode(data.code);
+                renderDiagram(data.diagram, solutionContent);
+
+            } else {
+                // UI Toggles
+                btnDiagToCode.classList.add('text-white', 'bg-indigo-600', 'shadow');
+                btnDiagToCode.classList.remove('text-slate-400', 'bg-transparent');
+
+                btnCodeToDiag.classList.remove('text-white', 'bg-indigo-600', 'shadow');
+                btnCodeToDiag.classList.add('text-slate-400', 'bg-transparent');
+
+                taskInstruction.innerText = "Überlege dir die C-Syntax zu diesem Ablauf.";
+                checklistContainer.classList.add('hidden');
+
+                // Content
+                renderDiagram(data.diagram, taskContent);
+                solutionContent.innerHTML = formatCode(data.code);
+            }
+        }
+
+        // Event Listeners
+        selCatalog.addEventListener('change', (e) => {
+            currentCatalog = e.target.value;
+            updateUI();
+        });
+
+        btnCodeToDiag.addEventListener('click', () => {
+            if (currentMode !== 'code-to-diagram') {
+                currentMode = 'code-to-diagram';
+                updateUI();
+            }
+        });
+
+        btnDiagToCode.addEventListener('click', () => {
+            if (currentMode !== 'diagram-to-code') {
+                currentMode = 'diagram-to-code';
+                updateUI();
+            }
+        });
+
+        btnShowSolution.addEventListener('click', () => {
+            if (!solutionVisible) {
+                showSolution();
+            }
+        });
+
+        // Initialize
+        updateUI();
+
+    </script>
+</body>
+</html>
