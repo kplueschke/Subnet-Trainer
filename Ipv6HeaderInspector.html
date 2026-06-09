@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv6-Header-Feld-Inspektor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-field {
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .header-field:hover {
+            filter: brightness(1.2);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        .header-field.selected {
+            filter: brightness(1.3);
+            border: 2px solid white;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            transform: scale(1.02);
+        }
+
+        /* Colors for different fields */
+        .bg-version { background-color: #ef4444; } /* Red */
+        .bg-traffic { background-color: #f97316; } /* Orange */
+        .bg-flow { background-color: #eab308; }    /* Yellow */
+        .bg-payload { background-color: #22c55e; } /* Green */
+        .bg-next { background-color: #06b6d4; }    /* Cyan */
+        .bg-hop { background-color: #3b82f6; }     /* Blue */
+        .bg-src { background-color: #8b5cf6; }     /* Violet */
+        .bg-dst { background-color: #d946ef; }     /* Fuchsia */
+
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+        </div>
+
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-500 mb-4">
+                IPv6-Header Inspektor
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Klicke auf die Felder des 40 Bytes großen IPv6-Headers, um Details, Längen und Bit/Byte-Adressen zu analysieren.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-start">
+
+            <!-- Graphic Area -->
+            <div class="w-full lg:w-2/3 glass-card rounded-2xl p-6 overflow-x-auto">
+                <h2 class="text-xl font-bold text-white mb-6 text-center">IPv6 Header Struktur (320 Bits / 40 Bytes)</h2>
+
+                <div class="min-w-[600px] border-2 border-slate-700 rounded-lg overflow-hidden bg-slate-900 mono text-sm select-none shadow-2xl">
+
+                    <!-- Bit Scale Header -->
+                    <div class="flex text-slate-500 text-xs border-b border-slate-700">
+                        <div class="w-[12.5%] text-center border-r border-slate-700/50 py-1">0-3</div>
+                        <div class="w-[25%] text-center border-r border-slate-700/50 py-1">4-11</div>
+                        <div class="w-[62.5%] text-center py-1">12-31</div>
+                    </div>
+
+                    <!-- Row 1: Version, Traffic Class, Flow Label -->
+                    <div class="flex h-16 border-b border-slate-700 text-center font-bold text-white">
+                        <div class="w-[12.5%] header-field bg-version border-r border-slate-700 flex items-center justify-center" data-field="version">
+                            Ver<br>(4)
+                        </div>
+                        <div class="w-[25%] header-field bg-traffic border-r border-slate-700 flex items-center justify-center" data-field="trafficClass">
+                            Traffic Class<br>(8)
+                        </div>
+                        <div class="w-[62.5%] header-field bg-flow flex items-center justify-center" data-field="flowLabel">
+                            Flow Label<br>(20)
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Payload Length, Next Header, Hop Limit -->
+                    <div class="flex h-16 border-b border-slate-700 text-center font-bold text-white">
+                        <div class="w-[50%] header-field bg-payload border-r border-slate-700 flex items-center justify-center" data-field="payloadLength">
+                            Payload Length<br>(16)
+                        </div>
+                        <div class="w-[25%] header-field bg-next border-r border-slate-700 flex items-center justify-center" data-field="nextHeader">
+                            Next Header<br>(8)
+                        </div>
+                        <div class="w-[25%] header-field bg-hop flex items-center justify-center" data-field="hopLimit">
+                            Hop Limit<br>(8)
+                        </div>
+                    </div>
+
+                    <!-- Row 3-6: Source Address -->
+                    <div class="flex h-32 border-b border-slate-700 text-center font-bold text-white">
+                        <div class="w-full header-field bg-src flex items-center justify-center" data-field="sourceAddress">
+                            Source Address (128 Bits / 16 Bytes)
+                        </div>
+                    </div>
+
+                    <!-- Row 7-10: Destination Address -->
+                    <div class="flex h-32 text-center font-bold text-white">
+                        <div class="w-full header-field bg-dst flex items-center justify-center" data-field="destinationAddress">
+                            Destination Address (128 Bits / 16 Bytes)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Details Panel -->
+            <div class="w-full lg:w-1/3 glass-card rounded-2xl p-6 sticky top-8" id="details-panel">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center" id="panel-icon">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white" id="panel-title">Details</h2>
+                </div>
+
+                <div id="panel-content" class="text-slate-400 text-sm">
+                    Klicke auf ein Feld im Header-Diagramm links, um dessen Funktion, Größe und genaue Bit/Byte-Positionen zu sehen.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-8">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const fieldData = {
+            version: {
+                title: "Version",
+                colorClass: "bg-red-500",
+                length: "4 Bits",
+                posBits: "Bit 0 - 3",
+                posBytes: "Byte 0 (Erstes Nibble)",
+                desc: "Gibt die IP-Version an. Für IPv6 enthält dieses Feld immer den binären Wert <code>0110</code> (Dezimal 6)."
+            },
+            trafficClass: {
+                title: "Traffic Class",
+                colorClass: "bg-orange-500",
+                length: "8 Bits (1 Byte)",
+                posBits: "Bit 4 - 11",
+                posBytes: "Byte 0 (zweites Nibble) bis Byte 1 (erstes Nibble)",
+                desc: "Äquivalent zum IPv4 Type of Service (ToS) Feld. Wird verwendet für Quality of Service (QoS) und Packet Priorization (z.B. DiffServ)."
+            },
+            flowLabel: {
+                title: "Flow Label",
+                colorClass: "bg-yellow-500",
+                length: "20 Bits",
+                posBits: "Bit 12 - 31",
+                posBytes: "Byte 1 (zweites Nibble) bis Byte 3",
+                desc: "Wird verwendet, um Pakete desselben Flusses (z.B. ein Echtzeit-Videostream) zu markieren, damit Router sie auf demselben Pfad und mit derselben Priorität behandeln, ohne weiter in die Kapselung schauen zu müssen."
+            },
+            payloadLength: {
+                title: "Payload Length",
+                colorClass: "bg-green-500",
+                length: "16 Bits (2 Bytes)",
+                posBits: "Bit 32 - 47",
+                posBytes: "Byte 4 - 5",
+                desc: "Gibt die Größe der Payload in Bytes an. Im Gegensatz zu IPv4 ist die Länge des Headers (40 Bytes) hier <strong>nicht</strong> enthalten. Beinhaltet auch Extension Headers."
+            },
+            nextHeader: {
+                title: "Next Header",
+                colorClass: "bg-cyan-500",
+                length: "8 Bits (1 Byte)",
+                posBits: "Bit 48 - 55",
+                posBytes: "Byte 6",
+                desc: "Äquivalent zum IPv4 Protocol-Feld. Gibt den Typ des nächsten Headers an (z.B. TCP=6, UDP=17, ICMPv6=58) oder verweist auf einen IPv6 Extension Header."
+            },
+            hopLimit: {
+                title: "Hop Limit",
+                colorClass: "bg-blue-500",
+                length: "8 Bits (1 Byte)",
+                posBits: "Bit 56 - 63",
+                posBytes: "Byte 7",
+                desc: "Äquivalent zur IPv4 Time to Live (TTL). Der Wert wird von jedem Router um 1 dekrementiert. Erreicht er 0, wird das Paket verworfen und eine ICMPv6-Nachricht gesendet."
+            },
+            sourceAddress: {
+                title: "Source Address",
+                colorClass: "bg-violet-500",
+                length: "128 Bits (16 Bytes)",
+                posBits: "Bit 64 - 191",
+                posBytes: "Byte 8 - 23",
+                desc: "Die 128-Bit lange IPv6-Adresse des Senders."
+            },
+            destinationAddress: {
+                title: "Destination Address",
+                colorClass: "bg-fuchsia-500",
+                length: "128 Bits (16 Bytes)",
+                posBits: "Bit 192 - 319",
+                posBytes: "Byte 24 - 39",
+                desc: "Die 128-Bit lange IPv6-Adresse des Empfängers."
+            }
+        };
+
+        const panelIcon = document.getElementById('panel-icon');
+        const panelTitle = document.getElementById('panel-title');
+        const panelContent = document.getElementById('panel-content');
+
+        document.querySelectorAll('.header-field').forEach(field => {
+            field.addEventListener('click', function() {
+                // Deselect all
+                document.querySelectorAll('.header-field').forEach(f => f.classList.remove('selected'));
+
+                // Select current
+                this.classList.add('selected');
+
+                const fieldId = this.dataset.field;
+                const data = fieldData[fieldId];
+
+                // Update Panel
+                panelIcon.className = `w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold ${data.colorClass}`;
+                panelIcon.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+                panelTitle.textContent = data.title;
+
+                panelContent.innerHTML = `
+                    <div class="mb-4 text-slate-300">
+                        ${data.desc}
+                    </div>
+
+                    <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 mono text-sm">
+                        <div class="flex justify-between border-b border-slate-800 pb-2 mb-2">
+                            <span class="text-slate-500">Länge:</span>
+                            <span class="text-blue-400 font-bold">${data.length}</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-800 pb-2 mb-2">
+                            <span class="text-slate-500">Bits:</span>
+                            <span class="text-emerald-400">${data.posBits}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Bytes:</span>
+                            <span class="text-purple-400">${data.posBytes}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daisy-Chaining-Konfigurator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .monitor {
+            transition: all 0.3s;
+        }
+        .monitor.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .cable-line {
+            stroke-dasharray: 10;
+            animation: dash 2s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -20; }
+        }
+
+        .cable-failed {
+            stroke: #ef4444;
+            animation: none;
+            stroke-dasharray: 0;
+        }
+
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 mb-4">
+                Daisy-Chaining-Konfigurator
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Plane einen Arbeitsplatz mit mehreren Monitoren in Reihe (Daisy Chain). Achte auf die korrekten Anschlüsse (DisplayPort MST) und Bandbreiten-Limits.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-start">
+
+            <!-- Controls -->
+            <div class="w-full lg:w-1/3 glass-card rounded-2xl p-6 flex flex-col gap-6">
+
+                <div>
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">1. PC / Notebook</h2>
+                    <select id="pc-source" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-2">
+                        <option value="dp12">Desktop PC (DisplayPort 1.2)</option>
+                        <option value="dp14" selected>Desktop PC (DisplayPort 1.4)</option>
+                        <option value="hdmi">Notebook (Nur HDMI)</option>
+                        <option value="usb-c">Notebook (USB-C mit DP Alt Mode)</option>
+                    </select>
+                    <p class="text-xs text-slate-400" id="pc-desc">DP 1.4 bietet genug Bandbreite für mehrere hochauflösende Displays.</p>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-4 border-b border-slate-700 pb-2">
+                        <h2 class="text-lg font-bold text-white">2. Monitore</h2>
+                        <span class="text-xs text-blue-400 font-bold" id="monitor-count">2 Monitore</span>
+                    </div>
+
+                    <div class="flex flex-col gap-3" id="monitors-list">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        <button id="btn-add-monitor" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm rounded-lg transition-colors">
+                            + Monitor
+                        </button>
+                        <button id="btn-remove-monitor" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm rounded-lg transition-colors">
+                            - Monitor
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-4 border-t border-slate-700">
+                    <button id="btn-check" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-colors">
+                        Konfiguration Prüfen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="w-full lg:w-2/3 glass-card rounded-2xl p-6 min-h-[500px] flex flex-col">
+
+                <!-- Feedback Panel -->
+                <div id="feedback-panel" class="mb-6 p-4 rounded-xl hidden text-sm font-bold border"></div>
+
+                <!-- Graphic -->
+                <div class="flex-grow relative flex items-center justify-start overflow-x-auto pb-8 pt-4 px-4 bg-slate-900/50 rounded-xl border border-slate-700" id="desk-area">
+
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" id="cable-layer">
+                        <!-- Cables drawn here -->
+                    </svg>
+
+                    <!-- PC Node -->
+                    <div class="z-10 flex flex-col items-center flex-shrink-0 mx-4" id="node-pc">
+                        <div class="w-16 h-24 bg-slate-700 border-2 border-slate-500 rounded-md relative flex items-center justify-center mb-2 shadow-lg">
+                            <span class="text-2xl">💻</span>
+                            <!-- Output Port -->
+                            <div class="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blue-400 rounded-full border border-slate-900" id="port-pc-out"></div>
+                        </div>
+                        <span class="text-xs font-bold text-slate-300">Quelle</span>
+                    </div>
+
+                    <!-- Monitors Container -->
+                    <div class="flex items-center z-10 gap-16" id="monitors-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-8">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const maxMonitors = 4;
+        let monitors = [
+            { res: '1080p', mst: true },
+            { res: '1080p', mst: false }
+        ];
+
+        const resolutions = {
+            '1080p': { name: 'Full HD (1080p)', bw: 1 }, // abstract bw units
+            '1440p': { name: 'QHD (1440p)', bw: 2 },
+            '4k': { name: '4K UHD', bw: 4 }
+        };
+
+        const sources = {
+            'dp12': { name: 'DP 1.2', bw: 4, mst: true, desc: 'DP 1.2 (max. ~21 Gbps)' },
+            'dp14': { name: 'DP 1.4', bw: 8, mst: true, desc: 'DP 1.4 (max. ~32 Gbps)' },
+            'hdmi': { name: 'HDMI', bw: 8, mst: false, desc: 'HDMI unterstützt kein nativer Daisy Chain (MST).' },
+            'usb-c': { name: 'USB-C (DP)', bw: 4, mst: true, desc: 'USB-C DP Alt Mode.' }
+        };
+
+        const pcSourceSelect = document.getElementById('pc-source');
+        const pcDesc = document.getElementById('pc-desc');
+        const monitorsList = document.getElementById('monitors-list');
+        const monitorsContainer = document.getElementById('monitors-container');
+        const cableLayer = document.getElementById('cable-layer');
+        const monitorCountLabel = document.getElementById('monitor-count');
+        const feedbackPanel = document.getElementById('feedback-panel');
+
+        function renderControls() {
+            monitorsList.innerHTML = '';
+            monitorCountLabel.textContent = `${monitors.length} Monitor${monitors.length !== 1 ? 'e' : ''}`;
+
+            monitors.forEach((mon, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800 p-3 rounded-lg border border-slate-700 flex flex-col gap-2';
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-white">Monitor ${index + 1}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <select class="res-select flex-grow bg-slate-900 border border-slate-600 rounded px-2 py-1 text-xs text-white" data-index="${index}">
+                            <option value="1080p" ${mon.res === '1080p' ? 'selected' : ''}>Full HD (1080p)</option>
+                            <option value="1440p" ${mon.res === '1440p' ? 'selected' : ''}>QHD (1440p)</option>
+                            <option value="4k" ${mon.res === '4k' ? 'selected' : ''}>4K UHD</option>
+                        </select>
+                        <label class="flex items-center gap-1 text-xs text-slate-300">
+                            <input type="checkbox" class="mst-check" data-index="${index}" ${mon.mst ? 'checked' : ''}>
+                            MST-Out
+                        </label>
+                    </div>
+                `;
+                monitorsList.appendChild(div);
+            });
+
+            // Bind events
+            document.querySelectorAll('.res-select').forEach(el => {
+                el.addEventListener('change', (e) => {
+                    monitors[e.target.dataset.index].res = e.target.value;
+                    renderVisuals();
+                    resetFeedback();
+                });
+            });
+            document.querySelectorAll('.mst-check').forEach(el => {
+                el.addEventListener('change', (e) => {
+                    monitors[e.target.dataset.index].mst = e.target.checked;
+                    renderVisuals();
+                    resetFeedback();
+                });
+            });
+
+            document.getElementById('btn-add-monitor').disabled = monitors.length >= maxMonitors;
+            document.getElementById('btn-remove-monitor').disabled = monitors.length <= 1;
+        }
+
+        function renderVisuals() {
+            monitorsContainer.innerHTML = '';
+
+            monitors.forEach((mon, index) => {
+                const div = document.createElement('div');
+                div.className = 'monitor flex flex-col items-center flex-shrink-0 relative';
+                div.id = `node-mon-${index}`;
+
+                // Screen size based on res
+                let width = 'w-24'; let height = 'h-16';
+                if(mon.res === '1440p') { width = 'w-28'; height = 'h-20'; }
+                if(mon.res === '4k') { width = 'w-32'; height = 'h-24'; }
+
+                div.innerHTML = `
+                    <div class="${width} ${height} bg-slate-800 border-4 border-slate-600 rounded-md relative flex items-center justify-center mb-1 shadow-lg">
+                        <span class="text-xs text-slate-500 font-bold">${index + 1}</span>
+                        <!-- In Port -->
+                        <div class="absolute left-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-green-400 rounded-full border border-slate-900" id="port-mon-${index}-in"></div>
+                        <!-- Out Port -->
+                        ${mon.mst ? `<div class="absolute right-[-6px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blue-400 rounded-full border border-slate-900" id="port-mon-${index}-out"></div>` : ''}
+                    </div>
+                    <div class="w-4 h-6 bg-slate-600"></div>
+                    <div class="w-16 h-2 bg-slate-500 rounded-t-sm"></div>
+                    <span class="text-[10px] font-bold text-slate-400 mt-2">${resolutions[mon.res].name}</span>
+                    <span class="text-[10px] text-slate-500">MST: ${mon.mst ? 'Ja' : 'Nein'}</span>
+                `;
+                monitorsContainer.appendChild(div);
+            });
+
+            // Need small timeout to let DOM render before drawing SVG lines
+            setTimeout(drawCables, 50);
+        }
+
+        function getPortCoords(portId) {
+            const port = document.getElementById(portId);
+            if (!port) return null;
+            const portRect = port.getBoundingClientRect();
+            const containerRect = document.getElementById('desk-area').getBoundingClientRect();
+
+            // Adjust for scroll
+            const scrollLeft = document.getElementById('desk-area').scrollLeft;
+
+            return {
+                x: portRect.left + portRect.width/2 - containerRect.left + scrollLeft,
+                y: portRect.top + portRect.height/2 - containerRect.top
+            };
+        }
+
+        function drawCables(errorIndices = []) {
+            cableLayer.innerHTML = '';
+
+            // PC to Mon 0
+            const pcOut = getPortCoords('port-pc-out');
+            const m0In = getPortCoords('port-mon-0-in');
+
+            if (pcOut && m0In) {
+                drawSVGLine(pcOut, m0In, errorIndices.includes(0));
+            }
+
+            // Mon to Mon
+            for (let i = 0; i < monitors.length - 1; i++) {
+                const mOut = getPortCoords(`port-mon-${i}-out`);
+                const mNextIn = getPortCoords(`port-mon-${i+1}-in`);
+
+                if (mOut && mNextIn) {
+                    drawSVGLine(mOut, mNextIn, errorIndices.includes(i+1));
+                }
+            }
+        }
+
+        function drawSVGLine(start, end, isFailed) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+            // Bezier curve
+            const cp1x = start.x + (end.x - start.x) / 2;
+            const cp1y = start.y + 30; // sag
+            const cp2x = start.x + (end.x - start.x) / 2;
+            const cp2y = end.y + 30;
+
+            const d = `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
+
+            line.setAttribute('d', d);
+            line.setAttribute('fill', 'none');
+            line.setAttribute('stroke-width', '4');
+
+            if (isFailed) {
+                line.setAttribute('stroke', '#ef4444');
+                line.classList.add('cable-failed');
+            } else {
+                line.setAttribute('stroke', '#3b82f6');
+                line.classList.add('cable-line');
+            }
+
+            cableLayer.appendChild(line);
+        }
+
+        function resetFeedback() {
+            feedbackPanel.classList.add('hidden');
+            drawCables(); // redraw normal cables
+        }
+
+        function checkConfig() {
+            const srcKey = pcSourceSelect.value;
+            const src = sources[srcKey];
+
+            let errors = [];
+            let errorIndices = []; // which cables failed
+            let totalBw = 0;
+
+            // Check 1: Source supports MST?
+            if (!src.mst && monitors.length > 1) {
+                errors.push("Fehler: Die Quelle (HDMI) unterstützt kein Multi-Stream Transport (MST) für Daisy Chaining.");
+                errorIndices.push(0); // Fail at first cable essentially
+            }
+
+            // Check 2: Monitors have MST out?
+            for (let i = 0; i < monitors.length - 1; i++) {
+                if (!monitors[i].mst) {
+                    errors.push(`Fehler: Monitor ${i+1} benötigt einen DP/MST-Ausgang (Out), um das Signal an Monitor ${i+2} weiterzuleiten.`);
+                    errorIndices.push(i+1); // Cable from i to i+1 failed
+                    break; // Stop cascading errors
+                }
+            }
+
+            // Check 3: Bandwidth
+            monitors.forEach(m => {
+                totalBw += resolutions[m.res].bw;
+            });
+
+            if (totalBw > src.bw) {
+                errors.push(`Bandbreitenlimit überschritten! Die Quelle (${src.name}) hat nicht genug Bandbreite für diese Auflösungen.`);
+                // Mark all cables after bw exceeded as red? Keep simple, mark first.
+                if(errorIndices.length === 0) errorIndices.push(0);
+            }
+
+            feedbackPanel.classList.remove('hidden');
+            if (errors.length > 0) {
+                feedbackPanel.className = 'mb-6 p-4 rounded-xl text-sm border bg-red-900/30 border-red-500 text-red-400';
+                feedbackPanel.innerHTML = `<ul class="list-disc pl-5 space-y-1">` + errors.map(e => `<li>${e}</li>`).join('') + `</ul>`;
+                drawCables(errorIndices);
+            } else {
+                feedbackPanel.className = 'mb-6 p-4 rounded-xl text-sm border font-bold text-center bg-green-900/30 border-green-500 text-green-400';
+                feedbackPanel.innerHTML = `✅ Konfiguration erfolgreich! Die Daisy Chain funktioniert.`;
+                drawCables([]); // All green/blue
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('btn-add-monitor').addEventListener('click', () => {
+            if (monitors.length < maxMonitors) {
+                // By default, previous last monitor needs MST now, let user figure it out or set it.
+                // We'll just add a standard 1080p monitor without MST to the end.
+                monitors.push({ res: '1080p', mst: false });
+                renderControls();
+                renderVisuals();
+                resetFeedback();
+            }
+        });
+
+        document.getElementById('btn-remove-monitor').addEventListener('click', () => {
+            if (monitors.length > 1) {
+                monitors.pop();
+                renderControls();
+                renderVisuals();
+                resetFeedback();
+            }
+        });
+
+        pcSourceSelect.addEventListener('change', () => {
+            pcDesc.textContent = sources[pcSourceSelect.value].desc;
+            resetFeedback();
+        });
+
+        document.getElementById('btn-check').addEventListener('click', checkConfig);
+
+        // Handle horizontal scrolling of desk area to redraw lines
+        document.getElementById('desk-area').addEventListener('scroll', () => {
+            // Need to know if we have errors currently displayed to redraw them correctly
+            // Simple approach: just redraw normal, user needs to click check again
+            drawCables();
+        });
+
+        window.addEventListener('resize', () => drawCables());
+
+        // Init
+        renderControls();
+        renderVisuals();
+
+    </script>
+</body>
+</html>

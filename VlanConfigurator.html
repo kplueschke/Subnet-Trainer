@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLAN-Konfigurator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .port {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .port:hover {
+            transform: scale(1.1);
+        }
+
+        /* SVG Animation classes */
+        @keyframes dash {
+            to { stroke-dashoffset: -20; }
+        }
+        .packet-flow {
+            stroke-dasharray: 5, 5;
+            animation: dash 1s linear infinite;
+        }
+
+        .vlan-color-10 { fill: #3b82f6; stroke: #3b82f6; color: #3b82f6; } /* Blue */
+        .vlan-color-20 { fill: #ef4444; stroke: #ef4444; color: #ef4444; } /* Red */
+        .vlan-color-30 { fill: #10b981; stroke: #10b981; color: #10b981; } /* Green */
+        .vlan-trunk { fill: #a855f7; stroke: #a855f7; color: #a855f7; } /* Purple */
+        .vlan-none { fill: #475569; stroke: #475569; color: #94a3b8; } /* Slate */
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 mb-4">
+                VLAN-Konfigurator
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Konfiguriere Switch-Ports als Access (VLAN-Zuweisung) oder Trunk (Alle VLANs). Teste danach die Kommunikation zwischen den PCs.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-start">
+
+            <!-- Controls Sidebar -->
+            <div class="w-full lg:w-1/3 glass-card rounded-2xl p-6 flex flex-col gap-6">
+
+                <div>
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Port Konfiguration</h2>
+                    <p class="text-sm text-slate-400 mb-4">Klicke auf einen Port im Diagramm, um ihn zu konfigurieren.</p>
+
+                    <div id="port-config-panel" class="hidden bg-slate-800 border border-slate-600 rounded-xl p-4">
+                        <div class="font-bold text-white mb-2" id="selected-port-name">Port ausgewählt</div>
+
+                        <label class="block text-sm font-medium text-slate-300 mb-1 mt-3">Modus</label>
+                        <select id="port-mode" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500 mb-3">
+                            <option value="none">Kein Modus</option>
+                            <option value="access">Access</option>
+                            <option value="trunk">Trunk (802.1Q)</option>
+                        </select>
+
+                        <div id="vlan-select-container" class="hidden">
+                            <label class="block text-sm font-medium text-slate-300 mb-1">VLAN ID</label>
+                            <select id="port-vlan" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                                <option value="10">VLAN 10 (Sales)</option>
+                                <option value="20">VLAN 20 (IT)</option>
+                                <option value="30">VLAN 30 (HR)</option>
+                            </select>
+                        </div>
+
+                        <button id="btn-apply-port" class="w-full mt-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors">
+                            Anwenden
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Ping Test</h2>
+                    <div class="flex gap-2 mb-2">
+                        <select id="ping-src" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
+                            <option value="PC1">PC1</option>
+                            <option value="PC2">PC2</option>
+                            <option value="PC3">PC3</option>
+                            <option value="PC4">PC4</option>
+                        </select>
+                        <span class="flex items-center text-slate-400">➡️</span>
+                        <select id="ping-dst" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
+                            <option value="PC1">PC1</option>
+                            <option value="PC2" selected>PC2</option>
+                            <option value="PC3">PC3</option>
+                            <option value="PC4">PC4</option>
+                        </select>
+                    </div>
+                    <button id="btn-ping" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors shadow-lg shadow-blue-500/20">
+                        Ping Senden
+                    </button>
+                    <div id="ping-result" class="mt-3 text-sm font-bold text-center h-6"></div>
+                </div>
+
+                <div class="mt-auto">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Legende</h3>
+                    <div class="flex flex-col gap-1 text-sm text-slate-400">
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span> VLAN 10 (Sales)</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-500"></span> VLAN 20 (IT)</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-green-500"></span> VLAN 30 (HR)</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-500"></span> Trunk Port</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive SVG Diagram -->
+            <div class="w-full lg:w-2/3 glass-card rounded-2xl p-6 overflow-x-auto flex justify-center items-center min-h-[500px] bg-slate-900/50">
+                <svg width="600" height="400" viewBox="0 0 600 400" id="network-svg">
+                    <!-- Background Grid -->
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+
+                    <!-- Connections (Lines) -->
+                    <!-- PC1 to SW1 -->
+                    <line x1="100" y1="100" x2="250" y2="200" stroke="#475569" stroke-width="4" id="line-pc1-sw1" />
+                    <!-- PC2 to SW1 -->
+                    <line x1="100" y1="300" x2="250" y2="200" stroke="#475569" stroke-width="4" id="line-pc2-sw1" />
+                    <!-- SW1 to SW2 (Trunk link) -->
+                    <line x1="300" y1="200" x2="450" y2="200" stroke="#475569" stroke-width="4" id="line-sw1-sw2" />
+                    <!-- SW2 to PC3 -->
+                    <line x1="500" y1="200" x2="650" y2="100" stroke="#475569" stroke-width="4" id="line-sw2-pc3" /> <!-- Adjusted coords below -->
+                    <!-- SW2 to PC4 -->
+                    <line x1="500" y1="200" x2="650" y2="300" stroke="#475569" stroke-width="4" id="line-sw2-pc4" /> <!-- Adjusted coords below -->
+
+                    <!-- Adjusted Lines -->
+                    <line x1="450" y1="200" x2="550" y2="100" stroke="#475569" stroke-width="4" id="line-sw2-pc3" />
+                    <line x1="450" y1="200" x2="550" y2="300" stroke="#475569" stroke-width="4" id="line-sw2-pc4" />
+
+                    <!-- Switches -->
+                    <!-- Switch 1 -->
+                    <rect x="230" y="180" width="70" height="40" rx="5" fill="#1e293b" stroke="#64748b" stroke-width="2" />
+                    <text x="265" y="205" fill="white" font-size="12" font-weight="bold" text-anchor="middle" class="mono">SW1</text>
+
+                    <!-- Ports on SW1 -->
+                    <circle cx="230" cy="190" r="8" class="port vlan-none" id="port-sw1-fa0/1" onclick="selectPort('sw1-fa0/1')" />
+                    <text x="210" y="193" fill="#94a3b8" font-size="10" text-anchor="end">Fa0/1</text>
+
+                    <circle cx="230" cy="210" r="8" class="port vlan-none" id="port-sw1-fa0/2" onclick="selectPort('sw1-fa0/2')" />
+                    <text x="210" y="213" fill="#94a3b8" font-size="10" text-anchor="end">Fa0/2</text>
+
+                    <circle cx="300" cy="200" r="8" class="port vlan-none" id="port-sw1-g0/1" onclick="selectPort('sw1-g0/1')" />
+                    <text x="315" y="195" fill="#94a3b8" font-size="10" text-anchor="start">G0/1</text>
+
+                    <!-- Switch 2 -->
+                    <rect x="420" y="180" width="70" height="40" rx="5" fill="#1e293b" stroke="#64748b" stroke-width="2" />
+                    <text x="455" y="205" fill="white" font-size="12" font-weight="bold" text-anchor="middle" class="mono">SW2</text>
+
+                    <!-- Ports on SW2 -->
+                    <circle cx="420" cy="200" r="8" class="port vlan-none" id="port-sw2-g0/1" onclick="selectPort('sw2-g0/1')" />
+                    <text x="405" y="195" fill="#94a3b8" font-size="10" text-anchor="end">G0/1</text>
+
+                    <circle cx="490" cy="190" r="8" class="port vlan-none" id="port-sw2-fa0/1" onclick="selectPort('sw2-fa0/1')" />
+                    <text x="510" y="193" fill="#94a3b8" font-size="10" text-anchor="start">Fa0/1</text>
+
+                    <circle cx="490" cy="210" r="8" class="port vlan-none" id="port-sw2-fa0/2" onclick="selectPort('sw2-fa0/2')" />
+                    <text x="510" y="213" fill="#94a3b8" font-size="10" text-anchor="start">Fa0/2</text>
+
+                    <!-- PCs -->
+                    <g id="PC1" transform="translate(60, 80)">
+                        <rect x="0" y="0" width="40" height="30" rx="3" fill="#334155" stroke="#94a3b8" stroke-width="2" />
+                        <rect x="15" y="30" width="10" height="10" fill="#94a3b8" />
+                        <rect x="5" y="40" width="30" height="5" rx="2" fill="#94a3b8" />
+                        <text x="20" y="20" fill="white" font-size="12" font-weight="bold" text-anchor="middle">PC1</text>
+                    </g>
+                    <g id="PC2" transform="translate(60, 280)">
+                        <rect x="0" y="0" width="40" height="30" rx="3" fill="#334155" stroke="#94a3b8" stroke-width="2" />
+                        <rect x="15" y="30" width="10" height="10" fill="#94a3b8" />
+                        <rect x="5" y="40" width="30" height="5" rx="2" fill="#94a3b8" />
+                        <text x="20" y="20" fill="white" font-size="12" font-weight="bold" text-anchor="middle">PC2</text>
+                    </g>
+                    <g id="PC3" transform="translate(550, 80)">
+                        <rect x="0" y="0" width="40" height="30" rx="3" fill="#334155" stroke="#94a3b8" stroke-width="2" />
+                        <rect x="15" y="30" width="10" height="10" fill="#94a3b8" />
+                        <rect x="5" y="40" width="30" height="5" rx="2" fill="#94a3b8" />
+                        <text x="20" y="20" fill="white" font-size="12" font-weight="bold" text-anchor="middle">PC3</text>
+                    </g>
+                    <g id="PC4" transform="translate(550, 280)">
+                        <rect x="0" y="0" width="40" height="30" rx="3" fill="#334155" stroke="#94a3b8" stroke-width="2" />
+                        <rect x="15" y="30" width="10" height="10" fill="#94a3b8" />
+                        <rect x="5" y="40" width="30" height="5" rx="2" fill="#94a3b8" />
+                        <text x="20" y="20" fill="white" font-size="12" font-weight="bold" text-anchor="middle">PC4</text>
+                    </g>
+
+                    <!-- Overlay for Packet Animation -->
+                    <g id="packet-layer"></g>
+
+                </svg>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-8">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        // State
+        const ports = {
+            'sw1-fa0/1': { mode: 'none', vlan: null, connectedTo: 'PC1' },
+            'sw1-fa0/2': { mode: 'none', vlan: null, connectedTo: 'PC2' },
+            'sw1-g0/1':  { mode: 'none', vlan: null, connectedTo: 'sw2-g0/1' },
+            'sw2-g0/1':  { mode: 'none', vlan: null, connectedTo: 'sw1-g0/1' },
+            'sw2-fa0/1': { mode: 'none', vlan: null, connectedTo: 'PC3' },
+            'sw2-fa0/2': { mode: 'none', vlan: null, connectedTo: 'PC4' }
+        };
+
+        const pcs = {
+            'PC1': { port: 'sw1-fa0/1' },
+            'PC2': { port: 'sw1-fa0/2' },
+            'PC3': { port: 'sw2-fa0/1' },
+            'PC4': { port: 'sw2-fa0/2' }
+        };
+
+        let currentSelectedPortId = null;
+
+        // UI Elements
+        const panel = document.getElementById('port-config-panel');
+        const portNameLabel = document.getElementById('selected-port-name');
+        const modeSelect = document.getElementById('port-mode');
+        const vlanContainer = document.getElementById('vlan-select-container');
+        const vlanSelect = document.getElementById('port-vlan');
+        const btnApply = document.getElementById('btn-apply-port');
+
+        modeSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'access') {
+                vlanContainer.classList.remove('hidden');
+            } else {
+                vlanContainer.classList.add('hidden');
+            }
+        });
+
+        // Global func for inline onclick
+        window.selectPort = function(portId) {
+            currentSelectedPortId = portId;
+            panel.classList.remove('hidden');
+
+            const portNameMap = {
+                'sw1-fa0/1': 'SW1 - FastEthernet 0/1',
+                'sw1-fa0/2': 'SW1 - FastEthernet 0/2',
+                'sw1-g0/1': 'SW1 - GigabitEthernet 0/1',
+                'sw2-g0/1': 'SW2 - GigabitEthernet 0/1',
+                'sw2-fa0/1': 'SW2 - FastEthernet 0/1',
+                'sw2-fa0/2': 'SW2 - FastEthernet 0/2'
+            };
+
+            portNameLabel.textContent = portNameMap[portId];
+
+            const pData = ports[portId];
+            modeSelect.value = pData.mode;
+
+            if (pData.mode === 'access') {
+                vlanContainer.classList.remove('hidden');
+                vlanSelect.value = pData.vlan || "10";
+            } else {
+                vlanContainer.classList.add('hidden');
+            }
+
+            // Highlight in SVG
+            document.querySelectorAll('.port').forEach(p => p.setAttribute('stroke', ''));
+            document.getElementById(`port-${portId}`).setAttribute('stroke', 'white');
+            document.getElementById(`port-${portId}`).setAttribute('stroke-width', '2');
+        };
+
+        btnApply.addEventListener('click', () => {
+            if (!currentSelectedPortId) return;
+
+            const mode = modeSelect.value;
+            const vlan = mode === 'access' ? vlanSelect.value : null;
+
+            ports[currentSelectedPortId].mode = mode;
+            ports[currentSelectedPortId].vlan = vlan;
+
+            updateSVGVisuals();
+            panel.classList.add('hidden');
+            document.getElementById(`port-${currentSelectedPortId}`).setAttribute('stroke', '');
+            currentSelectedPortId = null;
+        });
+
+        function updateSVGVisuals() {
+            for (const [id, data] of Object.entries(ports)) {
+                const el = document.getElementById(`port-${id}`);
+                // reset classes
+                el.className.baseVal = "port";
+
+                if (data.mode === 'none') {
+                    el.classList.add('vlan-none');
+                } else if (data.mode === 'trunk') {
+                    el.classList.add('vlan-trunk');
+                } else if (data.mode === 'access') {
+                    el.classList.add(`vlan-color-${data.vlan}`);
+                }
+            }
+        }
+
+        // Ping Logic
+        document.getElementById('btn-ping').addEventListener('click', () => {
+            const src = document.getElementById('ping-src').value;
+            const dst = document.getElementById('ping-dst').value;
+            const resultEl = document.getElementById('ping-result');
+
+            if (src === dst) {
+                resultEl.textContent = "Quelle und Ziel sind identisch.";
+                resultEl.className = "mt-3 text-sm font-bold text-center text-slate-400";
+                return;
+            }
+
+            const success = checkPing(src, dst);
+
+            if (success) {
+                resultEl.textContent = "Ping Erfolgreich! ✅";
+                resultEl.className = "mt-3 text-sm font-bold text-center text-green-400";
+                animatePing(src, dst, true);
+            } else {
+                resultEl.textContent = "Ping Fehlgeschlagen! ❌";
+                resultEl.className = "mt-3 text-sm font-bold text-center text-red-400";
+                animatePing(src, dst, false);
+            }
+        });
+
+        function checkPing(src, dst) {
+            const srcPortId = pcs[src].port;
+            const dstPortId = pcs[dst].port;
+            const srcPort = ports[srcPortId];
+            const dstPort = ports[dstPortId];
+
+            // Rule 1: Source port must be in access mode
+            if (srcPort.mode !== 'access') return false;
+
+            // Rule 2: Destination port must be in access mode
+            if (dstPort.mode !== 'access') return false;
+
+            // Rule 3: Must be in the same VLAN
+            if (srcPort.vlan !== dstPort.vlan) return false;
+
+            // Rule 4: If on different switches, trunk link must be configured
+            const srcSwitch = srcPortId.split('-')[0];
+            const dstSwitch = dstPortId.split('-')[0];
+
+            if (srcSwitch !== dstSwitch) {
+                const sw1Trunk = ports['sw1-g0/1'];
+                const sw2Trunk = ports['sw2-g0/1'];
+
+                if (sw1Trunk.mode !== 'trunk' || sw2Trunk.mode !== 'trunk') {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function animatePing(src, dst, success) {
+            const layer = document.getElementById('packet-layer');
+            layer.innerHTML = ''; // clear previous
+
+            // Just highlight lines temporarily based on success
+            const color = success ? '#22c55e' : '#ef4444'; // green or red
+
+            // Highlight source to its switch
+            const srcLine = document.getElementById(`line-${src.toLowerCase()}-${pcs[src].port.split('-')[0]}`);
+            if(srcLine) {
+                const origStroke = srcLine.getAttribute('stroke');
+                srcLine.setAttribute('stroke', color);
+                srcLine.classList.add('packet-flow');
+                setTimeout(() => {
+                    srcLine.setAttribute('stroke', origStroke);
+                    srcLine.classList.remove('packet-flow');
+                }, 2000);
+            }
+
+            if(success) {
+                const srcSwitch = pcs[src].port.split('-')[0];
+                const dstSwitch = pcs[dst].port.split('-')[0];
+
+                if (srcSwitch !== dstSwitch) {
+                     // Highlight trunk
+                     const trunkLine = document.getElementById('line-sw1-sw2');
+                     if(trunkLine) {
+                        const origStroke = trunkLine.getAttribute('stroke');
+                        trunkLine.setAttribute('stroke', color);
+                        trunkLine.classList.add('packet-flow');
+                        setTimeout(() => {
+                            trunkLine.setAttribute('stroke', origStroke);
+                            trunkLine.classList.remove('packet-flow');
+                        }, 2000);
+                     }
+                }
+
+                // Highlight dst switch to dst
+                const dstLine = document.getElementById(`line-${dstSwitch}-${dst.toLowerCase()}`);
+                if(dstLine) {
+                    const origStroke = dstLine.getAttribute('stroke');
+                    dstLine.setAttribute('stroke', color);
+                    dstLine.classList.add('packet-flow');
+                    setTimeout(() => {
+                        dstLine.setAttribute('stroke', origStroke);
+                        dstLine.classList.remove('packet-flow');
+                    }, 2000);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
