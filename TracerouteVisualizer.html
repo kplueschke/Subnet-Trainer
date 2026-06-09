@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traceroute-Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .terminal {
+            background-color: #0a0a0a;
+            color: #33ff00;
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #33ff00;
+            outline: none;
+            flex-grow: 1;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Node graph styles */
+        .node {
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .node.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 1s linear;
+        }
+        .line.visible {
+            stroke-dashoffset: 0;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-500 mb-4">
+                Traceroute-Visualizer
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Führe einen Traceroute-Befehl aus und beobachte, wie der Weg durchs Internet Knoten für Knoten aufgebaut wird.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-stretch">
+
+            <!-- Terminal -->
+            <div class="w-full lg:w-1/3 glass-card rounded-2xl p-4 flex flex-col">
+                <div class="flex items-center gap-2 mb-2 px-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-2 text-xs text-slate-400 mono">cmd.exe</span>
+                </div>
+                <div class="terminal shadow-inner text-sm flex-grow" id="terminal-output" onclick="document.getElementById('cmd-input').focus()">
+                    <div>Microsoft Windows [Version 10.0.19045.3803]</div>
+                    <div>(c) Microsoft Corporation. Alle Rechte vorbehalten.</div>
+                    <br>
+                    <div id="history"></div>
+                    <div class="terminal-input-line mt-1" id="input-line">
+                        <span>C:\Users\Admin&gt;</span>
+                        <input type="text" id="cmd-input" class="terminal-input" autocomplete="off" spellcheck="false" placeholder="tracert 8.8.8.8">
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-slate-500 text-center">
+                    Tipp: Versuche <code class="text-slate-300">tracert 8.8.8.8</code> oder <code class="text-slate-300">tracert google.com</code>
+                </div>
+            </div>
+
+            <!-- Visualization Canvas -->
+            <div class="w-full lg:w-2/3 glass-card rounded-2xl p-6 relative flex flex-col min-h-[400px]">
+                <h2 class="text-xl font-bold text-white mb-4 text-center z-10">Routen-Visualisierung</h2>
+
+                <div class="flex-grow relative bg-slate-900 rounded-xl border border-slate-700 overflow-hidden" id="graph-container">
+                    <!-- SVG for lines -->
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" id="svg-lines">
+                        <!-- Lines populated by JS -->
+                    </svg>
+
+                    <!-- Nodes populated by JS -->
+                    <div id="nodes-container" class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">
+                        <!-- Example layout: zigzag -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const terminalOutput = document.getElementById('history');
+        const cmdInput = document.getElementById('cmd-input');
+        const inputLine = document.getElementById('input-line');
+        const svgLines = document.getElementById('svg-lines');
+        const nodesContainer = document.getElementById('nodes-container');
+
+        let isRunning = false;
+
+        // Simulated target data
+        const targets = {
+            '8.8.8.8': {
+                name: 'dns.google',
+                hops: [
+                    { ip: '192.168.1.1', name: 'fritz.box', ms: 1, type: 'router' },
+                    { ip: '62.155.240.1', name: 'dsl-gateway.telekom.de', ms: 12, type: 'isp' },
+                    { ip: '217.239.52.1', name: 'ffm-bb1.telekom.de', ms: 14, type: 'isp' },
+                    { ip: '72.14.214.1', name: 'pr-google.ffm.de', ms: 15, type: 'peering' },
+                    { ip: '108.170.251.1', name: 'core-google.net', ms: 16, type: 'cloud' },
+                    { ip: '8.8.8.8', name: 'dns.google', ms: 16, type: 'target' }
+                ]
+            },
+            'google.com': {
+                name: 'google.com',
+                ip: '142.250.184.206',
+                hops: [
+                    { ip: '192.168.1.1', name: 'fritz.box', ms: 1, type: 'router' },
+                    { ip: '10.0.0.1', name: 'cgnat.vodafone.de', ms: 15, type: 'isp' },
+                    { ip: '84.116.190.1', name: 'de-b-core.vodafone.de', ms: 18, type: 'isp' },
+                    { ip: '74.125.147.1', name: 'google-peering.berlin', ms: 22, type: 'peering' },
+                    { ip: '142.250.184.206', name: 'fra16s51-in-f14.1e100.net', ms: 23, type: 'target' }
+                ]
+            }
+        };
+
+        const icons = {
+            router: '🏠',
+            isp: '🏢',
+            peering: '🔀',
+            cloud: '☁️',
+            target: '🎯'
+        };
+
+        cmdInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !isRunning) {
+                const val = this.value.trim();
+                this.value = '';
+
+                printTerminal(`C:\\Users\\Admin> ${val}`);
+
+                if (val.toLowerCase() === 'cls' || val.toLowerCase() === 'clear') {
+                    terminalOutput.innerHTML = '';
+                    return;
+                }
+
+                if (val.toLowerCase().startsWith('tracert ')) {
+                    const target = val.split(' ')[1];
+                    runTraceroute(target);
+                } else if (val !== '') {
+                    printTerminal(`Der Befehl "${val}" ist entweder falsch geschrieben oder konnte nicht gefunden werden.`);
+                }
+            }
+        });
+
+        function printTerminal(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            terminalOutput.appendChild(div);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const term = document.getElementById('terminal-output');
+            term.scrollTop = term.scrollHeight;
+        }
+
+        async function runTraceroute(targetStr) {
+            isRunning = true;
+            inputLine.style.display = 'none';
+            resetGraph();
+
+            let data = targets[targetStr];
+            if (!data) {
+                // Generate random data if not found
+                data = {
+                    name: targetStr,
+                    hops: [
+                        { ip: '192.168.1.1', name: 'router.local', ms: 2, type: 'router' },
+                        { ip: '10.20.30.1', name: 'isp-gateway', ms: 20, type: 'isp' },
+                        { ip: '192.0.2.1', name: 'unknown.net', ms: 35, type: 'peering' },
+                        { ip: '203.0.113.1', name: targetStr, ms: 45, type: 'target' }
+                    ]
+                };
+            }
+
+            const targetIp = data.ip || targetStr;
+            printTerminal(`Routenverfolgung zu ${data.name} [${targetIp}]`);
+            printTerminal(`über maximal 30 Hops:`);
+            printTerminal(``);
+
+            let prevNodePos = null;
+
+            for (let i = 0; i < data.hops.length; i++) {
+                const hop = data.hops[i];
+
+                // Simulate delay
+                await new Promise(r => setTimeout(r, 1000));
+
+                // Print to terminal
+                printTerminal(`  ${i+1}    ${hop.ms} ms    ${hop.ms+1} ms    ${hop.ms} ms  ${hop.name} [${hop.ip}]`);
+
+                // Add node to graph
+                const nodePos = addNodeToGraph(hop, i, data.hops.length);
+
+                // Draw line if not first
+                if (prevNodePos) {
+                    await new Promise(r => setTimeout(r, 100)); // small delay before line
+                    drawLine(prevNodePos, nodePos);
+                }
+                prevNodePos = nodePos;
+            }
+
+            await new Promise(r => setTimeout(r, 500));
+            printTerminal(``);
+            printTerminal(`Ablaufverfolgung beendet.`);
+
+            inputLine.style.display = 'flex';
+            isRunning = false;
+            cmdInput.focus();
+            scrollToBottom();
+        }
+
+        function resetGraph() {
+            svgLines.innerHTML = '';
+            nodesContainer.innerHTML = '';
+        }
+
+        function addNodeToGraph(hop, index, total) {
+            // Calculate zigzag position
+            const percentY = (index / (total - 1)) * 80 + 10; // 10% to 90%
+            const isEven = index % 2 === 0;
+            const percentX = isEven ? 20 : 80;
+
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = 'node absolute bg-slate-800 border-2 border-slate-600 rounded-lg p-2 flex items-center gap-3 shadow-lg shadow-black/50 z-10 w-48';
+            nodeDiv.style.top = `calc(${percentY}% - 24px)`;
+            nodeDiv.style.left = `calc(${percentX}% - 96px)`; // center roughly
+
+            nodeDiv.innerHTML = `
+                <div class="text-2xl">${icons[hop.type]}</div>
+                <div class="flex flex-col">
+                    <span class="text-xs font-bold text-white truncate w-32" title="${hop.name}">${hop.name}</span>
+                    <span class="text-[10px] text-blue-400 mono">${hop.ip}</span>
+                    <span class="text-[10px] text-slate-400">${hop.ms} ms</span>
+                </div>
+            `;
+
+            nodesContainer.appendChild(nodeDiv);
+
+            // Trigger animation
+            setTimeout(() => nodeDiv.classList.add('visible'), 50);
+
+            return { x: percentX, y: percentY, pxX: isEven ? 96 : -96 }; // rough attachment points
+        }
+
+        function drawLine(start, end) {
+            // Get pixel coordinates from percentages
+            const containerRect = document.getElementById('graph-container').getBoundingClientRect();
+
+            const x1 = (start.x / 100) * containerRect.width;
+            const y1 = (start.y / 100) * containerRect.height;
+            const x2 = (end.x / 100) * containerRect.width;
+            const y2 = (end.y / 100) * containerRect.height;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', '#3b82f6'); // blue-500
+            line.setAttribute('stroke-width', '2');
+            line.setAttribute('stroke-dasharray', '5,5');
+            line.classList.add('line');
+
+            svgLines.appendChild(line);
+
+            // Trigger animation
+            setTimeout(() => line.classList.add('visible'), 50);
+        }
+
+        // Handle resize to redraw lines correctly (optional but good for robustness)
+        window.addEventListener('resize', () => {
+            if(!isRunning && nodesContainer.children.length > 0) {
+                // A bit complex to redraw lines perfectly on resize without full state,
+                // so we just clear lines on resize for simplicity in this demo.
+                svgLines.innerHTML = '';
+            }
+        });
+
+    </script>
+</body>
+</html>

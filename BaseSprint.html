@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahlenbasis-Sprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+            <div class="text-lg font-bold text-slate-300">Level: <span id="level-display" class="text-indigo-400">1</span></div>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-500 mb-4">
+                Zahlenbasis-Sprint
+            </h1>
+            <p class="text-slate-400">Zeitangriff! Rechne blitzschnell zwischen Binär, Hexadezimal und Dezimal um.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 relative overflow-hidden" id="game-container">
+
+            <!-- Screens -->
+            <div id="screen-start" class="text-center">
+                <p class="mb-6 text-slate-300">Die Zeit pro Level wird kürzer. Wie weit schaffst du es?</p>
+                <button id="btn-start" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-transform transform hover:scale-105">
+                    Spiel Starten
+                </button>
+            </div>
+
+            <div id="screen-game" class="hidden">
+                <!-- Score & Timer -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-xl font-bold">Score: <span id="score-display" class="text-yellow-400 mono">0</span></div>
+                    <div class="text-xl font-bold flex items-center gap-2">
+                        ⏱️ <span id="time-display" class="mono text-red-400">10.0</span>s
+                    </div>
+                </div>
+
+                <!-- Timer Bar -->
+                <div class="w-full h-2 bg-slate-800 rounded-full mb-8 overflow-hidden">
+                    <div id="timer-bar" class="h-full bg-red-500 w-full transition-all duration-100 ease-linear"></div>
+                </div>
+
+                <!-- Task -->
+                <div class="bg-slate-900 rounded-xl p-6 text-center border border-slate-700 mb-8">
+                    <div class="text-sm text-slate-400 mb-2 uppercase tracking-wide">Wandle um:</div>
+                    <div class="text-sm font-bold text-indigo-400 mb-1" id="from-base-label">Von Dezimal</div>
+                    <div class="text-4xl font-extrabold text-white mono tracking-widest mb-4" id="question-val">255</div>
+
+                    <div class="flex items-center justify-center gap-4">
+                        <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        <div class="text-sm font-bold text-teal-400" id="to-base-label">In Hexadezimal</div>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div class="flex gap-4">
+                    <input type="text" id="answer-input" class="flex-grow bg-slate-800 border-2 border-slate-600 focus:border-indigo-500 rounded-xl px-4 py-3 text-xl text-white font-bold mono text-center outline-none transition-colors" placeholder="Lösung" autocomplete="off" spellcheck="false">
+                    <button id="btn-submit" class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl shadow-lg shadow-teal-500/20 transition-colors">
+                        Enter
+                    </button>
+                </div>
+            </div>
+
+            <div id="screen-gameover" class="hidden text-center">
+                <h2 class="text-4xl font-bold text-red-500 mb-2">Zeit abgelaufen!</h2>
+                <p class="text-lg text-slate-300 mb-6">Das war zu langsam.</p>
+                <div class="bg-slate-800 rounded-xl p-6 inline-block mb-8 border border-slate-700">
+                    <div class="text-sm text-slate-400 mb-1">Erreichtes Level</div>
+                    <div class="text-3xl font-bold text-indigo-400 mb-4" id="final-level">1</div>
+                    <div class="text-sm text-slate-400 mb-1">Finaler Score</div>
+                    <div class="text-4xl font-bold text-yellow-400 mono" id="final-score">0</div>
+                </div>
+                <div>
+                    <button id="btn-restart" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-transform transform hover:scale-105">
+                        Nochmal versuchen
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-auto">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const screens = {
+            start: document.getElementById('screen-start'),
+            game: document.getElementById('screen-game'),
+            gameover: document.getElementById('screen-gameover')
+        };
+
+        const ui = {
+            level: document.getElementById('level-display'),
+            score: document.getElementById('score-display'),
+            time: document.getElementById('time-display'),
+            timerBar: document.getElementById('timer-bar'),
+            fromLabel: document.getElementById('from-base-label'),
+            questionVal: document.getElementById('question-val'),
+            toLabel: document.getElementById('to-base-label'),
+            input: document.getElementById('answer-input'),
+            finalLevel: document.getElementById('final-level'),
+            finalScore: document.getElementById('final-score'),
+            container: document.getElementById('game-container')
+        };
+
+        let state = {
+            level: 1,
+            score: 0,
+            timeLeft: 15.0,
+            maxTime: 15.0,
+            currentAnswer: "",
+            timerId: null
+        };
+
+        const bases = [
+            { name: "Dezimal", base: 10, prefix: "" },
+            { name: "Binär", base: 2, prefix: "" },
+            { name: "Hexadezimal", base: 16, prefix: "" }
+        ];
+
+        function switchScreen(screenName) {
+            Object.values(screens).forEach(s => s.classList.add('hidden'));
+            screens[screenName].classList.remove('hidden');
+        }
+
+        function startGame() {
+            state.level = 1;
+            state.score = 0;
+            updateMaxTime();
+            state.timeLeft = state.maxTime;
+
+            ui.level.textContent = state.level;
+            ui.score.textContent = state.score;
+
+            switchScreen('game');
+            nextTask();
+            startTimer();
+            ui.input.focus();
+        }
+
+        function updateMaxTime() {
+            // Start with 15s, decrease slightly per level, min 3s
+            state.maxTime = Math.max(3.0, 15.0 - (state.level * 0.5));
+        }
+
+        function nextTask() {
+            ui.input.value = "";
+            ui.input.focus();
+            updateMaxTime();
+            state.timeLeft = state.maxTime;
+
+            // Select random bases (must be different)
+            let fromBaseIdx = Math.floor(Math.random() * bases.length);
+            let toBaseIdx;
+            do {
+                toBaseIdx = Math.floor(Math.random() * bases.length);
+            } while (toBaseIdx === fromBaseIdx);
+
+            const fromBase = bases[fromBaseIdx];
+            const toBase = bases[toBaseIdx];
+
+            // Generate number based on level difficulty
+            // Level 1-3: up to 15 (4 bits)
+            // Level 4-8: up to 63 (6 bits)
+            // Level 9+: up to 255 (8 bits)
+            let maxVal = 15;
+            if (state.level > 3) maxVal = 63;
+            if (state.level > 8) maxVal = 255;
+
+            const num = Math.floor(Math.random() * (maxVal - 1)) + 1; // 1 to maxVal
+
+            let questionStr = num.toString(fromBase.base).toUpperCase();
+            if (fromBase.base === 2) {
+                // pad to 4 or 8 bits purely for aesthetics
+                if(questionStr.length <= 4) questionStr = questionStr.padStart(4, '0');
+                else questionStr = questionStr.padStart(8, '0');
+            }
+
+            state.currentAnswer = num.toString(toBase.base).toUpperCase();
+
+            ui.fromLabel.textContent = `Von ${fromBase.name}`;
+            ui.questionVal.textContent = fromBase.prefix + questionStr;
+            ui.toLabel.textContent = `In ${toBase.name}`;
+        }
+
+        function startTimer() {
+            if (state.timerId) clearInterval(state.timerId);
+
+            state.timerId = setInterval(() => {
+                state.timeLeft -= 0.1;
+
+                if (state.timeLeft <= 0) {
+                    state.timeLeft = 0;
+                    gameOver();
+                }
+
+                updateTimerUI();
+            }, 100);
+        }
+
+        function updateTimerUI() {
+            ui.time.textContent = state.timeLeft.toFixed(1);
+            const percent = (state.timeLeft / state.maxTime) * 100;
+            ui.timerBar.style.width = `${percent}%`;
+
+            if (percent < 25) {
+                ui.timerBar.className = 'h-full bg-red-500 w-full transition-all duration-100 ease-linear';
+                ui.time.classList.replace('text-indigo-400', 'text-red-500');
+            } else if (percent < 50) {
+                ui.timerBar.className = 'h-full bg-orange-500 w-full transition-all duration-100 ease-linear';
+            } else {
+                ui.timerBar.className = 'h-full bg-green-500 w-full transition-all duration-100 ease-linear';
+                ui.time.classList.replace('text-red-500', 'text-indigo-400');
+            }
+        }
+
+        function checkAnswer() {
+            const userAns = ui.input.value.trim().toUpperCase().replace(/^0+/, ''); // remove leading zeros
+            const correctAns = state.currentAnswer.replace(/^0+/, '');
+
+            if (userAns === correctAns || (userAns==="" && correctAns==="0")) {
+                // Correct
+                state.score += (Math.floor(state.timeLeft) * 10) + (state.level * 50);
+                state.level++;
+
+                ui.score.textContent = state.score;
+                ui.level.textContent = state.level;
+
+                ui.container.classList.add('border-green-500');
+                setTimeout(() => ui.container.classList.remove('border-green-500'), 200);
+
+                nextTask();
+            } else {
+                // Wrong
+                ui.container.classList.remove('shake');
+                void ui.container.offsetWidth; // trigger reflow
+                ui.container.classList.add('shake');
+
+                ui.input.value = "";
+                ui.input.focus();
+
+                // Penalty
+                state.timeLeft -= 2.0;
+                updateTimerUI();
+                if (state.timeLeft <= 0) gameOver();
+            }
+        }
+
+        function gameOver() {
+            clearInterval(state.timerId);
+            ui.finalLevel.textContent = state.level;
+            ui.finalScore.textContent = state.score;
+            switchScreen('gameover');
+        }
+
+        document.getElementById('btn-start').addEventListener('click', startGame);
+        document.getElementById('btn-restart').addEventListener('click', startGame);
+        document.getElementById('btn-submit').addEventListener('click', checkAnswer);
+
+        ui.input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+    </script>
+</body>
+</html>

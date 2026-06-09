@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoE-Leistungsbudget-Rechner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bar-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600 mb-4">
+                PoE-Leistungsbudget-Rechner
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Ermittle das benötigte Power over Ethernet (PoE) Budget für verschiedene IP-Kameras und finde den passenden IEEE-Standard für deinen Switch.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-stretch">
+
+            <!-- Device Selection -->
+            <div class="w-full lg:w-1/2 glass-card rounded-2xl p-6 flex flex-col">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                    <h2 class="text-xl font-bold text-white">Geräte hinzufügen</h2>
+                    <span class="bg-slate-800 text-slate-300 text-xs px-2 py-1 rounded border border-slate-600 mono" id="device-count">0 Geräte</span>
+                </div>
+
+                <div class="flex flex-col gap-4 mb-6">
+                    <!-- Standard Cam -->
+                    <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-white flex items-center gap-2">📷 Standard IP-Kamera</div>
+                            <div class="text-xs text-slate-400 mt-1">Typischer Verbrauch: 5 Watt</div>
+                        </div>
+                        <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-std" data-power="5" data-name="Standard IP-Kamera">
+                            + Hinzufügen
+                        </button>
+                    </div>
+
+                    <!-- IR Cam -->
+                    <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-white flex items-center gap-2">🔦 IR-Kamera (Nachtsicht)</div>
+                            <div class="text-xs text-slate-400 mt-1">Max. Verbrauch: 12 Watt</div>
+                        </div>
+                        <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-ir" data-power="12" data-name="IR-Kamera">
+                            + Hinzufügen
+                        </button>
+                    </div>
+
+                    <!-- PTZ Cam -->
+                    <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
+                        <div>
+                            <div class="font-bold text-white flex items-center gap-2">🔄 PTZ-Kamera (Heizung)</div>
+                            <div class="text-xs text-slate-400 mt-1">Max. Verbrauch: 24 Watt</div>
+                        </div>
+                        <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-ptz" data-power="24" data-name="PTZ-Kamera">
+                            + Hinzufügen
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wider">Inventarliste</h3>
+                <div id="inventory-list" class="flex-grow bg-slate-900 rounded-xl p-4 border border-slate-700 overflow-y-auto max-h-[200px] flex flex-col gap-2">
+                    <div class="text-center text-slate-500 text-sm mt-4 italic" id="empty-msg">Noch keine Geräte ausgewählt.</div>
+                    <!-- Items added here -->
+                </div>
+
+            </div>
+
+            <!-- Analysis Dashboard -->
+            <div class="w-full lg:w-1/2 glass-card rounded-2xl p-6 flex flex-col">
+                <h2 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4">Budget & Standards</h2>
+
+                <!-- Total Power -->
+                <div class="flex items-end gap-2 mb-8 justify-center">
+                    <div class="text-6xl font-black text-amber-400 mono" id="total-power">0</div>
+                    <div class="text-xl text-amber-500/70 mb-1 font-bold">Watt</div>
+                </div>
+
+                <!-- PoE Standards Analysis -->
+                <div class="space-y-6">
+
+                    <!-- 802.3af -->
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="font-bold text-white">PoE (802.3af)</span>
+                            <span class="text-xs text-slate-400">Max 15.4W pro Port</span>
+                        </div>
+                        <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-slate-600 bar-transition w-0" id="bar-af"></div>
+                        </div>
+                        <div class="text-xs mt-1 text-right font-bold mono" id="status-af">0 / 15.4 W</div>
+                    </div>
+
+                    <!-- 802.3at -->
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="font-bold text-white">PoE+ (802.3at)</span>
+                            <span class="text-xs text-slate-400">Max 30W pro Port</span>
+                        </div>
+                        <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-slate-600 bar-transition w-0" id="bar-at"></div>
+                        </div>
+                        <div class="text-xs mt-1 text-right font-bold mono" id="status-at">0 / 30.0 W</div>
+                    </div>
+
+                    <!-- 802.3bt -->
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="font-bold text-white">PoE++ (802.3bt)</span>
+                            <span class="text-xs text-slate-400">Max 60W (Typ 3) / 90W (Typ 4)</span>
+                        </div>
+                        <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-slate-600 bar-transition w-0" id="bar-bt"></div>
+                        </div>
+                        <div class="text-xs mt-1 text-right font-bold mono" id="status-bt">0 / 60.0 W</div>
+                    </div>
+
+                </div>
+
+                <div class="mt-auto pt-6">
+                    <div id="recommendation" class="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4 text-center">
+                        <span class="text-blue-400 text-sm font-bold">Füge Geräte hinzu, um eine Switch-Empfehlung zu erhalten.</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-8">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const inventory = [];
+        const inventoryList = document.getElementById('inventory-list');
+        const emptyMsg = document.getElementById('empty-msg');
+        const deviceCount = document.getElementById('device-count');
+        const totalPowerEl = document.getElementById('total-power');
+
+        const barAf = document.getElementById('bar-af');
+        const barAt = document.getElementById('bar-at');
+        const barBt = document.getElementById('bar-bt');
+
+        const statusAf = document.getElementById('status-af');
+        const statusAt = document.getElementById('status-at');
+        const statusBt = document.getElementById('status-bt');
+
+        const recommendation = document.getElementById('recommendation');
+
+        document.querySelectorAll('.btn-add').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = {
+                    id: Date.now().toString(),
+                    name: btn.dataset.name,
+                    power: parseInt(btn.dataset.power)
+                };
+                inventory.push(item);
+                updateUI();
+            });
+        });
+
+        function removeItem(id) {
+            const index = inventory.findIndex(item => item.id === id);
+            if (index > -1) {
+                inventory.splice(index, 1);
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            // Update List
+            inventoryList.innerHTML = '';
+            if (inventory.length === 0) {
+                inventoryList.appendChild(emptyMsg);
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+                inventory.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between items-center bg-slate-800 p-2 rounded-lg text-sm';
+                    div.innerHTML = `
+                        <span class="text-white">${item.name}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-amber-400 font-bold mono">${item.power}W</span>
+                            <button class="text-red-400 hover:text-red-300 transition-colors" onclick="removeItem('${item.id}')">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    `;
+                    inventoryList.appendChild(div);
+                });
+            }
+
+            deviceCount.textContent = `${inventory.length} Geräte`;
+
+            // Calculate Total Power (Sum of all devices, assuming single port for now or analyzing max port requirement)
+            // Actually, PoE standard applies PER PORT. But total budget applies to the switch.
+            // Let's analyze both: Max single device power (determines Standard needed) and Total Power (determines Switch Budget).
+
+            let totalPower = 0;
+            let maxDevicePower = 0;
+
+            inventory.forEach(item => {
+                totalPower += item.power;
+                if (item.power > maxDevicePower) maxDevicePower = item.power;
+            });
+
+            totalPowerEl.textContent = totalPower;
+
+            // Update Bars based on Max Device Power (Per Port analysis)
+            // If we have a 24W device, we NEED 802.3at.
+
+            updateBar(barAf, statusAf, maxDevicePower, 15.4);
+            updateBar(barAt, statusAt, maxDevicePower, 30.0);
+            updateBar(barBt, statusBt, maxDevicePower, 60.0);
+
+            // Recommendations
+            if (inventory.length === 0) {
+                recommendation.className = 'bg-blue-900/20 border border-blue-500/30 rounded-xl p-4 text-center';
+                recommendation.innerHTML = `<span class="text-blue-400 text-sm font-bold">Füge Geräte hinzu, um eine Switch-Empfehlung zu erhalten.</span>`;
+            } else {
+                let recStd = '802.3af (PoE)';
+                if (maxDevicePower > 30) recStd = '802.3bt (PoE++)';
+                else if (maxDevicePower > 15.4) recStd = '802.3at (PoE+)';
+
+                // Add 20% safety margin for total budget
+                const safeBudget = Math.ceil(totalPower * 1.2);
+
+                recommendation.className = 'bg-green-900/20 border border-green-500/30 rounded-xl p-4 text-center';
+                recommendation.innerHTML = `
+                    <div class="text-green-400 text-sm font-bold mb-2">Switch-Empfehlung</div>
+                    <p class="text-slate-300 text-sm">
+                        Standard: <strong class="text-white">${recStd}</strong> fähige Ports werden benötigt.<br>
+                        Gesamtbudget: Switch sollte mind. <strong class="text-amber-400">${safeBudget}W</strong> (inkl. 20% Reserve) PoE-Leistung bereitstellen.
+                    </p>
+                `;
+            }
+        }
+
+        function updateBar(bar, statusEl, current, max) {
+            let percent = (current / max) * 100;
+            let color = 'bg-green-500';
+            let textColor = 'text-green-400';
+
+            if (percent > 100) {
+                percent = 100;
+                color = 'bg-red-500';
+                textColor = 'text-red-500';
+            } else if (percent > 80) {
+                color = 'bg-amber-500';
+                textColor = 'text-amber-400';
+            } else if (current === 0) {
+                color = 'bg-slate-600';
+                textColor = 'text-slate-500';
+            }
+
+            bar.style.width = `${percent}%`;
+            bar.className = `h-full bar-transition ${color}`;
+
+            statusEl.textContent = `${current} / ${max} W`;
+            statusEl.className = `text-xs mt-1 text-right font-bold mono ${textColor}`;
+        }
+
+    </script>
+</body>
+</html>

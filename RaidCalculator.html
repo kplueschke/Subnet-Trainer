@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAID-Kalkulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bar-transition {
+            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück zur Übersicht
+            </a>
+        </div>
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 mb-4">
+                RAID-Kalkulator
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Berechne Bruttokapazität, Nettokapazität und Ausfalltoleranz für verschiedene RAID-Level.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 max-w-5xl mx-auto items-stretch">
+
+            <!-- Controls -->
+            <div class="w-full lg:w-1/3 glass-card rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-white mb-6">Konfiguration</h2>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">RAID-Level</label>
+                    <select id="raid-level" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        <option value="0">RAID 0 (Striping)</option>
+                        <option value="1">RAID 1 (Mirroring)</option>
+                        <option value="5" selected>RAID 5 (Parity)</option>
+                        <option value="10">RAID 10 (Stripe of Mirrors)</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
+                        <span>Anzahl Festplatten</span>
+                        <span id="disk-count-val" class="text-blue-400 font-bold">3</span>
+                    </label>
+                    <input type="range" id="disk-count" min="2" max="24" step="1" value="3" class="w-full accent-blue-500">
+                    <p id="disk-warning" class="text-xs text-amber-400 mt-2 hidden">Für RAID 5 werden mindestens 3 Festplatten benötigt.</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2 flex justify-between">
+                        <span>Größe pro Festplatte (TB)</span>
+                        <span id="disk-size-val" class="text-blue-400 font-bold">2 TB</span>
+                    </label>
+                    <input type="range" id="disk-size" min="1" max="24" step="1" value="2" class="w-full accent-blue-500">
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="w-full lg:w-2/3 glass-card rounded-2xl p-6 flex flex-col justify-center">
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-center">
+                        <p class="text-slate-400 text-sm mb-1">Bruttokapazität</p>
+                        <p id="gross-cap" class="text-2xl font-bold text-white mono">6 TB</p>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-center">
+                        <p class="text-slate-400 text-sm mb-1">Nettokapazität</p>
+                        <p id="net-cap" class="text-2xl font-bold text-green-400 mono">4 TB</p>
+                    </div>
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-center col-span-2">
+                        <p class="text-slate-400 text-sm mb-1">Ausfalltoleranz</p>
+                        <p id="fault-tol" class="text-lg font-medium text-blue-300">1 Festplatte</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-sm text-slate-400 mb-2">
+                        <span>Nutzdaten</span>
+                        <span>Redundanz / Overhead</span>
+                    </div>
+                    <div class="w-full h-8 bg-slate-800 rounded-full overflow-hidden flex border border-slate-700">
+                        <div id="bar-net" class="h-full bg-green-500 bar-transition flex items-center justify-center text-xs font-bold text-green-900" style="width: 66.6%;">66%</div>
+                        <div id="bar-redundancy" class="h-full bg-red-500 bar-transition flex items-center justify-center text-xs font-bold text-red-900" style="width: 33.4%;">33%</div>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-4 mono" id="formula-text">Nettokapazität = (N - 1) * Kapazität</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-8">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const raidLevel = document.getElementById('raid-level');
+        const diskCount = document.getElementById('disk-count');
+        const diskSize = document.getElementById('disk-size');
+
+        const diskCountVal = document.getElementById('disk-count-val');
+        const diskSizeVal = document.getElementById('disk-size-val');
+        const diskWarning = document.getElementById('disk-warning');
+
+        const grossCapEl = document.getElementById('gross-cap');
+        const netCapEl = document.getElementById('net-cap');
+        const faultTolEl = document.getElementById('fault-tol');
+
+        const barNet = document.getElementById('bar-net');
+        const barRedundancy = document.getElementById('bar-redundancy');
+        const formulaText = document.getElementById('formula-text');
+
+        function enforceConstraints() {
+            const level = parseInt(raidLevel.value);
+            let count = parseInt(diskCount.value);
+
+            diskWarning.classList.add('hidden');
+
+            if (level === 1) {
+                diskCount.min = 2;
+                diskCount.step = 2;
+                if (count % 2 !== 0) count++;
+            } else if (level === 5) {
+                diskCount.min = 3;
+                diskCount.step = 1;
+                if (count < 3) count = 3;
+            } else if (level === 10) {
+                diskCount.min = 4;
+                diskCount.step = 2;
+                if (count < 4) count = 4;
+                if (count % 2 !== 0) count++;
+            } else {
+                // RAID 0
+                diskCount.min = 2;
+                diskCount.step = 1;
+                if (count < 2) count = 2;
+            }
+
+            diskCount.value = count;
+            diskCountVal.textContent = count;
+            diskSizeVal.textContent = `${diskSize.value} TB`;
+        }
+
+        function calculate() {
+            enforceConstraints();
+
+            const level = parseInt(raidLevel.value);
+            const n = parseInt(diskCount.value);
+            const s = parseInt(diskSize.value);
+
+            const gross = n * s;
+            let net = 0;
+            let tolerance = "";
+            let formula = "";
+
+            switch(level) {
+                case 0:
+                    net = gross;
+                    tolerance = "0 Festplatten (Totalausfall bei einem Defekt!)";
+                    formula = "Nettokapazität = N * Kapazität";
+                    break;
+                case 1:
+                    net = (n / 2) * s; // Assuming mirrors of 2
+                    tolerance = `${n / 2} Festplatten (1 pro Mirror-Set)`;
+                    formula = "Nettokapazität = (N / 2) * Kapazität";
+                    break;
+                case 5:
+                    net = (n - 1) * s;
+                    tolerance = "1 Festplatte";
+                    formula = "Nettokapazität = (N - 1) * Kapazität";
+                    break;
+                case 10:
+                    net = (n / 2) * s;
+                    tolerance = "1 Festplatte pro Sub-Array (Mirror)";
+                    formula = "Nettokapazität = (N / 2) * Kapazität";
+                    break;
+            }
+
+            grossCapEl.textContent = `${gross} TB`;
+            netCapEl.textContent = `${net} TB`;
+            faultTolEl.textContent = tolerance;
+            formulaText.textContent = formula;
+
+            const netPercent = (net / gross) * 100;
+            const redPercent = 100 - netPercent;
+
+            barNet.style.width = `${netPercent}%`;
+            barNet.textContent = netPercent > 5 ? `${Math.round(netPercent)}%` : '';
+
+            barRedundancy.style.width = `${redPercent}%`;
+            barRedundancy.textContent = redPercent > 5 ? `${Math.round(redPercent)}%` : '';
+        }
+
+        raidLevel.addEventListener('change', calculate);
+        diskCount.addEventListener('input', calculate);
+        diskSize.addEventListener('input', calculate);
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>

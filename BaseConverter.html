@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahlenbasis-Umrechner Trainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Zurück
+            </a>
+            <button id="btn-new-task" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg shadow-lg shadow-indigo-500/20 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Neue Aufgabe generieren
+            </button>
+        </div>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 mb-4">
+                Basis-Umrechner
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto">
+                Übe die Umrechnung zwischen Dezimal, Binär und Hexadezimal. Eine Basis wird vorgegeben, ergänze die fehlenden.
+            </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8">
+
+            <div id="feedback-panel" class="mb-6 p-4 rounded-xl hidden text-center font-bold"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <!-- Dezimal -->
+                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-white">Dezimal</h2>
+                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 10</span>
+                    </div>
+                    <input type="text" id="input-dec" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-blue-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9">
+                </div>
+
+                <!-- Binär -->
+                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-white">Binär</h2>
+                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 2</span>
+                    </div>
+                    <input type="text" id="input-bin" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-green-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-1">
+                </div>
+
+                <!-- Hexadezimal -->
+                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-white">Hexadezimal</h2>
+                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 16</span>
+                    </div>
+                    <input type="text" id="input-hex" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-purple-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9, A-F">
+                </div>
+
+            </div>
+
+            <div class="mt-8 flex justify-center">
+                <button id="btn-check" class="px-10 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-transform transform hover:scale-105 text-lg">
+                    Eingaben Prüfen
+                </button>
+            </div>
+
+            <div class="mt-8 bg-slate-900 rounded-xl p-4 border border-slate-700">
+                <h3 class="text-sm font-bold text-slate-400 mb-2">Tipps zur Umrechnung:</h3>
+                <ul class="list-disc pl-5 text-sm text-slate-500 space-y-1">
+                    <li><strong class="text-slate-300">Dez ➔ Bin:</strong> Teile die Zahl fortlaufend durch 2. Die Reste von unten nach oben gelesen ergeben die Binärzahl.</li>
+                    <li><strong class="text-slate-300">Bin ➔ Hex:</strong> Fasse die Bits von rechts nach links in 4er-Blöcke (Nibbles) zusammen und wandle jeden Block in sein Hex-Äquivalent um (0-9, A-F).</li>
+                    <li><strong class="text-slate-300">Hex ➔ Dez:</strong> Multipliziere jede Ziffer mit 16 hoch ihrer Position (von rechts bei 0 beginnend) und addiere die Ergebnisse.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-6 border-t border-slate-900 text-xs text-slate-600 mono mt-auto">
+        &copy; 2026 kplueschke All rights reserved.
+    </footer>
+
+    <script>
+        const inputDec = document.getElementById('input-dec');
+        const inputBin = document.getElementById('input-bin');
+        const inputHex = document.getElementById('input-hex');
+        const btnCheck = document.getElementById('btn-check');
+        const btnNewTask = document.getElementById('btn-new-task');
+        const feedbackPanel = document.getElementById('feedback-panel');
+
+        let currentNumber = 0;
+        let givenBase = ''; // 'dec', 'bin', 'hex'
+
+        function generateNewTask() {
+            // Generate a random number between 1 and 255
+            currentNumber = Math.floor(Math.random() * 255) + 1;
+
+            // Randomly select which base is given
+            const bases = ['dec', 'bin', 'hex'];
+            givenBase = bases[Math.floor(Math.random() * bases.length)];
+
+            // Reset inputs
+            inputDec.value = '';
+            inputBin.value = '';
+            inputHex.value = '';
+            inputDec.disabled = false;
+            inputBin.disabled = false;
+            inputHex.disabled = false;
+
+            inputDec.classList.remove('bg-slate-800', 'text-slate-400');
+            inputBin.classList.remove('bg-slate-800', 'text-slate-400');
+            inputHex.classList.remove('bg-slate-800', 'text-slate-400');
+
+            inputDec.classList.remove('border-red-500', 'border-green-500');
+            inputBin.classList.remove('border-red-500', 'border-green-500');
+            inputHex.classList.remove('border-red-500', 'border-green-500');
+
+            feedbackPanel.classList.add('hidden');
+
+            // Set the given value and disable its input
+            if (givenBase === 'dec') {
+                inputDec.value = currentNumber.toString(10);
+                inputDec.disabled = true;
+                inputDec.classList.add('bg-slate-800', 'text-slate-400');
+                inputBin.focus();
+            } else if (givenBase === 'bin') {
+                inputBin.value = currentNumber.toString(2);
+                inputBin.disabled = true;
+                inputBin.classList.add('bg-slate-800', 'text-slate-400');
+                inputDec.focus();
+            } else if (givenBase === 'hex') {
+                inputHex.value = currentNumber.toString(16).toUpperCase();
+                inputHex.disabled = true;
+                inputHex.classList.add('bg-slate-800', 'text-slate-400');
+                inputDec.focus();
+            }
+        }
+
+        function checkAnswers() {
+            let allCorrect = true;
+
+            const checkInput = (inputEl, base, correctValueStr) => {
+                if (inputEl.disabled) return; // Skip given
+
+                // Format user input: remove spaces, uppercase for hex, remove leading zeros unless it's just '0'
+                let userVal = inputEl.value.trim().replace(/\s/g, '').toUpperCase();
+                userVal = userVal.replace(/^0+/, '');
+                if (userVal === '') userVal = '0';
+
+                let correctVal = correctValueStr.toUpperCase();
+
+                inputEl.classList.remove('border-slate-600', 'border-blue-500', 'border-green-500', 'border-purple-500', 'border-red-500');
+
+                if (userVal === correctVal || (inputEl.value.trim() === '' && correctVal === '0')) {
+                    inputEl.classList.add('border-green-500');
+                } else {
+                    inputEl.classList.add('border-red-500');
+                    allCorrect = false;
+                }
+            };
+
+            checkInput(inputDec, 10, currentNumber.toString(10));
+            checkInput(inputBin, 2, currentNumber.toString(2));
+            checkInput(inputHex, 16, currentNumber.toString(16));
+
+            feedbackPanel.classList.remove('hidden');
+            if (allCorrect) {
+                feedbackPanel.textContent = "Perfekt! Alle Umrechnungen sind korrekt. 🎉";
+                feedbackPanel.className = "mb-6 p-4 rounded-xl text-center font-bold bg-green-900/30 border border-green-500 text-green-400";
+            } else {
+                feedbackPanel.textContent = "Da sind noch Fehler. Bitte korrigiere die rot markierten Felder.";
+                feedbackPanel.className = "mb-6 p-4 rounded-xl text-center font-bold bg-red-900/30 border border-red-500 text-red-400";
+            }
+        }
+
+        btnNewTask.addEventListener('click', generateNewTask);
+        btnCheck.addEventListener('click', checkAnswers);
+
+        // Add Enter key support
+        [inputDec, inputBin, inputHex].forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkAnswers();
+            });
+        });
+
+        // Init first task
+        generateNewTask();
+
+    </script>
+</body>
+</html>
