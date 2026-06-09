@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design-Pattern-Matcher - AP Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .pattern-block {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pattern-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .pattern-block.selected {
+            border-color: #a855f7; /* purple-500 */
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4);
+        }
+        .scenario-box {
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-purple-400">📐</span> Design-Pattern-Matcher
+                </h1>
+            </div>
+            <div class="text-sm text-slate-400">Architektur-Training</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8 flex flex-col lg:flex-row gap-6">
+
+        <!-- Left: Scenarios & Check -->
+        <div class="w-full lg:w-1/2 flex flex-col gap-6">
+
+            <div class="glass-card rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-white mb-2">Szenarien</h2>
+                <p class="text-sm text-slate-400 mb-6">Wähle unten ein Entwurfsmuster (Pattern) aus und klicke auf das passende Szenario, um sie zuzuordnen.</p>
+
+                <div id="scenariosContainer" class="space-y-4">
+                    <!-- Scenarios injected via JS -->
+                </div>
+
+                <div class="mt-6 flex justify-between items-center border-t border-slate-700 pt-6">
+                    <div id="feedbackText" class="text-sm font-medium"></div>
+                    <button id="checkBtn" class="bg-purple-600 hover:bg-purple-500 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-purple-600/20">
+                        Überprüfen
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6">
+                <h2 class="text-lg font-bold text-white mb-4">Verfügbare Patterns</h2>
+                <div id="patternsContainer" class="grid grid-cols-2 gap-3">
+                    <!-- Patterns injected via JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: UML Visualization -->
+        <div class="w-full lg:w-1/2 flex flex-col">
+            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col border-slate-700 bg-slate-800/30">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    UML-Struktur (Vorschau)
+                </h2>
+                <div id="umlContainer" class="flex-grow flex items-center justify-center bg-slate-900 rounded-xl border border-slate-700 p-4 overflow-auto text-slate-400 text-sm italic">
+                    Wähle ein Pattern aus, um das Klassendiagramm zu sehen.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Data
+        const patterns = [
+            { id: 'p1', name: 'Singleton', color: 'bg-blue-600', hover: 'hover:bg-blue-500',
+              uml: `classDiagram\nclass Singleton {\n  -static instance: Singleton\n  -Singleton()\n  +static getInstance(): Singleton\n}` },
+            { id: 'p2', name: 'Factory Method', color: 'bg-green-600', hover: 'hover:bg-green-500',
+              uml: `classDiagram\nCreator <|-- ConcreteCreator\nProduct <|-- ConcreteProduct\nCreator ..> Product\nclass Creator {\n  +factoryMethod(): Product\n}` },
+            { id: 'p3', name: 'Observer', color: 'bg-orange-600', hover: 'hover:bg-orange-500',
+              uml: `classDiagram\nSubject o-- Observer\nclass Subject {\n  +attach(Observer)\n  +detach(Observer)\n  +notify()\n}\nclass Observer {\n  <<interface>>\n  +update()\n}` },
+            { id: 'p4', name: 'Strategy', color: 'bg-red-600', hover: 'hover:bg-red-500',
+              uml: `classDiagram\nContext o-- Strategy\nStrategy <|-- ConcreteStrategyA\nStrategy <|-- ConcreteStrategyB\nclass Strategy {\n  <<interface>>\n  +execute()\n}` }
+        ];
+
+        const scenarios = [
+            { id: 's1', patternId: 'p3', text: 'Eine Wetterstation ändert ihre Daten. Alle angeschlossenen Displays (App, Website, Monitor) sollen automatisch aktualisiert werden.' },
+            { id: 's2', patternId: 'p1', text: 'Eine Anwendung benötigt genau EINE zentrale Datenbankverbindung, auf die von überall aus zugegriffen wird, ohne sie mehrfach zu instanziieren.' },
+            { id: 's3', patternId: 'p4', text: 'Ein Navigationssystem soll Routen berechnen. Je nach Auswahl (Auto, Fahrrad, Fußgänger) wird zur Laufzeit ein anderer Berechnungs-Algorithmus verwendet.' },
+            { id: 's4', patternId: 'p2', text: 'Ein Logistik-Programm erstellt Transportmittel. Abhängig von der Konfiguration wird entweder ein LKW-Objekt oder ein Schiff-Objekt erzeugt, ohne die genaue Klasse im Hauptcode zu kennen.' }
+        ];
+
+        let selectedPattern = null;
+        let matches = {}; // { scenarioId: patternId }
+
+        // DOM Elements
+        const scenariosContainer = document.getElementById('scenariosContainer');
+        const patternsContainer = document.getElementById('patternsContainer');
+        const umlContainer = document.getElementById('umlContainer');
+        const checkBtn = document.getElementById('checkBtn');
+        const feedbackText = document.getElementById('feedbackText');
+
+        // Init Mermaid
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+        // Setup UI
+        function init() {
+            // Render Patterns
+            patterns.forEach(p => {
+                const el = document.createElement('div');
+                el.className = `pattern-block rounded-xl p-3 border border-slate-700 bg-slate-800 text-center text-white font-medium`;
+                el.innerText = p.name;
+                el.dataset.id = p.id;
+
+                el.addEventListener('click', () => {
+                    // Deselect all
+                    document.querySelectorAll('.pattern-block').forEach(n => n.classList.remove('selected'));
+                    // Select this
+                    el.classList.add('selected');
+                    selectedPattern = p;
+                    renderUml(p.uml);
+                });
+
+                patternsContainer.appendChild(el);
+            });
+
+            // Render Scenarios
+            scenarios.forEach((s, index) => {
+                const el = document.createElement('div');
+                el.className = `scenario-box bg-slate-800/50 border border-slate-700 rounded-xl p-4 cursor-pointer hover:bg-slate-700/50 flex gap-4 items-start`;
+                el.dataset.id = s.id;
+
+                el.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-400 font-bold flex-shrink-0 border-2 border-slate-600 match-indicator">
+                        ?
+                    </div>
+                    <p class="text-sm text-slate-300 leading-relaxed pt-1">${s.text}</p>
+                `;
+
+                el.addEventListener('click', () => {
+                    if (!selectedPattern) {
+                        feedbackText.innerText = "Bitte wähle zuerst ein Pattern unten aus.";
+                        feedbackText.className = "text-sm font-medium text-orange-400";
+                        return;
+                    }
+
+                    // Assign pattern to scenario
+                    matches[s.id] = selectedPattern.id;
+
+                    // Update UI
+                    const indicator = el.querySelector('.match-indicator');
+                    indicator.innerText = getPatternInitials(selectedPattern.name);
+
+                    // Remove all pattern color classes
+                    indicator.className = `w-8 h-8 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg match-indicator ${selectedPattern.color}`;
+                    el.className = `scenario-box bg-slate-800 border rounded-xl p-4 cursor-pointer hover:bg-slate-700 flex gap-4 items-start border-slate-500`;
+
+                    feedbackText.innerText = "";
+                });
+
+                scenariosContainer.appendChild(el);
+            });
+        }
+
+        async function renderUml(umlDef) {
+            umlContainer.innerHTML = '';
+            try {
+                const { svg } = await mermaid.render('graphDiv', umlDef);
+                umlContainer.innerHTML = svg;
+            } catch (e) {
+                umlContainer.innerHTML = `<span class="text-red-400">Fehler beim Rendern des Diagramms.</span>`;
+            }
+        }
+
+        function getPatternInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            const total = scenarios.length;
+
+            if (Object.keys(matches).length < total) {
+                feedbackText.innerText = "Bitte ordne allen Szenarien ein Pattern zu.";
+                feedbackText.className = "text-sm font-medium text-yellow-400";
+                return;
+            }
+
+            scenarios.forEach(s => {
+                const box = document.querySelector(`.scenario-box[data-id="${s.id}"]`);
+                if (matches[s.id] === s.patternId) {
+                    correct++;
+                    box.classList.add('border-green-500', 'bg-green-900/20');
+                    box.classList.remove('border-slate-500', 'border-red-500', 'bg-red-900/20');
+                } else {
+                    box.classList.add('border-red-500', 'bg-red-900/20');
+                    box.classList.remove('border-slate-500', 'border-green-500', 'bg-green-900/20');
+                }
+            });
+
+            if (correct === total) {
+                feedbackText.innerText = `🎉 Perfekt! Alle ${total} Szenarien korrekt zugeordnet.`;
+                feedbackText.className = "text-sm font-bold text-green-400";
+            } else {
+                feedbackText.innerText = `${correct} von ${total} korrekt. Versuche es nochmal.`;
+                feedbackText.className = "text-sm font-bold text-red-400";
+            }
+        }
+
+        checkBtn.addEventListener('click', checkAnswers);
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

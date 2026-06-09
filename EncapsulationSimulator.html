@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapselungs-Sicherheits-Simulator - AP Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .shield-icon {
+            transition: all 0.3s;
+        }
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .pulse-green {
+            animation: pulseGreen 1s ease-out;
+        }
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-teal-400">🛡️</span> Kapselungs-Simulator
+                </h1>
+            </div>
+            <div class="text-sm text-slate-400">Datenverstecken (Information Hiding)</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8 flex flex-col lg:flex-row gap-6">
+
+        <!-- Left: Class Definition -->
+        <div class="w-full lg:w-1/2 flex flex-col gap-6">
+            <div class="glass-card rounded-2xl p-6 flex-grow">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    Klasse: BankKonto
+                </h2>
+
+                <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 font-mono text-sm mb-6">
+                    <span class="text-blue-400">class</span> <span class="text-yellow-300">BankKonto</span><br>
+                    {<br>
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
+                        <select id="kontostandAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                            <option value="public">public</option>
+                            <option value="private" selected>private</option>
+                            <option value="protected">protected</option>
+                        </select>
+                        <span><span class="text-teal-300">decimal</span> <span class="text-white">kontostand</span> = <span class="text-orange-300">1000.00m</span>;</span>
+                    </div>
+
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
+                        <select id="pinAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                            <option value="public">public</option>
+                            <option value="private" selected>private</option>
+                            <option value="protected">protected</option>
+                        </select>
+                        <span><span class="text-teal-300">string</span> <span class="text-white">pin</span> = <span class="text-green-300">"1234"</span>;</span>
+                    </div>
+
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
+                        <select id="einzahlenAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                            <option value="public" selected>public</option>
+                            <option value="private">private</option>
+                            <option value="protected">protected</option>
+                        </select>
+                        <span><span class="text-teal-300">void</span> <span class="text-yellow-200">Einzahlen</span>(<span class="text-teal-300">decimal</span> <span class="text-orange-300">betrag</span>) { ... }</span>
+                    </div>
+                    }
+                </div>
+
+                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 text-sm text-slate-300">
+                    <h3 class="font-bold text-white mb-2">Erklärung der Modifizierer:</h3>
+                    <ul class="space-y-1 list-disc list-inside">
+                        <li><span class="text-blue-400 font-mono">public</span>: Zugriff von überall möglich.</li>
+                        <li><span class="text-blue-400 font-mono">private</span>: Zugriff nur innerhalb derselben Klasse.</li>
+                        <li><span class="text-blue-400 font-mono">protected</span>: Zugriff in dieser und abgeleiteten Klassen.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Access Simulation -->
+        <div class="w-full lg:w-1/2 flex flex-col gap-6">
+            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    Zugriffs-Simulator
+                </h2>
+
+                <div class="mb-4">
+                    <label class="block text-sm text-slate-400 mb-2">Von wo greifst du zu?</label>
+                    <div class="flex gap-2">
+                        <button class="context-btn active flex-1 bg-slate-800 hover:bg-slate-700 border border-teal-500 text-white px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="main">
+                            Externe Klasse (Program.cs)
+                        </button>
+                        <button class="context-btn flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="derived">
+                            Abgeleitete Klasse (GiroKonto)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-3 mt-4">
+                    <p class="text-sm font-bold text-slate-300 mb-2">Versuche auf Felder zuzugreifen:</p>
+
+                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="kontostand">
+                        <span class="mono text-sm text-slate-300 group-hover:text-white">konto.kontostand = <span class="text-orange-300">9999999m</span>;</span>
+                        <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
+                    </button>
+
+                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="pin">
+                        <span class="mono text-sm text-slate-300 group-hover:text-white"><span class="text-teal-300">string</span> p = konto.pin;</span>
+                        <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
+                    </button>
+
+                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="einzahlen">
+                        <span class="mono text-sm text-slate-300 group-hover:text-white">konto.Einzahlen(<span class="text-orange-300">50m</span>);</span>
+                        <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
+                    </button>
+                </div>
+
+                <!-- Console Output -->
+                <div class="mt-auto pt-6">
+                    <div class="bg-[#0d1117] rounded-xl border border-slate-700 h-32 p-4 overflow-y-auto font-mono text-sm flex flex-col-reverse" id="consoleOutput">
+                        <div class="text-slate-500 italic">// Compiler-Ausgabe erscheint hier...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // State
+        let currentContext = 'main'; // 'main' or 'derived'
+
+        // DOM Elements
+        const contextBtns = document.querySelectorAll('.context-btn');
+        const actionBtns = document.querySelectorAll('.action-btn');
+        const consoleOutput = document.getElementById('consoleOutput');
+
+        const selects = {
+            kontostand: document.getElementById('kontostandAccess'),
+            pin: document.getElementById('pinAccess'),
+            einzahlen: document.getElementById('einzahlenAccess')
+        };
+
+        // Context Switching
+        contextBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                contextBtns.forEach(b => {
+                    b.classList.remove('active', 'border-teal-500', 'text-white');
+                    b.classList.add('border-slate-700', 'text-slate-300');
+                });
+                const clicked = e.currentTarget;
+                clicked.classList.add('active', 'border-teal-500', 'text-white');
+                clicked.classList.remove('border-slate-700', 'text-slate-300');
+
+                currentContext = clicked.dataset.context;
+                log(`Kontext gewechselt zu: ${currentContext === 'main' ? 'Externe Klasse' : 'Abgeleitete Klasse'}`, 'text-blue-400');
+                resetIcons();
+            });
+        });
+
+        // Reset Icons when access modifier changes
+        Object.values(selects).forEach(select => {
+            select.addEventListener('change', () => {
+                resetIcons();
+                log(`Zugriffsmodifizierer geändert.`, 'text-slate-400');
+            });
+        });
+
+        function resetIcons() {
+            document.querySelectorAll('.shield-icon').forEach(icon => {
+                icon.innerHTML = '?';
+                icon.className = 'shield-icon w-6 h-6 text-slate-500 flex items-center justify-center';
+            });
+        }
+
+        // Action Simulation
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget.dataset.target;
+                const modifier = selects[target].value;
+                const iconContainer = e.currentTarget.querySelector('.shield-icon');
+
+                // Logic check
+                let isAllowed = false;
+                let errorMsg = '';
+
+                if (modifier === 'public') {
+                    isAllowed = true;
+                } else if (modifier === 'private') {
+                    isAllowed = false;
+                    errorMsg = `Der Zugriff auf 'BankKonto.${target}' ist aufgrund des Schutzgrads (private) nicht möglich.`;
+                } else if (modifier === 'protected') {
+                    if (currentContext === 'derived') {
+                        isAllowed = true;
+                    } else {
+                        isAllowed = false;
+                        errorMsg = `Der Zugriff auf 'BankKonto.${target}' ist aufgrund des Schutzgrads (protected) nicht möglich.`;
+                    }
+                }
+
+                // UI Update
+                if (isAllowed) {
+                    iconContainer.innerHTML = `<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                    e.currentTarget.classList.add('pulse-green');
+                    setTimeout(() => e.currentTarget.classList.remove('pulse-green'), 1000);
+                    log(`Erfolg: Zugriff auf '${target}' (${modifier}) gestattet.`, 'text-green-400');
+                } else {
+                    iconContainer.innerHTML = `<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>`;
+                    e.currentTarget.classList.add('shake');
+                    setTimeout(() => e.currentTarget.classList.remove('shake'), 500);
+                    log(`Compiler Error CS0122: ${errorMsg}`, 'text-red-400 font-bold');
+                }
+            });
+        });
+
+        function log(message, colorClass) {
+            const entry = document.createElement('div');
+            entry.className = `mb-1 ${colorClass}`;
+            entry.innerText = `> ${message}`;
+            consoleOutput.prepend(entry);
+        }
+
+    </script>
+</body>
+</html>

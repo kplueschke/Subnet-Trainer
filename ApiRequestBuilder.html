@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API-Request-Builder - AP Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
+                <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="text-green-400">🌐</span> API-Request-Builder
+                </h1>
+            </div>
+            <div class="text-sm text-slate-400 mono">Mini-Postman</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
+
+        <!-- Request Builder Section -->
+        <div class="glass-card rounded-2xl p-6">
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <!-- Method Select -->
+                <select id="methodSelect" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 font-bold md:w-32 transition-colors">
+                    <option value="GET" class="text-blue-400">GET</option>
+                    <option value="POST" class="text-green-400">POST</option>
+                    <option value="PUT" class="text-orange-400">PUT</option>
+                    <option value="DELETE" class="text-red-400">DELETE</option>
+                </select>
+
+                <!-- URL Input -->
+                <div class="flex-grow flex">
+                    <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-slate-700 bg-slate-800 text-slate-400 mono text-sm">
+                        https://api.mock.local
+                    </span>
+                    <input type="text" id="urlInput" value="/users" placeholder="/endpoint" class="flex-grow bg-slate-900 border border-slate-700 rounded-r-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 transition-colors mono">
+                </div>
+
+                <!-- Send Button -->
+                <button id="sendBtn" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-lg transition-colors flex items-center justify-center gap-2 md:w-auto w-full shadow-lg shadow-green-600/20">
+                    Senden
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-700 mb-4">
+                <button class="tab-btn active px-4 py-2 text-green-400 border-b-2 border-green-400 font-medium" data-target="headers">Headers</button>
+                <button class="tab-btn px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent font-medium transition-colors" data-target="body">Body (JSON)</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div id="headers" class="tab-content block space-y-3">
+                <div class="flex gap-2">
+                    <input type="text" value="Content-Type" readonly class="w-1/3 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-400 text-sm focus:outline-none">
+                    <input type="text" value="application/json" readonly class="flex-grow bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-400 text-sm focus:outline-none">
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" value="Authorization" class="w-1/3 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Key">
+                    <input type="text" value="Bearer mock-token-123" class="flex-grow bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Value">
+                </div>
+            </div>
+
+            <div id="body" class="tab-content hidden">
+                <textarea id="bodyInput" rows="6" class="w-full bg-[#0d1117] border border-slate-700 rounded-lg p-4 text-green-300 mono text-sm focus:outline-none focus:border-green-500 transition-colors resize-y" placeholder="{\n  &quot;key&quot;: &quot;value&quot;\n}"></textarea>
+                <p class="text-xs text-slate-500 mt-2">Wird nur bei POST und PUT simuliert berücksichtigt.</p>
+            </div>
+        </div>
+
+        <!-- Response Section -->
+        <div class="glass-card rounded-2xl flex flex-col overflow-hidden min-h-[300px]">
+            <div class="bg-slate-800/80 px-6 py-3 border-b border-slate-700 flex justify-between items-center">
+                <span class="font-semibold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Response
+                </span>
+                <div class="flex gap-4 text-sm mono">
+                    <span id="statusBadge" class="px-2 py-1 rounded bg-slate-700 text-slate-300">Status: ---</span>
+                    <span id="timeBadge" class="px-2 py-1 rounded bg-slate-700 text-slate-300">Time: -- ms</span>
+                </div>
+            </div>
+
+            <div class="flex-grow bg-[#0d1117] p-6 relative">
+                <!-- Loading Overlay -->
+                <div id="loadingOverlay" class="absolute inset-0 bg-[#0d1117]/80 backdrop-blur-sm flex flex-col items-center justify-center hidden z-10">
+                    <div class="w-8 h-8 border-4 border-green-500/30 border-t-green-500 rounded-full animate-spin mb-4"></div>
+                    <span class="text-green-400 font-medium animate-pulse">Sende Request...</span>
+                </div>
+
+                <pre><code id="responseOutput" class="mono text-sm text-slate-400">Drücke "Senden" um eine Mock-Anfrage auszuführen...</code></pre>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // DOM Elements
+        const methodSelect = document.getElementById('methodSelect');
+        const urlInput = document.getElementById('urlInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const bodyInput = document.getElementById('bodyInput');
+        const responseOutput = document.getElementById('responseOutput');
+        const statusBadge = document.getElementById('statusBadge');
+        const timeBadge = document.getElementById('timeBadge');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Color coding for methods
+        const methodColors = {
+            'GET': 'text-blue-400',
+            'POST': 'text-green-400',
+            'PUT': 'text-orange-400',
+            'DELETE': 'text-red-400'
+        };
+
+        methodSelect.addEventListener('change', (e) => {
+            // Remove all color classes
+            Object.values(methodColors).forEach(c => methodSelect.classList.remove(c));
+            // Add current color class
+            methodSelect.classList.add(methodColors[e.target.value]);
+
+            // Auto-format body suggestion based on method
+            if (e.target.value === 'POST' && !bodyInput.value) {
+                bodyInput.value = '{\n  "name": "Neuer User",\n  "role": "Azubi"\n}';
+            } else if (e.target.value === 'GET' || e.target.value === 'DELETE') {
+                bodyInput.value = '';
+            }
+        });
+
+        // Tabs logic
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active from all
+                tabBtns.forEach(b => {
+                    b.classList.remove('active', 'text-green-400', 'border-green-400');
+                    b.classList.add('text-slate-400', 'border-transparent');
+                });
+                tabContents.forEach(c => c.classList.add('hidden'));
+
+                // Add active to clicked
+                btn.classList.remove('text-slate-400', 'border-transparent');
+                btn.classList.add('active', 'text-green-400', 'border-green-400');
+                document.getElementById(btn.dataset.target).classList.remove('hidden');
+            });
+        });
+
+        // Mock Database
+        let mockUsers = [
+            { id: 1, name: "Max Mustermann", role: "Admin" },
+            { id: 2, name: "Erika Musterfrau", role: "User" }
+        ];
+
+        // Simulate API Request
+        sendBtn.addEventListener('click', () => {
+            const method = methodSelect.value;
+            const endpoint = urlInput.value.trim();
+            const rawBody = bodyInput.value.trim();
+
+            // UI Feedback
+            loadingOverlay.classList.remove('hidden');
+            sendBtn.disabled = true;
+            statusBadge.className = 'px-2 py-1 rounded bg-slate-700 text-slate-300';
+            statusBadge.textContent = 'Status: Pending';
+            timeBadge.textContent = 'Time: -- ms';
+
+            // Simulate network delay (300-800ms)
+            const delay = Math.floor(Math.random() * 500) + 300;
+
+            setTimeout(() => {
+                let status = 200;
+                let responseData = null;
+                let errorMsg = null;
+
+                // Simple Routing Logic
+                try {
+                    if (endpoint === '/users' || endpoint === '/users/') {
+                        if (method === 'GET') {
+                            status = 200;
+                            responseData = mockUsers;
+                        } else if (method === 'POST') {
+                            const newObj = JSON.parse(rawBody || '{}');
+                            if (!newObj.name) throw new Error("Field 'name' is required");
+
+                            const newUser = {
+                                id: mockUsers.length > 0 ? Math.max(...mockUsers.map(u => u.id)) + 1 : 1,
+                                name: newObj.name,
+                                role: newObj.role || 'User'
+                            };
+                            mockUsers.push(newUser);
+                            status = 201;
+                            responseData = newUser;
+                        } else {
+                            status = 405;
+                            errorMsg = `Method ${method} Not Allowed on /users`;
+                        }
+                    } else if (endpoint.startsWith('/users/')) {
+                        const idStr = endpoint.split('/')[2];
+                        const id = parseInt(idStr);
+                        const userIndex = mockUsers.findIndex(u => u.id === id);
+
+                        if (isNaN(id)) {
+                            status = 400;
+                            errorMsg = "Invalid ID format";
+                        } else if (userIndex === -1) {
+                            status = 404;
+                            errorMsg = "User not found";
+                        } else {
+                            if (method === 'GET') {
+                                status = 200;
+                                responseData = mockUsers[userIndex];
+                            } else if (method === 'PUT') {
+                                const updateData = JSON.parse(rawBody || '{}');
+                                mockUsers[userIndex] = { ...mockUsers[userIndex], ...updateData, id: id };
+                                status = 200;
+                                responseData = mockUsers[userIndex];
+                            } else if (method === 'DELETE') {
+                                mockUsers.splice(userIndex, 1);
+                                status = 204;
+                                responseData = null;
+                            } else {
+                                status = 405;
+                                errorMsg = `Method ${method} Not Allowed on /users/:id`;
+                            }
+                        }
+                    } else {
+                        status = 404;
+                        errorMsg = "Endpoint not found. Try /users or /users/1";
+                    }
+                } catch (e) {
+                    status = 400;
+                    errorMsg = "Bad Request: " + e.message;
+                }
+
+                // Update UI
+                loadingOverlay.classList.add('hidden');
+                sendBtn.disabled = false;
+
+                // Status Badge Color
+                let statusColor = 'bg-green-500/20 text-green-400 border-green-500/30';
+                if (status >= 400) statusColor = 'bg-red-500/20 text-red-400 border-red-500/30';
+                if (status === 204) statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+
+                statusBadge.className = `px-2 py-1 rounded border ${statusColor}`;
+
+                // HTTP Status Text mapping
+                const statusTexts = { 200: 'OK', 201: 'Created', 204: 'No Content', 400: 'Bad Request', 404: 'Not Found', 405: 'Method Not Allowed' };
+                statusBadge.textContent = `${status} ${statusTexts[status] || ''}`;
+                timeBadge.textContent = `${delay} ms`;
+
+                // Format Output
+                if (status === 204) {
+                    responseOutput.innerHTML = '<span class="text-slate-500">// No Content (204)</span>';
+                } else if (errorMsg) {
+                    const errObj = { error: errorMsg, status: status };
+                    responseOutput.innerHTML = syntaxHighlight(JSON.stringify(errObj, null, 2));
+                } else {
+                    responseOutput.innerHTML = syntaxHighlight(JSON.stringify(responseData, null, 2));
+                }
+
+            }, delay);
+        });
+
+        // Simple JSON Syntax Highlighter
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'text-blue-300'; // number
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'text-purple-300'; // key
+                    } else {
+                        cls = 'text-green-300'; // string
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'text-orange-300'; // boolean
+                } else if (/null/.test(match)) {
+                    cls = 'text-slate-500'; // null
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        // Init setup
+        methodSelect.classList.add(methodColors['GET']);
+    </script>
+</body>
+</html>
