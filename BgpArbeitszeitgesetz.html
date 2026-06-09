@@ -54,7 +54,7 @@
         </div>
 
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Arbeitszeitgesetz-Inspektor
             </h1>
             <p class="mt-4 text-slate-400">Klicke auf die Schichten oder Pausen im Plan, die gegen das Arbeitszeitgesetz (ArbZG) verstoßen.</p>
@@ -67,7 +67,7 @@
                 <div class="space-y-4">
                     <!-- Montag -->
                     <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                        <div class="font-bold text-indigo-400 mb-2">Montag</div>
+                        <div class="font-bold text-orange-400 mb-2">Montag</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
                                 <span class="block text-xs text-slate-400">Arbeitszeit</span>
@@ -86,7 +86,7 @@
 
                     <!-- Dienstag -->
                     <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                        <div class="font-bold text-indigo-400 mb-2">Dienstag</div>
+                        <div class="font-bold text-orange-400 mb-2">Dienstag</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
                                 <span class="block text-xs text-slate-400">Arbeitszeit</span>
@@ -105,7 +105,7 @@
 
                     <!-- Mittwoch -->
                     <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                        <div class="font-bold text-indigo-400 mb-2">Mittwoch</div>
+                        <div class="font-bold text-orange-400 mb-2">Mittwoch</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, true, 'Verstoß: Ruhezeit < 11h! Zwischen Dienstag 20:30 und Mittwoch 06:00 liegen nur 9.5h. Gesetzlich sind 11h vorgeschrieben (ArbZG §5).', 'rest_mi')">
                                 <span class="block text-xs text-slate-400">Arbeitszeit (Frühschicht)</span>
@@ -128,7 +128,7 @@
                 <h3 class="text-xl font-bold mb-4">Inspektions-Log</h3>
                 <div class="flex justify-between text-sm mb-4">
                     <span>Gefundene Verstöße:</span>
-                    <span class="font-bold text-cyan-400"><span id="foundCount">0</span> / 3</span>
+                    <span class="font-bold text-red-400"><span id="foundCount">0</span> / 3</span>
                 </div>
 
                 <div id="feedbackLog" class="space-y-3 h-64 overflow-y-auto pr-2">
@@ -176,7 +176,7 @@
 
             if (foundViolations.size === totalViolations) {
                 const winEntry = document.createElement('div');
-                winEntry.className = 'p-3 rounded text-sm border bg-indigo-500/20 border-indigo-500/50 text-indigo-200 font-bold mt-4';
+                winEntry.className = 'p-3 rounded text-sm border bg-orange-500/20 border-orange-500/50 text-indigo-200 font-bold mt-4';
                 winEntry.innerHTML = '🎉 Alle Verstöße gefunden!';
                 logContainer.prepend(winEntry);
             }

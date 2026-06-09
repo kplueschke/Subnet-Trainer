@@ -43,7 +43,7 @@
         </div>
 
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Ökonomisches-Prinzip-Zuordner
             </h1>
             <p class="mt-4 text-slate-400">Ziehe die Fallbeispiele in die richtige Kategorie (Maximalprinzip oder Minimalprinzip).</p>
@@ -61,15 +61,15 @@
             <!-- Target Categories -->
             <div class="lg:col-span-2 grid sm:grid-cols-2 gap-6">
                 <!-- Maximalprinzip -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-indigo-500/50 transition-colors" id="maximal" ondragover="allowDrop(event)" ondrop="drop(event, 'maximal')">
-                    <h3 class="text-xl font-bold mb-2 text-indigo-400">Maximalprinzip</h3>
+                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-orange-500/50 transition-colors" id="maximal" ondragover="allowDrop(event)" ondrop="drop(event, 'maximal')">
+                    <h3 class="text-xl font-bold mb-2 text-orange-400">Maximalprinzip</h3>
                     <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Mit <strong>gegebenem Aufwand</strong> (Mitteln) einen <strong>möglichst großen Ertrag</strong> (Ziel) erzielen.</p>
                     <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="maximal-list"></div>
                 </div>
 
                 <!-- Minimalprinzip -->
                 <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-cyan-500/50 transition-colors" id="minimal" ondragover="allowDrop(event)" ondrop="drop(event, 'minimal')">
-                    <h3 class="text-xl font-bold mb-2 text-cyan-400">Minimalprinzip</h3>
+                    <h3 class="text-xl font-bold mb-2 text-red-400">Minimalprinzip</h3>
                     <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Ein <strong>vorgegebenes Ziel</strong> (Ertrag) mit <strong>möglichst geringem Aufwand</strong> (Mitteln) erreichen.</p>
                     <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="minimal-list"></div>
                 </div>
@@ -78,7 +78,7 @@
 
         <div class="mt-8 text-center flex justify-center gap-4">
             <button onclick="resetGame()" class="px-6 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 font-medium transition-colors">Neustart</button>
-            <button onclick="checkAnswers()" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold transition-colors shadow-lg shadow-indigo-500/30">Lösung prüfen</button>
+            <button onclick="checkAnswers()" class="px-6 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 font-bold transition-colors shadow-lg shadow-indigo-500/30">Lösung prüfen</button>
         </div>
 
         <div id="feedback" class="mt-6 text-center font-bold text-lg hidden"></div>

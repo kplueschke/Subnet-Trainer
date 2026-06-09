@@ -41,15 +41,15 @@
         </div>
 
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 SMART-Ziel-Validierer
             </h1>
             <p class="mt-4 text-slate-400">Analysiere deinen Projektauftrag und hake ab, ob das Projektziel SMART formuliert ist.</p>
         </div>
 
         <div class="glass-card rounded-2xl p-6 mb-8">
-            <label class="block text-sm font-bold text-indigo-400 mb-2 uppercase tracking-wide">Projektziel Formulieren</label>
-            <textarea id="goalInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none h-32" placeholder="Beispiel: Die Ladezeit der Unternehmenswebsite soll bis zum 31.12. des laufenden Jahres von 3.5 auf 1.5 Sekunden reduziert werden, um die Kundenzufriedenheit zu steigern..."></textarea>
+            <label class="block text-sm font-bold text-orange-400 mb-2 uppercase tracking-wide">Projektziel Formulieren</label>
+            <textarea id="goalInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-indigo-500 resize-none h-32" placeholder="Beispiel: Die Ladezeit der Unternehmenswebsite soll bis zum 31.12. des laufenden Jahres von 3.5 auf 1.5 Sekunden reduziert werden, um die Kundenzufriedenheit zu steigern..."></textarea>
 
             <div class="mt-4 flex gap-2">
                 <button onclick="loadExample(1)" class="text-xs px-3 py-1 rounded bg-slate-700 hover:bg-slate-600">Beispiel: Gut</button>
@@ -67,7 +67,7 @@
                     <!-- Specific -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="S" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="S" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="S" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
@@ -81,7 +81,7 @@
                     <!-- Measurable -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="M" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="M" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="M" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
@@ -95,7 +95,7 @@
                     <!-- Attractive / Achievable -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="A" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="A" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="A" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
@@ -109,7 +109,7 @@
                     <!-- Realistic -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="R" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="R" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="R" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
@@ -123,7 +123,7 @@
                     <!-- Time-bound -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="T" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="T" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="T" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">

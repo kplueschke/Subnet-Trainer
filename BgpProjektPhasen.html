@@ -49,7 +49,7 @@
         </div>
 
         <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Projekt-Phasen-Navigator
             </h1>
             <p class="mt-4 text-slate-400">Ziehe die Dokumente und Meilensteine in die korrekte Projektphase.</p>
@@ -68,8 +68,8 @@
             <!-- Phase 2: Planung -->
             <div class="glass-card rounded-2xl p-4 flex flex-col droppable border border-slate-700" id="plan" ondragover="allowDrop(event)" ondrop="drop(event, 'plan')">
                 <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
-                    <div class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/50 flex items-center justify-center text-xs font-bold">2</div>
-                    <h3 class="text-lg font-bold text-indigo-400">Planung</h3>
+                    <div class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/50 flex items-center justify-center text-xs font-bold">2</div>
+                    <h3 class="text-lg font-bold text-orange-400">Planung</h3>
                 </div>
                 <div class="phase-container" id="plan-list"></div>
             </div>
@@ -77,8 +77,8 @@
             <!-- Phase 3: Durchführung -->
             <div class="glass-card rounded-2xl p-4 flex flex-col droppable border border-slate-700" id="do" ondragover="allowDrop(event)" ondrop="drop(event, 'do')">
                 <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
-                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 flex items-center justify-center text-xs font-bold">3</div>
-                    <h3 class="text-lg font-bold text-cyan-400">Durchführung</h3>
+                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-red-400 border border-cyan-500/50 flex items-center justify-center text-xs font-bold">3</div>
+                    <h3 class="text-lg font-bold text-red-400">Durchführung</h3>
                 </div>
                 <div class="phase-container" id="do-list"></div>
             </div>
@@ -103,7 +103,7 @@
 
         <div class="mt-8 flex justify-center gap-4">
             <button onclick="resetGame()" class="px-6 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 font-medium transition-colors">Zurücksetzen</button>
-            <button onclick="checkAnswers()" class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold transition-colors">Überprüfen</button>
+            <button onclick="checkAnswers()" class="px-6 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 font-bold transition-colors">Überprüfen</button>
         </div>
 
         <div id="feedback" class="mt-6 text-center font-bold text-lg hidden"></div>

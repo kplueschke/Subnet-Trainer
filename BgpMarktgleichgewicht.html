@@ -33,7 +33,7 @@
             </a>
         </div>
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Marktgleichgewichts-Simulator
             </h1>
             <p class="mt-4 text-slate-400">Verschiebe Angebots- und Nachfragekurven und beobachte die Veränderung von Gleichgewichtspreis und -menge.</p>
@@ -55,13 +55,13 @@
                     <button onclick="shiftSupply(-1)" class="w-full text-left px-4 py-3 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-colors">
                         🔥 Rohstoffknappheit (Angebot sinkt)
                     </button>
-                    <button onclick="resetChart()" class="w-full text-center px-4 py-3 rounded bg-indigo-600 hover:bg-indigo-500 font-bold transition-colors mt-4">
+                    <button onclick="resetChart()" class="w-full text-center px-4 py-3 rounded bg-orange-600 hover:bg-orange-500 font-bold transition-colors mt-4">
                         🔄 Zurücksetzen
                     </button>
                 </div>
 
                 <div class="mt-6 p-4 rounded bg-slate-800 border border-slate-700">
-                    <h4 class="font-bold text-lg mb-2 text-cyan-400">Aktuelles Gleichgewicht</h4>
+                    <h4 class="font-bold text-lg mb-2 text-red-400">Aktuelles Gleichgewicht</h4>
                     <p>Preis (P*): <span id="eqPrice" class="font-bold mono text-xl">5.00</span> €</p>
                     <p>Menge (Q*): <span id="eqQty" class="font-bold mono text-xl">50</span> Stück</p>
                 </div>
