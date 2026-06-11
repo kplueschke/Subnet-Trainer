@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-Vokabel-Tinder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .card-container { perspective: 1000px; position: relative; width: 100%; max-width: 400px; height: 300px; margin: 0 auto; }
+        .flashcard { position: absolute; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 1rem; padding: 2rem; text-align: center; }
+        .card-front { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(99, 102, 241, 0.3); }
+        .card-back { background: linear-gradient(135deg, #334155, #1e293b); transform: rotateY(180deg); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .swipe-left { animation: swipeLeft 0.5s forwards; }
+        .swipe-right { animation: swipeRight 0.5s forwards; }
+        @keyframes swipeLeft { to { transform: translateX(-200px) rotate(-20deg) scale(0.8); opacity: 0; } }
+        @keyframes swipeRight { to { transform: translateX(200px) rotate(20deg) scale(0.8); opacity: 0; } }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">IT-Vokabel-Tinder</h1>
+            <div class="text-sm text-slate-400">Cards: <span id="card-count">0</span></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 mb-6 flex-grow flex flex-col justify-center relative overflow-hidden">
+            <div id="deck" class="card-container">
+                <!-- Card inserted by JS -->
+            </div>
+
+            <div class="flex justify-center gap-8 mt-8 opacity-0 transition-opacity" id="action-buttons">
+                <button id="btn-left" class="w-16 h-16 rounded-full bg-slate-800 hover:bg-red-900/50 border border-red-500/30 flex items-center justify-center text-red-500 text-2xl transition-all hover:scale-110">
+                    ✕
+                </button>
+                <button id="btn-right" class="w-16 h-16 rounded-full bg-slate-800 hover:bg-green-900/50 border border-green-500/30 flex items-center justify-center text-green-500 text-2xl transition-all hover:scale-110">
+                    ♥
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+            <h2 class="text-lg font-bold text-white mb-2">Neue Vokabeln generieren</h2>
+            <p class="text-xs text-slate-400 mb-4">Kopiere englischen Text (z.B. aus einer Doku) hier hinein. Wir extrahieren Wörter.</p>
+            <textarea id="import-text" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 focus:outline-none focus:border-indigo-500 mb-3" placeholder="Paste english text here..."></textarea>
+            <button id="btn-import" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors">Extrahieren & Hinzufügen</button>
+        </div>
+    </div>
+
+    <script>
+        let vocab = [
+            { en: "Deployment", de: "Bereitstellung", weight: 1 },
+            { en: "Inheritance", de: "Vererbung", weight: 1 },
+            { en: "Bandwidth", de: "Bandbreite", weight: 1 },
+            { en: "Encryption", de: "Verschlüsselung", weight: 1 }
+        ];
+
+        let currentCardIndex = -1;
+        const deckEl = document.getElementById('deck');
+        const countEl = document.getElementById('card-count');
+        const actionsEl = document.getElementById('action-buttons');
+
+        function updateCount() {
+            countEl.innerText = vocab.length;
+        }
+
+        function getNextCard() {
+            if(vocab.length === 0) return null;
+            // Weighted random selection for spaced repetition
+            const totalWeight = vocab.reduce((sum, v) => sum + v.weight, 0);
+            let random = Math.random() * totalWeight;
+            for (let i = 0; i < vocab.length; i++) {
+                random -= vocab[i].weight;
+                if (random <= 0) return i;
+            }
+            return 0;
+        }
+
+        function renderCard() {
+            deckEl.innerHTML = '';
+            updateCount();
+            if (vocab.length === 0) {
+                deckEl.innerHTML = '<div class="text-center text-slate-400 mt-20">Keine Karten mehr. Bitte Text importieren!</div>';
+                actionsEl.style.opacity = '0';
+                return;
+            }
+
+            currentCardIndex = getNextCard();
+            const word = vocab[currentCardIndex];
+
+            const card = document.createElement('div');
+            card.className = 'flashcard';
+            card.innerHTML = `
+                <div class="card-face card-front">
+                    <span class="text-xs text-indigo-400 mb-2 uppercase tracking-widest">Englisch</span>
+                    <h3 class="text-3xl font-bold text-white">${word.en}</h3>
+                    <p class="text-sm text-slate-500 mt-4">(Klicken zum Umdrehen)</p>
+                </div>
+                <div class="card-face card-back">
+                    <span class="text-xs text-green-400 mb-2 uppercase tracking-widest">Deutsch</span>
+                    <h3 class="text-2xl font-bold text-white">${word.de || '?'}</h3>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                card.classList.toggle('flipped');
+                actionsEl.style.opacity = '1';
+            });
+
+            deckEl.appendChild(card);
+        }
+
+        function handleSwipe(knewIt) {
+            if(currentCardIndex === -1) return;
+            const cardEl = deckEl.querySelector('.flashcard');
+            if(!cardEl) return;
+
+            cardEl.classList.add(knewIt ? 'swipe-right' : 'swipe-left');
+
+            // Spaced repetition logic
+            if (knewIt) {
+                vocab[currentCardIndex].weight = Math.max(0.1, vocab[currentCardIndex].weight * 0.5); // show less often
+            } else {
+                vocab[currentCardIndex].weight *= 2; // show more often
+            }
+
+            setTimeout(() => {
+                actionsEl.style.opacity = '0';
+                renderCard();
+            }, 500);
+        }
+
+        document.getElementById('btn-right').addEventListener('click', () => handleSwipe(true));
+        document.getElementById('btn-left').addEventListener('click', () => handleSwipe(false));
+
+        document.getElementById('btn-import').addEventListener('click', () => {
+            const text = document.getElementById('import-text').value;
+            // Very simple extraction: split by space, remove punctuation, keep long words
+            const words = text.split(/\s+/).map(w => w.replace(/[^a-zA-Z]/g, '')).filter(w => w.length > 5);
+            const uniqueWords = [...new Set(words)];
+
+            let added = 0;
+            uniqueWords.forEach(w => {
+                if(!vocab.find(v => v.en.toLowerCase() === w.toLowerCase())) {
+                    vocab.push({ en: w, de: "(Auto-Importiert)", weight: 2 }); // high weight for new words
+                    added++;
+                }
+            });
+
+            document.getElementById('import-text').value = '';
+            alert(`${added} neue Wörter hinzugefügt!`);
+            if(vocab.length > 0 && deckEl.children.length === 0 || deckEl.innerText.includes('Keine')) {
+                renderCard();
+            } else {
+                updateCount();
+            }
+        });
+
+        // Init
+        renderCard();
+    </script>
+</body>
+</html>

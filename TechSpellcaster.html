@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Spellcaster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #game-area { height: 60vh; background: #1e293b; border-radius: 1rem; position: relative; overflow: hidden; border: 2px solid #334155; }
+        .wizard { position: absolute; bottom: 20px; left: 50px; font-size: 4rem; z-index: 10; transition: transform 0.2s; }
+        .wizard.cast { transform: scale(1.2) rotate(10deg); }
+        .bug { position: absolute; font-size: 3rem; right: -100px; bottom: 20px; transition: transform 0.1s; }
+        .bug-clue { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; white-space: nowrap; border: 1px solid #475569; }
+        .spell-projectile { position: absolute; font-size: 2rem; z-index: 5; transition: left 0.5s linear; }
+        .spell-btn { transition: transform 0.1s, box-shadow 0.1s; }
+        .spell-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col relative z-10">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Tech-Spellcaster</h1>
+            <div class="text-xl font-mono">Score: <span id="score" class="text-purple-400">0</span></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 flex-grow flex flex-col">
+            <p class="text-slate-400 text-center mb-4 text-sm">Bugs nähern sich. Lies den zeitlichen Hinweis über dem Bug und wirke den Zauber in der exakt richtigen <span class="text-purple-400 font-bold">englischen Zeitform</span> (Tense).</p>
+
+            <div id="game-area" class="mb-4">
+                <div id="start-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+                    <button id="start-btn" class="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-colors">Verteidigung starten</button>
+                </div>
+
+                <div class="wizard" id="wizard">🧙‍♂️</div>
+                <!-- Bugs will spawn here -->
+            </div>
+
+            <!-- Spellbook (Controls) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button class="spell-btn bg-slate-800 hover:bg-purple-900/50 border border-purple-500/50 rounded-xl p-3 text-center" data-tense="past">
+                    <div class="text-xs text-purple-400 mb-1">Past Simple</div>
+                    <div class="font-bold">crashed</div>
+                </button>
+                <button class="spell-btn bg-slate-800 hover:bg-blue-900/50 border border-blue-500/50 rounded-xl p-3 text-center" data-tense="present_perfect">
+                    <div class="text-xs text-blue-400 mb-1">Present Perfect</div>
+                    <div class="font-bold">has crashed</div>
+                </button>
+                <button class="spell-btn bg-slate-800 hover:bg-green-900/50 border border-green-500/50 rounded-xl p-3 text-center" data-tense="present_continuous">
+                    <div class="text-xs text-green-400 mb-1">Present Cont.</div>
+                    <div class="font-bold">is crashing</div>
+                </button>
+                <button class="spell-btn bg-slate-800 hover:bg-orange-900/50 border border-orange-500/50 rounded-xl p-3 text-center" data-tense="future">
+                    <div class="text-xs text-orange-400 mb-1">Future Simple</div>
+                    <div class="font-bold">will crash</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bugTypes = [
+            { clue: "happened yesterday", tense: "past" },
+            { clue: "in 2020", tense: "past" },
+            { clue: "is still broken now", tense: "present_perfect" },
+            { clue: "since this morning", tense: "present_perfect" },
+            { clue: "right now", tense: "present_continuous" },
+            { clue: "look! it is...", tense: "present_continuous" },
+            { clue: "tomorrow", tense: "future" },
+            { clue: "next week", tense: "future" }
+        ];
+
+        const gameArea = document.getElementById('game-area');
+        const wizard = document.getElementById('wizard');
+        const scoreEl = document.getElementById('score');
+        const startBtn = document.getElementById('start-btn');
+        const startOverlay = document.getElementById('start-overlay');
+        const spellBtns = document.querySelectorAll('.spell-btn');
+
+        let isPlaying = false;
+        let score = 0;
+        let activeBugs = [];
+        let gameLoopId;
+        let bugSpeed = 1;
+        let spawnRate = 3000;
+        let lastSpawn = 0;
+
+        function startGame() {
+            startOverlay.classList.add('hidden');
+            isPlaying = true;
+            score = 0;
+            scoreEl.innerText = score;
+            activeBugs.forEach(b => b.el.remove());
+            activeBugs = [];
+            bugSpeed = 1;
+            lastSpawn = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnBug() {
+            const bData = bugTypes[Math.floor(Math.random() * bugTypes.length)];
+            const el = document.createElement('div');
+            el.className = 'bug';
+            el.innerHTML = `👾<div class="bug-clue">${bData.clue}</div>`;
+
+            // start position
+            const x = gameArea.clientWidth + 50;
+            el.style.left = x + 'px';
+            gameArea.appendChild(el);
+
+            activeBugs.push({
+                el: el,
+                tense: bData.tense,
+                x: x
+            });
+        }
+
+        function castSpell(tense) {
+            if(!isPlaying) return;
+
+            // Animate wizard
+            wizard.classList.add('cast');
+            setTimeout(() => wizard.classList.remove('cast'), 200);
+
+            // Create projectile
+            const proj = document.createElement('div');
+            proj.className = 'spell-projectile';
+            proj.innerText = '✨';
+            proj.style.left = '120px'; // Wizard x approx
+            proj.style.bottom = '40px';
+            gameArea.appendChild(proj);
+
+            // Target nearest bug
+            if(activeBugs.length > 0) {
+                const target = activeBugs[0]; // closest one
+
+                // Animate projectile
+                setTimeout(() => {
+                    proj.style.left = target.x + 'px';
+                }, 50);
+
+                setTimeout(() => {
+                    proj.remove();
+                    // Check hit logic
+                    if (target.tense === tense) {
+                        // Success
+                        score += 10;
+                        scoreEl.innerText = score;
+                        target.el.innerText = '💥';
+                        setTimeout(() => target.el.remove(), 200);
+                        activeBugs.shift(); // remove from array
+
+                        // speed up
+                        if(score % 50 === 0) bugSpeed += 0.5;
+                    } else {
+                        // Fail - wrong spell
+                        score = Math.max(0, score - 5);
+                        scoreEl.innerText = score;
+                        const puff = document.createElement('div');
+                        puff.innerText = '💨 (Wrong Tense!)';
+                        puff.style.position = 'absolute';
+                        puff.style.left = (target.x - 50) + 'px';
+                        puff.style.bottom = '80px';
+                        puff.style.color = '#ef4444';
+                        gameArea.appendChild(puff);
+                        setTimeout(() => puff.remove(), 1000);
+                    }
+                }, 500); // travel time
+            } else {
+                // No targets, just remove projectile
+                setTimeout(() => proj.remove(), 500);
+            }
+        }
+
+        spellBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                castSpell(btn.dataset.tense);
+            });
+        });
+
+        // Keyboard bindings
+        document.addEventListener('keydown', (e) => {
+            if(!isPlaying) return;
+            switch(e.key) {
+                case '1': castSpell('past'); break;
+                case '2': castSpell('present_perfect'); break;
+                case '3': castSpell('present_continuous'); break;
+                case '4': castSpell('future'); break;
+            }
+        });
+
+        function gameLoop(timestamp) {
+            if(!isPlaying) return;
+
+            if (timestamp - lastSpawn > spawnRate) {
+                spawnBug();
+                lastSpawn = timestamp;
+                spawnRate = Math.max(1000, spawnRate - 50); // gets faster
+            }
+
+            const wizardX = 100; // approx hit box
+
+            for(let i = 0; i < activeBugs.length; i++) {
+                const b = activeBugs[i];
+                b.x -= bugSpeed;
+                b.el.style.left = b.x + 'px';
+
+                if(b.x < wizardX) {
+                    // Hit wizard
+                    gameOver();
+                    return;
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            startOverlay.classList.remove('hidden');
+            startOverlay.innerHTML = `
+                <h2 class="text-4xl font-bold text-red-500 mb-4">Wasted!</h2>
+                <p class="text-white mb-6">Ein Bug hat dich erreicht.</p>
+                <button onclick="startGame()" class="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl">Nochmal</button>
+            `;
+        }
+
+        startBtn.addEventListener('click', startGame);
+
+    </script>
+</body>
+</html>

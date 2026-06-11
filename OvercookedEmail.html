@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overcooked: Email-Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #conveyor { height: 100px; background: #334155; border-radius: 0.5rem; position: relative; overflow: hidden; display: flex; align-items: center; border: 2px solid #475569; }
+        .belt-stripe { position: absolute; top: 0; left: 0; width: 200%; height: 100%; background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.2) 20px, rgba(0,0,0,0.2) 40px); animation: moveBelt 3s linear infinite; pointer-events: none; }
+        @keyframes moveBelt { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .phrase-item { position: absolute; background: #fdfbf7; color: #1e293b; padding: 0.5rem 1rem; border-radius: 0.25rem; font-weight: bold; cursor: grab; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.1s; z-index: 10; white-space: nowrap; }
+        .phrase-item:active { cursor: grabbing; transform: scale(1.05); }
+        #email-editor { min-height: 200px; border: 2px dashed #475569; border-radius: 0.5rem; padding: 1rem; background: rgba(15, 23, 42, 0.5); display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start; }
+        .editor-slot { background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); border-radius: 0.25rem; height: 40px; min-width: 100px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+        .editor-slot.filled { background: #1e293b; border: 1px solid #475569; color: white; }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Overcooked: Email</h1>
+            <div class="flex gap-4">
+                <div class="text-lg font-mono">Time: <span id="time" class="text-red-400">01:30</span></div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 mb-6 flex-grow flex flex-col relative">
+            <div id="start-overlay" class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex flex-col items-center justify-center rounded-2xl z-30">
+                <h2 class="text-3xl font-bold text-white mb-4">Wort-Küche</h2>
+                <p class="text-slate-300 mb-6 max-w-md text-center">Baue die geforderte E-Mail aus den Phrasen zusammen, die auf dem Förderband ankommen. Klicke auf eine Phrase, um sie in den Editor einzufügen.</p>
+                <button id="start-btn" class="px-8 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-colors">Schicht beginnen</button>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-lg font-bold text-orange-400 mb-1">Current Order:</h3>
+                <p id="task-desc" class="text-slate-300 italic">Schreibe eine E-Mail, um ein Meeting zu verschieben.</p>
+            </div>
+
+            <div id="conveyor" class="mb-8">
+                <div class="belt-stripe"></div>
+                <!-- Phrases appended here via JS -->
+            </div>
+
+            <h3 class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">Email Editor (Click slot to remove)</h3>
+            <div id="email-editor" class="mb-4">
+                <!-- Slots populated based on target sentence -->
+            </div>
+
+            <div class="flex justify-end">
+                <button id="send-btn" class="px-6 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const orders = [
+            {
+                desc: "Verschiebe das Meeting auf morgen.",
+                target: ["Dear team,", "due to a conflict,", "we need to", "reschedule", "our meeting", "to tomorrow.", "Best regards"],
+                decoys: ["due to a bug,", "we want to", "cancel", "our lunch", "to yesterday.", "Cheers"]
+            },
+            {
+                desc: "Melde einen Bug in der Produktion.",
+                target: ["Hi everyone,", "I found a bug", "in the", "production environment.", "Please investigate", "immediately.", "Thanks"],
+                decoys: ["I created a bug", "on the", "test server.", "Please ignore", "later.", "Yours"]
+            }
+        ];
+
+        let currentOrder = null;
+        let isPlaying = false;
+        let timeLeft = 90;
+        let timerInterval;
+        let conveyorInterval;
+        let activePhrases = [];
+        let editorState = [];
+
+        const timeEl = document.getElementById('time');
+        const taskDesc = document.getElementById('task-desc');
+        const conveyor = document.getElementById('conveyor');
+        const editor = document.getElementById('email-editor');
+        const startBtn = document.getElementById('start-btn');
+        const startOverlay = document.getElementById('start-overlay');
+        const sendBtn = document.getElementById('send-btn');
+
+        function startGame() {
+            startOverlay.classList.add('hidden');
+            isPlaying = true;
+            timeLeft = 90;
+            activePhrases.forEach(p => p.el.remove());
+            activePhrases = [];
+            loadOrder(0);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const s = (timeLeft % 60).toString().padStart(2, '0');
+                timeEl.innerText = `${m}:${s}`;
+                if(timeLeft <= 0) gameOver(false);
+            }, 1000);
+
+            conveyorInterval = setInterval(spawnPhrase, 1500);
+            requestAnimationFrame(movePhrases);
+        }
+
+        function loadOrder(index) {
+            if(index >= orders.length) {
+                gameOver(true);
+                return;
+            }
+            currentOrder = orders[index];
+            currentOrder.index = index;
+            taskDesc.innerText = currentOrder.desc;
+            editorState = new Array(currentOrder.target.length).fill(null);
+            renderEditor();
+        }
+
+        function renderEditor() {
+            editor.innerHTML = '';
+            editorState.forEach((val, idx) => {
+                const slot = document.createElement('div');
+                slot.className = `editor-slot ${val ? 'filled' : ''} px-3 py-1 cursor-pointer hover:border-red-500`;
+                slot.innerText = val ? val : `Part ${idx+1}`;
+                if(val) {
+                    slot.onclick = () => {
+                        editorState[idx] = null;
+                        renderEditor();
+                    };
+                }
+                editor.appendChild(slot);
+            });
+            checkWin();
+        }
+
+        function spawnPhrase() {
+            if(!isPlaying) return;
+            // Mix target phrases and decoys
+            const allPhrases = [...currentOrder.target, ...currentOrder.decoys];
+            const text = allPhrases[Math.floor(Math.random() * allPhrases.length)];
+
+            const el = document.createElement('div');
+            el.className = 'phrase-item';
+            el.innerText = text;
+            el.style.right = '-150px';
+
+            // Add click to add to editor
+            el.onclick = () => {
+                const firstEmptyIdx = editorState.indexOf(null);
+                if(firstEmptyIdx !== -1) {
+                    editorState[firstEmptyIdx] = text;
+                    renderEditor();
+                    el.remove();
+                    activePhrases = activePhrases.filter(p => p.el !== el);
+                }
+            };
+
+            conveyor.appendChild(el);
+            activePhrases.push({ el: el, x: -150 });
+        }
+
+        function movePhrases() {
+            if(!isPlaying) return;
+            const beltSpeed = 2; // px per frame
+            const containerWidth = conveyor.clientWidth;
+
+            for(let i = activePhrases.length - 1; i >= 0; i--) {
+                const p = activePhrases[i];
+                p.x += beltSpeed;
+                p.el.style.right = p.x + 'px';
+
+                if(p.x > containerWidth) {
+                    p.el.remove();
+                    activePhrases.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(movePhrases);
+        }
+
+        function checkWin() {
+            sendBtn.disabled = editorState.includes(null);
+        }
+
+        sendBtn.onclick = () => {
+            // Check if arrays match
+            let isCorrect = true;
+            for(let i=0; i<currentOrder.target.length; i++) {
+                if(editorState[i] !== currentOrder.target[i]) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if(isCorrect) {
+                alert("Email gesendet! Perfekt!");
+                loadOrder(currentOrder.index + 1);
+            } else {
+                alert("Die E-Mail macht keinen Sinn! Überprüfe die Grammatik und Reihenfolge.");
+                // Clear editor
+                editorState.fill(null);
+                renderEditor();
+            }
+        };
+
+        function gameOver(win) {
+            isPlaying = false;
+            clearInterval(timerInterval);
+            clearInterval(conveyorInterval);
+            startOverlay.classList.remove('hidden');
+            startOverlay.innerHTML = win ?
+                `<h2 class="text-3xl font-bold text-green-400 mb-4">Feierabend!</h2><p class="text-white mb-4">Alle E-Mails erfolgreich versendet.</p><button onclick="location.reload()" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl">Nochmal spielen</button>` :
+                `<h2 class="text-3xl font-bold text-red-500 mb-4">Zeit abgelaufen!</h2><p class="text-white mb-4">Die Empfänger haben die Geduld verloren.</p><button onclick="location.reload()" class="px-8 py-3 bg-slate-700 text-white font-bold rounded-xl">Neustart</button>`;
+        }
+
+        startBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
