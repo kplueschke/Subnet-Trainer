@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .shield-icon {
             transition: all 0.3s;
@@ -43,13 +44,13 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <header class="w-full bg-black/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <a href="ap.html" class="p-2 rounded-lg bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
@@ -58,7 +59,7 @@
                     <span class="text-teal-400">🛡️</span> Kapselungs-Simulator
                 </h1>
             </div>
-            <div class="text-sm text-slate-300">Datenverstecken (Information Hiding)</div>
+            <div class="text-sm text-gray-400">Datenverstecken (Information Hiding)</div>
         </div>
     </header>
 
@@ -73,11 +74,11 @@
                     Klasse: BankKonto
                 </h2>
 
-                <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 font-mono text-sm mb-6">
+                <div class="bg-black rounded-xl p-4 border border-gray-700 font-mono text-sm mb-6">
                     <span class="text-blue-400">class</span> <span class="text-yellow-300">BankKonto</span><br>
                     {<br>
-                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
-                        <select id="kontostandAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-gray-900/50 p-2 rounded border border-gray-700">
+                        <select id="kontostandAccess" class="bg-black border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
                             <option value="public">public</option>
                             <option value="private" selected>private</option>
                             <option value="protected">protected</option>
@@ -85,8 +86,8 @@
                         <span><span class="text-teal-300">decimal</span> <span class="text-white">kontostand</span> = <span class="text-orange-300">1000.00m</span>;</span>
                     </div>
 
-                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
-                        <select id="pinAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-gray-900/50 p-2 rounded border border-gray-700">
+                        <select id="pinAccess" class="bg-black border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
                             <option value="public">public</option>
                             <option value="private" selected>private</option>
                             <option value="protected">protected</option>
@@ -94,8 +95,8 @@
                         <span><span class="text-teal-300">string</span> <span class="text-white">pin</span> = <span class="text-green-300">"1234"</span>;</span>
                     </div>
 
-                    <div class="ml-4 flex items-center gap-3 my-2 bg-slate-800/50 p-2 rounded border border-slate-700">
-                        <select id="einzahlenAccess" class="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
+                    <div class="ml-4 flex items-center gap-3 my-2 bg-gray-900/50 p-2 rounded border border-gray-700">
+                        <select id="einzahlenAccess" class="bg-black border border-slate-600 rounded px-2 py-1 text-blue-400 focus:outline-none focus:border-teal-500">
                             <option value="public" selected>public</option>
                             <option value="private">private</option>
                             <option value="protected">protected</option>
@@ -105,7 +106,7 @@
                     }
                 </div>
 
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 text-sm text-slate-300">
+                <div class="bg-gray-900/50 rounded-xl p-4 border border-gray-700 text-sm text-gray-400">
                     <h3 class="font-bold text-white mb-2">Erklärung der Modifizierer:</h3>
                     <ul class="space-y-1 list-disc list-inside">
                         <li><span class="text-blue-400 font-mono">public</span>: Zugriff von überall möglich.</li>
@@ -125,39 +126,39 @@
                 </h2>
 
                 <div class="mb-4">
-                    <label class="block text-sm text-slate-300 mb-2">Von wo greifst du zu?</label>
+                    <label class="block text-sm text-gray-400 mb-2">Von wo greifst du zu?</label>
                     <div class="flex gap-2">
-                        <button class="context-btn active flex-1 bg-slate-800 hover:bg-slate-700 border border-teal-500 text-white px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="main">
+                        <button class="context-btn active flex-1 bg-gray-900 hover:bg-slate-700 border border-teal-500 text-white px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="main">
                             Externe Klasse (Program.cs)
                         </button>
-                        <button class="context-btn flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="derived">
+                        <button class="context-btn flex-1 bg-gray-900 hover:bg-slate-700 border border-gray-700 text-gray-400 px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="derived">
                             Abgeleitete Klasse (GiroKonto)
                         </button>
                     </div>
                 </div>
 
                 <div class="space-y-3 mt-4">
-                    <p class="text-sm font-bold text-slate-300 mb-2">Versuche auf Felder zuzugreifen:</p>
+                    <p class="text-sm font-bold text-gray-400 mb-2">Versuche auf Felder zuzugreifen:</p>
 
-                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="kontostand">
-                        <span class="mono text-sm text-slate-300 group-hover:text-white">konto.kontostand = <span class="text-orange-300">9999999m</span>;</span>
+                    <button class="action-btn w-full flex items-center justify-between bg-black border border-gray-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="kontostand">
+                        <span class="mono text-sm text-gray-400 group-hover:text-white">konto.kontostand = <span class="text-orange-300">9999999m</span>;</span>
                         <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
                     </button>
 
-                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="pin">
-                        <span class="mono text-sm text-slate-300 group-hover:text-white"><span class="text-teal-300">string</span> p = konto.pin;</span>
+                    <button class="action-btn w-full flex items-center justify-between bg-black border border-gray-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="pin">
+                        <span class="mono text-sm text-gray-400 group-hover:text-white"><span class="text-teal-300">string</span> p = konto.pin;</span>
                         <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
                     </button>
 
-                    <button class="action-btn w-full flex items-center justify-between bg-slate-900 border border-slate-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="einzahlen">
-                        <span class="mono text-sm text-slate-300 group-hover:text-white">konto.Einzahlen(<span class="text-orange-300">50m</span>);</span>
+                    <button class="action-btn w-full flex items-center justify-between bg-black border border-gray-700 hover:border-slate-500 rounded-lg p-3 transition-colors group" data-target="einzahlen">
+                        <span class="mono text-sm text-gray-400 group-hover:text-white">konto.Einzahlen(<span class="text-orange-300">50m</span>);</span>
                         <div class="shield-icon w-6 h-6 text-slate-500 flex items-center justify-center">?</div>
                     </button>
                 </div>
 
                 <!-- Console Output -->
                 <div class="mt-auto pt-6">
-                    <div class="bg-[#0d1117] rounded-xl border border-slate-700 h-32 p-4 overflow-y-auto font-mono text-sm flex flex-col-reverse" id="consoleOutput">
+                    <div class="bg-[#0d1117] rounded-xl border border-gray-700 h-32 p-4 overflow-y-auto font-mono text-sm flex flex-col-reverse" id="consoleOutput">
                         <div class="text-slate-500 italic">// Compiler-Ausgabe erscheint hier...</div>
                     </div>
                 </div>
@@ -187,11 +188,11 @@
             btn.addEventListener('click', (e) => {
                 contextBtns.forEach(b => {
                     b.classList.remove('active', 'border-teal-500', 'text-white');
-                    b.classList.add('border-slate-700', 'text-slate-300');
+                    b.classList.add('border-gray-700', 'text-gray-400');
                 });
                 const clicked = e.currentTarget;
                 clicked.classList.add('active', 'border-teal-500', 'text-white');
-                clicked.classList.remove('border-slate-700', 'text-slate-300');
+                clicked.classList.remove('border-gray-700', 'text-gray-400');
 
                 currentContext = clicked.dataset.context;
                 log(`Kontext gewechselt zu: ${currentContext === 'main' ? 'Externe Klasse' : 'Abgeleitete Klasse'}`, 'text-blue-400');
@@ -203,7 +204,7 @@
         Object.values(selects).forEach(select => {
             select.addEventListener('change', () => {
                 resetIcons();
-                log(`Zugriffsmodifizierer geändert.`, 'text-slate-300');
+                log(`Zugriffsmodifizierer geändert.`, 'text-gray-400');
             });
         });
 

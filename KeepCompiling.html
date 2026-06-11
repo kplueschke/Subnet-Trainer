@@ -20,10 +20,10 @@
         @keyframes bombShake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, 0px); } }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-5xl flex-grow flex flex-col">
         <div class="mb-6 flex items-center justify-between">
-            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück
             </a>
@@ -34,16 +34,16 @@
             <!-- Manual / Documentation Side -->
             <div class="glass-card rounded-2xl p-6 flex flex-col max-h-[80vh] overflow-y-auto">
                 <h2 class="text-xl font-bold text-rose-400 mb-4 border-b border-rose-500/30 pb-2">Hardware Recovery Manual</h2>
-                <div class="text-sm text-slate-300 space-y-4">
+                <div class="text-sm text-gray-400 space-y-4">
                     <p><strong>Warning:</strong> Improper sequence will cause immediate kernel panic and system destruction.</p>
-                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mono text-xs">
-                        <p class="text-indigo-400 mb-2">// SECTION 1: POWER INITIALIZATION</p>
+                    <div class="bg-black p-4 rounded-xl border border-gray-700 mono text-xs">
+                        <p class="text-gray-400 mb-2">// SECTION 1: POWER INITIALIZATION</p>
                         <p>If the system timer is currently displaying an EVEN number of seconds when you begin, toggle Switch A to the ON position. Otherwise, leave it OFF.</p>
-                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 2: NETWORK BYPASS</p>
+                        <p class="mt-2 text-gray-400 mb-2">// SECTION 2: NETWORK BYPASS</p>
                         <p>Switch B must only be activated AFTER Switch D has been toggled, but BEFORE Switch C.</p>
-                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 3: MEMORY FLUSH</p>
+                        <p class="mt-2 text-gray-400 mb-2">// SECTION 3: MEMORY FLUSH</p>
                         <p>Switch C is highly volatile. Toggle it ON only if Switch A is currently OFF. If Switch A is ON, Switch C must remain OFF.</p>
-                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 4: CLOCK SYNC</p>
+                        <p class="mt-2 text-gray-400 mb-2">// SECTION 4: CLOCK SYNC</p>
                         <p>Always activate Switch D first, unless the instruction in Section 1 explicitly states otherwise.</p>
                     </div>
                     <p class="text-rose-300 italic text-xs mt-4">Translate carefully. "Even" = Gerade, "Odd" = Ungerade. "Before" = Vorher, "After" = Nachher.</p>
@@ -53,13 +53,13 @@
             <!-- The Bomb / Server Interface Side -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-center items-center relative" id="server-module">
 
-                <div id="start-screen" class="absolute inset-0 bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl z-20">
+                <div id="start-screen" class="absolute inset-0 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl z-20">
                     <h2 class="text-4xl font-bold text-red-500 mb-4">CRITICAL FAILURE</h2>
-                    <p class="text-slate-300 mb-6 text-center px-8">Der Server stürzt ab. Lies das englische Handbuch genau durch, um die Schalter in der korrekten Reihenfolge umzulegen.</p>
+                    <p class="text-gray-400 mb-6 text-center px-8">Der Server stürzt ab. Lies das englische Handbuch genau durch, um die Schalter in der korrekten Reihenfolge umzulegen.</p>
                     <button id="start-btn" class="px-8 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-colors">Emergency Boot</button>
                 </div>
 
-                <div class="bg-black border-4 border-slate-700 rounded-xl p-8 w-full max-w-md relative">
+                <div class="bg-black border-4 border-gray-700 rounded-xl p-8 w-full max-w-md relative">
                     <!-- Timer -->
                     <div class="bg-red-950 border-2 border-red-900 rounded p-4 mb-8 text-center">
                         <span id="timer" class="font-mono text-5xl font-bold text-red-500 tracking-widest" style="text-shadow: 0 0 10px #ef4444;">60.00</span>
@@ -72,28 +72,28 @@
                             <div class="switch" id="sw-a" data-id="A">
                                 <div class="switch-toggle"></div>
                             </div>
-                            <span class="mt-2 font-mono font-bold text-slate-400">SW-A</span>
+                            <span class="mt-2 font-mono font-bold text-gray-500">SW-A</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="led" id="led-b"></div>
                             <div class="switch" id="sw-b" data-id="B">
                                 <div class="switch-toggle"></div>
                             </div>
-                            <span class="mt-2 font-mono font-bold text-slate-400">SW-B</span>
+                            <span class="mt-2 font-mono font-bold text-gray-500">SW-B</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="led" id="led-c"></div>
                             <div class="switch" id="sw-c" data-id="C">
                                 <div class="switch-toggle"></div>
                             </div>
-                            <span class="mt-2 font-mono font-bold text-slate-400">SW-C</span>
+                            <span class="mt-2 font-mono font-bold text-gray-500">SW-C</span>
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="led" id="led-d"></div>
                             <div class="switch" id="sw-d" data-id="D">
                                 <div class="switch-toggle"></div>
                             </div>
-                            <span class="mt-2 font-mono font-bold text-slate-400">SW-D</span>
+                            <span class="mt-2 font-mono font-bold text-gray-500">SW-D</span>
                         </div>
                     </div>
                 </div>

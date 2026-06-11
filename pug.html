@@ -9,50 +9,51 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-16 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700 text-gray-400 text-xs font-medium uppercase tracking-wider mb-4">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                 IT-Ausbildung Workspace
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
                 IT-Ausbildung Lernwerkzeuge
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-gray-400 max-w-xl mx-auto">
                 Lernwerkzeuge für PUG (Politik und Gesellschaft)
             </p>
         </div>
 
         <!-- Back Button -->
         <div class="mb-8">
-            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -62,7 +63,7 @@
 
         <!-- Subject Section -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-700 pb-3">PUG (Politik und Gesellschaft)</h2>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-3">PUG (Politik und Gesellschaft)</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
             <!-- 1. Eco-Kanzler -->
@@ -73,29 +74,29 @@
                     </div>
                     <h3 class="text-lg font-semibold text-white">Eco-Kanzler</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Du bist in der Regierung und entscheidest über politische Gesetzesentwürfe. Wische für Ja/Nein und balanciere Wirtschaft, Staatskasse, Beliebtheit und Ökologie.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Du bist in der Regierung und entscheidest über politische Gesetzesentwürfe. Wische für Ja/Nein und balanciere Wirtschaft, Staatskasse, Beliebtheit und Ökologie.</p>
             </a>
 
             <!-- 2. Data-Autonomy Defender -->
             <a href="PugDataAutonomyDefender.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🛡️
                     </div>
                     <h3 class="text-lg font-semibold text-white">Data-Autonomy Defender</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Tower Defense gegen Daten-Kraken. Baue Abwehrtürme basierend auf europäischen Rechten (DSGVO, Recht auf Vergessenwerden) zum Schutz der Privatsphäre.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Tower Defense gegen Daten-Kraken. Baue Abwehrtürme basierend auf europäischen Rechten (DSGVO, Recht auf Vergessenwerden) zum Schutz der Privatsphäre.</p>
             </a>
 
             <!-- 3. Azubi-Rechte-Quartett -->
             <a href="PugAzubiRechteQuartett.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🃏
                     </div>
                     <h3 class="text-lg font-semibold text-white">Azubi-Rechte-Quartett</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Rundenbasiertes Kartenspiel gegen den Chef. Nutze das BBiG und JArbSchG, um unzulässige Überstunden oder berufsfremde Aufgaben rechtlich abzuwehren.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Rundenbasiertes Kartenspiel gegen den Chef. Nutze das BBiG und JArbSchG, um unzulässige Überstunden oder berufsfremde Aufgaben rechtlich abzuwehren.</p>
             </a>
 
             <!-- 4. Sozialversicherungs-Flipper -->
@@ -106,7 +107,7 @@
                     </div>
                     <h3 class="text-lg font-semibold text-white">Sozialversicherungs-Flipper</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Lenke deinen Bruttolohn (Flipperkugel) in die fünf Säulen der Sozialversicherung, bevor er im "Steuer-Aus" landet.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Lenke deinen Bruttolohn (Flipperkugel) in die fünf Säulen der Sozialversicherung, bevor er im "Steuer-Aus" landet.</p>
             </a>
 
             <!-- 5. Fake-News-Sweeper -->
@@ -117,18 +118,18 @@
                     </div>
                     <h3 class="text-lg font-semibold text-white">Fake-News-Sweeper</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Minesweeper für Social-Media. Identifiziere und markiere Fake News anhand von Hinweisen wie fehlendem Impressum, ohne echte Beiträge zu löschen.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Minesweeper für Social-Media. Identifiziere und markiere Fake News anhand von Hinweisen wie fehlendem Impressum, ohne echte Beiträge zu löschen.</p>
             </a>
 
             <!-- 6. EU-Zoll-Inspektor -->
             <a href="PugEuZollInspektor.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🛂
                     </div>
                     <h3 class="text-lg font-semibold text-white">EU-Zoll-Inspektor</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Kontrolliere LKW-Frachtpapiere. Prüfe Binnenmarkt vs. Drittland, berechne Zölle und achte auf CE-Kennzeichen unter Zeitdruck.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Kontrolliere LKW-Frachtpapiere. Prüfe Binnenmarkt vs. Drittland, berechne Zölle und achte auf CE-Kennzeichen unter Zeitdruck.</p>
             </a>
 
             <!-- 7. Wahlsystem-Plinko -->
@@ -139,18 +140,18 @@
                     </div>
                     <h3 class="text-lg font-semibold text-white">Wahlsystem-Plinko</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Wirf "Wähler-Kugeln" ins Plinko-Brett. Erlebe, wie Hindernisse wie die 5%-Hürde und Überhangmandate die Sitzverteilung im Bundestag beeinflussen.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Wirf "Wähler-Kugeln" ins Plinko-Brett. Erlebe, wie Hindernisse wie die 5%-Hürde und Überhangmandate die Sitzverteilung im Bundestag beeinflussen.</p>
             </a>
 
             <!-- 8. Grundgesetz-Sniper -->
             <a href="PugGrundgesetzSniper.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🎯
                     </div>
                     <h3 class="text-lg font-semibold text-white">Grundgesetz-Sniper</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Schütze Grundrechte! Reagiere blitzschnell auf Alltagssituationen, indem du den passenden Grundgesetz-Artikel (z.B. Briefgeheimnis) triffst.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Schütze Grundrechte! Reagiere blitzschnell auf Alltagssituationen, indem du den passenden Grundgesetz-Artikel (z.B. Briefgeheimnis) triffst.</p>
             </a>
 
             <!-- 9. Tarif-Tauziehen -->
@@ -161,18 +162,18 @@
                     </div>
                     <h3 class="text-lg font-semibold text-white">Tarif-Tauziehen</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Arbeitgeber vs. Gewerkschaften. Wähle im richtigen Takt zulässige Maßnahmen (z.B. Warnstreik), um den Tarifvertrag auf deine Seite zu ziehen.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Arbeitgeber vs. Gewerkschaften. Wähle im richtigen Takt zulässige Maßnahmen (z.B. Warnstreik), um den Tarifvertrag auf deine Seite zu ziehen.</p>
             </a>
 
             <!-- 10. Steuer-Rohrleger -->
             <a href="PugSteuerRohrleger.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🚰
                     </div>
                     <h3 class="text-lg font-semibold text-white">Steuer-Rohrleger</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Baue ein Rohrnetzwerk, um verschiedene Steuerarten (Einkommensteuer, MwSt) korrekt in die Becken von Bund, Ländern und Gemeinden zu leiten.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Baue ein Rohrnetzwerk, um verschiedene Steuerarten (Einkommensteuer, MwSt) korrekt in die Becken von Bund, Ländern und Gemeinden zu leiten.</p>
             </a>
 
             </div>

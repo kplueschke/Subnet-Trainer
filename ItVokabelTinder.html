@@ -21,15 +21,15 @@
         @keyframes swipeRight { to { transform: translateX(200px) rotate(20deg) scale(0.8); opacity: 0; } }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
         <div class="mb-6 flex items-center justify-between">
-            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück
             </a>
             <h1 class="text-2xl font-bold text-white">IT-Vokabel-Tinder</h1>
-            <div class="text-sm text-slate-400">Cards: <span id="card-count">0</span></div>
+            <div class="text-sm text-gray-500">Cards: <span id="card-count">0</span></div>
         </div>
 
         <div class="glass-card rounded-2xl p-6 mb-6 flex-grow flex flex-col justify-center relative overflow-hidden">
@@ -38,10 +38,10 @@
             </div>
 
             <div class="flex justify-center gap-8 mt-8 opacity-0 transition-opacity" id="action-buttons">
-                <button id="btn-left" class="w-16 h-16 rounded-full bg-slate-800 hover:bg-red-900/50 border border-red-500/30 flex items-center justify-center text-red-500 text-2xl transition-all hover:scale-110">
+                <button id="btn-left" class="w-16 h-16 rounded-full bg-gray-900 hover:bg-red-900/50 border border-red-500/30 flex items-center justify-center text-red-500 text-2xl transition-all hover:scale-110">
                     ✕
                 </button>
-                <button id="btn-right" class="w-16 h-16 rounded-full bg-slate-800 hover:bg-green-900/50 border border-green-500/30 flex items-center justify-center text-green-500 text-2xl transition-all hover:scale-110">
+                <button id="btn-right" class="w-16 h-16 rounded-full bg-gray-900 hover:bg-green-900/50 border border-green-500/30 flex items-center justify-center text-green-500 text-2xl transition-all hover:scale-110">
                     ♥
                 </button>
             </div>
@@ -49,8 +49,8 @@
 
         <div class="glass-card rounded-2xl p-6">
             <h2 class="text-lg font-bold text-white mb-2">Neue Vokabeln generieren</h2>
-            <p class="text-xs text-slate-400 mb-4">Kopiere englischen Text (z.B. aus einer Doku) hier hinein. Wir extrahieren Wörter.</p>
-            <textarea id="import-text" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 focus:outline-none focus:border-indigo-500 mb-3" placeholder="Paste english text here..."></textarea>
+            <p class="text-xs text-gray-500 mb-4">Kopiere englischen Text (z.B. aus einer Doku) hier hinein. Wir extrahieren Wörter.</p>
+            <textarea id="import-text" rows="3" class="w-full bg-black border border-gray-700 rounded-xl p-3 text-sm text-gray-400 focus:outline-none focus:border-indigo-500 mb-3" placeholder="Paste english text here..."></textarea>
             <button id="btn-import" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors">Extrahieren & Hinzufügen</button>
         </div>
     </div>
@@ -88,7 +88,7 @@
             deckEl.innerHTML = '';
             updateCount();
             if (vocab.length === 0) {
-                deckEl.innerHTML = '<div class="text-center text-slate-400 mt-20">Keine Karten mehr. Bitte Text importieren!</div>';
+                deckEl.innerHTML = '<div class="text-center text-gray-500 mt-20">Keine Karten mehr. Bitte Text importieren!</div>';
                 actionsEl.style.opacity = '0';
                 return;
             }
@@ -100,7 +100,7 @@
             card.className = 'flashcard';
             card.innerHTML = `
                 <div class="card-face card-front">
-                    <span class="text-xs text-indigo-400 mb-2 uppercase tracking-widest">Englisch</span>
+                    <span class="text-xs text-gray-400 mb-2 uppercase tracking-widest">Englisch</span>
                     <h3 class="text-3xl font-bold text-white">${word.en}</h3>
                     <p class="text-sm text-slate-500 mt-4">(Klicken zum Umdrehen)</p>
                 </div>

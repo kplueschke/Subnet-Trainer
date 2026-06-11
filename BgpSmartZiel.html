@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .smart-checkbox:checked + label {
             color: #4ade80; /* green-400 */
@@ -32,10 +33,10 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10">
         <div class="mb-8">
-            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück zu BGP
             </a>
@@ -45,12 +46,12 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 SMART-Ziel-Validierer
             </h1>
-            <p class="mt-4 text-slate-300">Analysiere deinen Projektauftrag und hake ab, ob das Projektziel SMART formuliert ist.</p>
+            <p class="mt-4 text-gray-400">Analysiere deinen Projektauftrag und hake ab, ob das Projektziel SMART formuliert ist.</p>
         </div>
 
         <div class="glass-card rounded-3xl p-6 mb-8">
             <label class="block text-sm font-bold text-orange-400 mb-2 uppercase tracking-wide">Projektziel Formulieren</label>
-            <textarea id="goalInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-indigo-500 resize-none h-32" placeholder="Beispiel: Die Ladezeit der Unternehmenswebsite soll bis zum 31.12. des laufenden Jahres von 3.5 auf 1.5 Sekunden reduziert werden, um die Kundenzufriedenheit zu steigern..."></textarea>
+            <textarea id="goalInput" class="w-full bg-black border border-gray-700 rounded-xl p-4 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-indigo-500 resize-none h-32" placeholder="Beispiel: Die Ladezeit der Unternehmenswebsite soll bis zum 31.12. des laufenden Jahres von 3.5 auf 1.5 Sekunden reduziert werden, um die Kundenzufriedenheit zu steigern..."></textarea>
 
             <div class="mt-4 flex gap-2">
                 <button onclick="loadExample(1)" class="text-xs px-3 py-1 rounded bg-slate-700 hover:bg-slate-600">Beispiel: Gut</button>
@@ -61,77 +62,77 @@
         <div class="grid md:grid-cols-2 gap-6">
             <!-- Checklist -->
             <div class="glass-card rounded-3xl p-6">
-                <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Kriterien</h3>
+                <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2">Kriterien</h3>
 
                 <div class="space-y-4" id="checklist">
 
                     <!-- Specific -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="S" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="S" type="checkbox" class="smart-checkbox w-5 h-5 bg-gray-900 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="S" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
                                 S - Spezifisch
                                 <svg class="w-4 h-4 text-green-400 opacity-0 check-icon transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </label>
-                            <p class="text-slate-300 mt-1">Ist das Ziel eindeutig und präzise definiert? Weiß jeder sofort, was gemeint ist?</p>
+                            <p class="text-gray-400 mt-1">Ist das Ziel eindeutig und präzise definiert? Weiß jeder sofort, was gemeint ist?</p>
                         </div>
                     </div>
 
                     <!-- Measurable -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="M" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="M" type="checkbox" class="smart-checkbox w-5 h-5 bg-gray-900 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="M" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
                                 M - Messbar
                                 <svg class="w-4 h-4 text-green-400 opacity-0 check-icon transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </label>
-                            <p class="text-slate-300 mt-1">Gibt es klare Zahlen oder Kriterien, um zu beurteilen, ob das Ziel erreicht wurde?</p>
+                            <p class="text-gray-400 mt-1">Gibt es klare Zahlen oder Kriterien, um zu beurteilen, ob das Ziel erreicht wurde?</p>
                         </div>
                     </div>
 
                     <!-- Attractive / Achievable -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="A" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="A" type="checkbox" class="smart-checkbox w-5 h-5 bg-gray-900 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="A" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
                                 A - Attraktiv / Akzeptiert
                                 <svg class="w-4 h-4 text-green-400 opacity-0 check-icon transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </label>
-                            <p class="text-slate-300 mt-1">Haben alle Beteiligten Lust auf das Ziel? Steht ein positiver Nutzen dahinter?</p>
+                            <p class="text-gray-400 mt-1">Haben alle Beteiligten Lust auf das Ziel? Steht ein positiver Nutzen dahinter?</p>
                         </div>
                     </div>
 
                     <!-- Realistic -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="R" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="R" type="checkbox" class="smart-checkbox w-5 h-5 bg-gray-900 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="R" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
                                 R - Realistisch
                                 <svg class="w-4 h-4 text-green-400 opacity-0 check-icon transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </label>
-                            <p class="text-slate-300 mt-1">Ist das Ziel mit den vorhandenen Ressourcen (Zeit, Geld, Personal) machbar?</p>
+                            <p class="text-gray-400 mt-1">Ist das Ziel mit den vorhandenen Ressourcen (Zeit, Geld, Personal) machbar?</p>
                         </div>
                     </div>
 
                     <!-- Time-bound -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="T" type="checkbox" class="smart-checkbox w-5 h-5 bg-slate-800 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
+                            <input id="T" type="checkbox" class="smart-checkbox w-5 h-5 bg-gray-900 border-slate-600 rounded text-orange-600 focus:ring-indigo-500 focus:ring-offset-slate-900 cursor-pointer" onchange="updateProgress()">
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="T" class="font-bold text-white cursor-pointer select-none flex items-center gap-2 transition-colors">
                                 T - Terminiert
                                 <svg class="w-4 h-4 text-green-400 opacity-0 check-icon transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </label>
-                            <p class="text-slate-300 mt-1">Gibt es ein klares Enddatum oder eine klare Frist, bis wann das Ziel erreicht sein muss?</p>
+                            <p class="text-gray-400 mt-1">Gibt es ein klares Enddatum oder eine klare Frist, bis wann das Ziel erreicht sein muss?</p>
                         </div>
                     </div>
 
@@ -139,17 +140,17 @@
             </div>
 
             <!-- Score -->
-            <div class="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center bg-slate-900/50">
-                <div class="w-32 h-32 rounded-full border-8 border-slate-800 flex items-center justify-center mb-6 relative">
+            <div class="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center bg-black/50">
+                <div class="w-32 h-32 rounded-full border-8 border-gray-800 flex items-center justify-center mb-6 relative">
                     <!-- Fake radial progress -->
                     <div class="absolute inset-0 rounded-full border-8 border-transparent" id="circleProgress"></div>
                     <span class="text-4xl font-bold font-mono text-white" id="scoreText">0/5</span>
                 </div>
 
                 <h3 class="text-2xl font-bold mb-2" id="resultTitle">Nicht validiert</h3>
-                <p class="text-slate-300 text-sm" id="resultDesc">Formuliere ein Ziel und hake die erfüllten Kriterien ab.</p>
+                <p class="text-gray-400 text-sm" id="resultDesc">Formuliere ein Ziel und hake die erfüllten Kriterien ab.</p>
 
-                <div class="w-full bg-slate-800 rounded-full h-2.5 mt-6">
+                <div class="w-full bg-gray-900 rounded-full h-2.5 mt-6">
                     <div class="bg-slate-600 h-2.5 rounded-full progress-bar-fill w-0" id="progressBar"></div>
                 </div>
             </div>

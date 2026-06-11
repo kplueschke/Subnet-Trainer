@@ -9,50 +9,51 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-16 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700 text-gray-400 text-xs font-medium uppercase tracking-wider mb-4">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                 IT-Ausbildung Workspace
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
                 IT-Ausbildung Lernwerkzeuge
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-gray-400 max-w-xl mx-auto">
                 Lernwerkzeuge für ITS (IT-Systeme)
             </p>
         </div>
 
         <!-- Back Button -->
         <div class="mb-8">
-            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -62,16 +63,16 @@
 
         <!-- Subject Section -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-700 pb-3">ITS (IT-Systeme)</h2>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-3">ITS (IT-Systeme)</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 <!-- Card 1: Subnetting Trainer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-gray-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🎯
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">IPv4 Trainer</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Berechne Netz-IDs, Broadcasts und nutzbare Host-Adressen. Inklusive interaktivem Bit-Schalter und Schritt-für-Schritt-Erklärung über die Magic Number.
                     </p>
                 </div>
@@ -86,15 +87,15 @@
             <!-- Card 2: Subnet Calculator -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🎛️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Visual Slider Calculator</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Verschiebe das Präfix dynamisch über einen Schieberegler und beobachte sofort, wie sich Subnetzmaske, verfügbare Host-Anzahlen und die Bitstrukturen verändern.
                     </p>
                 </div>
-                <a href="SubnetCalculator.html" class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-200 hover:text-white font-medium rounded-xl border border-slate-700 transition-colors">
+                <a href="SubnetCalculator.html" class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-gray-900 hover:bg-slate-700 active:bg-black text-gray-300 hover:text-white font-medium rounded-xl border border-gray-700 transition-colors">
                     Rechner öffnen
                     <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
@@ -105,11 +106,11 @@
             <!-- Card 3: IPv6 Trainer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🌐
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">IPv6 Trainer</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Übe das Komprimieren von IPv6-Adressen und das Finden von Netzwerk-Präfixen mit detaillierten Schritt-für-Schritt Erklärungen.
                     </p>
                 </div>
@@ -124,11 +125,11 @@
             <!-- Card 4: OSI Model Trainer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🧩
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">OSI Modell Puzzle</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Ziehe Protokolle, Geräte und PDUs auf die entsprechenden Schichten des OSI-Modells per Drag & Drop, um dein Wissen zu testen.
                     </p>
                 </div>
@@ -143,11 +144,11 @@
             <!-- Card 5: IPv6 Subnetting Trainer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔪
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">IPv6 Subnetting</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Berechne Subnetz-Bits, Anzahl der Subnetze und erstelle spezifische Subnetz-Präfixe aus einem gegebenen Provider-Netz.
                     </p>
                 </div>
@@ -162,11 +163,11 @@
             <!-- Card: RAID Calculator -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         💽
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">RAID Kalkulator</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Ein visuelles Dashboard für RAID 0, 1, 5 und 10. Stelle per Slider die Anzahl und Größe der Festplatten ein.
                     </p>
                 </div>
@@ -181,11 +182,11 @@
             <!-- Card: Firewall Bouncer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🧱
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Firewall-Türsteher</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Gamification-Ansatz: IP-Pakete fliegen heran, du musst sie in kurzer Zeit gemäß ACL filtern (Allow oder Drop).
                     </p>
                 </div>
@@ -200,11 +201,11 @@
             <!-- Card: Hardware Check -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🖥️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Hardware Check</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Warenkorb für CPU, Mainboard und RAM. Das Tool prüft auf Sockel-Konflikte und DDR-Generationen.
                     </p>
                 </div>
@@ -219,11 +220,11 @@
             <!-- Card: Traceroute -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🗺️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Traceroute</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Simuliertes Terminal. Führe tracert aus und sieh zu, wie ein Knotenpunkt-Graphen aufgebaut wird.
                     </p>
                 </div>
@@ -238,11 +239,11 @@
             <!-- Card: VLAN Config -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔀
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">VLAN Config</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Interaktiver Switch: Ports als Trunk oder Access konfigurieren und Ping im SVG-Netz testen.
                     </p>
                 </div>
@@ -257,11 +258,11 @@
             <!-- Card: Base Sprint -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         ⏱️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Base Sprint</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Zeitangriffs-Spiel für schnelle Umrechnungen zwischen Binär, Hexadezimal und Dezimal.
                     </p>
                 </div>
@@ -276,11 +277,11 @@
             <!-- Card: Port Matrix -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-gray-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔌
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Port Matrix</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Verbinde Dienste (SSH, HTTPS) mit den korrekten Portnummern durch Ziehen von Linien auf einem Canvas.
                     </p>
                 </div>
@@ -295,11 +296,11 @@
             <!-- Card: Crypto Sandbox -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔐
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Crypto Sandbox</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Beobachte live, wie Klartext durch symmetrische und asymmetrische Algorithmen transformiert wird.
                     </p>
                 </div>
@@ -314,11 +315,11 @@
             <!-- Card: Base Converter -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔢
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Base Converter</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Lerne Umrechnungen zwischen Binär, Hexadezimal und Dezimal mit generierten Zufallsaufgaben.
                     </p>
                 </div>
@@ -333,11 +334,11 @@
             <!-- Card: PDU Animator -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         📦
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">PDU Animator</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Interaktiver Simulator der Datenkapselung durch die OSI-Schichten bis aufs Medium (Bits).
                     </p>
                 </div>
@@ -352,11 +353,11 @@
             <!-- Card: IPv6 Header -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔎
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">IPv6 Header</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Interaktive Grafik des IPv6-Headers mit Bit- und Byte-Positionen auf Klick.
                     </p>
                 </div>
@@ -371,11 +372,11 @@
             <!-- Card: CMD Emulator -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         ⌨️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">CMD Emulator</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Terminal-Simulation für Netzwerkbefehle (ipconfig, ping) inkl. Analyse durch den Assistenten.
                     </p>
                 </div>
@@ -390,11 +391,11 @@
             <!-- Card: Topology Designer -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🕸️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Topologie Designer</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Verknüpfe HQ, Home Office und Branch logisch über ein interaktives Canvas-Diagramm.
                     </p>
                 </div>
@@ -409,11 +410,11 @@
             <!-- Card: Daisy Chaining -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🔗
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Daisy Chaining</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Konfiguriere Monitor-Reihenschaltungen und prüfe auf MST- und Bandbreiten-Kompatibilität.
                     </p>
                 </div>
@@ -428,11 +429,11 @@
             <!-- Card: PoE Calculator -->
             <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         ⚡
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">PoE Rechner</h2>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
                         Berechne Leistungsbudgets für IP-Kameras und bestimme den passenden IEEE 802.3 Standard.
                     </p>
                 </div>
@@ -447,11 +448,11 @@
                 <!-- Card 15: Subnetting Tower Defense -->
                 <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                     <div>
-                        <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                             🏰
                         </div>
                         <h2 class="text-xl font-bold text-white mb-2">Subnetting Tower Defense</h2>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6">
                             Festigt das Wissen über IP-Adressierung und Subnetzmasken unter Zeitdruck.
                         </p>
                     </div>
@@ -470,7 +471,7 @@
                             🐦
                         </div>
                         <h2 class="text-xl font-bold text-white mb-2">OSI-Layer Flappy Bird</h2>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6">
                             Dient als Drill für das Auswendiglernen der 7 Netzwerkschichten und der dazugehörigen Protokolle.
                         </p>
                     </div>
@@ -489,7 +490,7 @@
                             🏃
                         </div>
                         <h2 class="text-xl font-bold text-white mb-2">Binary Hex Runner</h2>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6">
                             Automatisiert das schnelle Umrechnen zwischen binären, hexadezimalen und dezimalen Zahlensystemen.
                         </p>
                     </div>
@@ -508,7 +509,7 @@
                             🔐
                         </div>
                         <h2 class="text-xl font-bold text-white mb-2">Cybersecurity Password Tycoon</h2>
-                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6">
                             Kombiniert IT-Sicherheit (Passwortrichtlinien, Verschlüsselung) mit dem Aufbau lokaler Server-Infrastrukturen.
                         </p>
                     </div>

@@ -9,26 +9,27 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -44,7 +45,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 mb-4">
                 Basis-Umrechner
             </h1>
-            <p class="text-slate-300 max-w-2xl mx-auto">
+            <p class="text-gray-400 max-w-2xl mx-auto">
                 Übe die Umrechnung zwischen Dezimal, Binär und Hexadezimal. Eine Basis wird vorgegeben, ergänze die fehlenden.
             </p>
         </div>
@@ -56,30 +57,30 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 <!-- Dezimal -->
-                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold text-white">Dezimal</h2>
-                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 10</span>
+                        <span class="text-xs font-bold text-slate-500 bg-black px-2 py-1 rounded">Basis 10</span>
                     </div>
-                    <input type="text" id="input-dec" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-blue-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9">
+                    <input type="text" id="input-dec" class="w-full bg-black border-2 border-slate-600 focus:border-blue-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9">
                 </div>
 
                 <!-- Binär -->
-                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold text-white">Binär</h2>
-                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 2</span>
+                        <span class="text-xs font-bold text-slate-500 bg-black px-2 py-1 rounded">Basis 2</span>
                     </div>
-                    <input type="text" id="input-bin" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-green-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-1">
+                    <input type="text" id="input-bin" class="w-full bg-black border-2 border-slate-600 focus:border-green-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-1">
                 </div>
 
                 <!-- Hexadezimal -->
-                <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 flex flex-col">
+                <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold text-white">Hexadezimal</h2>
-                        <span class="text-xs font-bold text-slate-500 bg-slate-900 px-2 py-1 rounded">Basis 16</span>
+                        <span class="text-xs font-bold text-slate-500 bg-black px-2 py-1 rounded">Basis 16</span>
                     </div>
-                    <input type="text" id="input-hex" class="w-full bg-slate-900 border-2 border-slate-600 focus:border-purple-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9, A-F">
+                    <input type="text" id="input-hex" class="w-full bg-black border-2 border-slate-600 focus:border-purple-500 rounded-xl px-4 py-3 text-2xl text-white mono text-center outline-none transition-colors" autocomplete="off" spellcheck="false" placeholder="0-9, A-F">
                 </div>
 
             </div>
@@ -90,12 +91,12 @@
                 </button>
             </div>
 
-            <div class="mt-8 bg-slate-900 rounded-xl p-4 border border-slate-700">
-                <h3 class="text-sm font-bold text-slate-300 mb-2">Tipps zur Umrechnung:</h3>
+            <div class="mt-8 bg-black rounded-xl p-4 border border-gray-700">
+                <h3 class="text-sm font-bold text-gray-400 mb-2">Tipps zur Umrechnung:</h3>
                 <ul class="list-disc pl-5 text-sm text-slate-500 space-y-1">
-                    <li><strong class="text-slate-300">Dez ➔ Bin:</strong> Teile die Zahl fortlaufend durch 2. Die Reste von unten nach oben gelesen ergeben die Binärzahl.</li>
-                    <li><strong class="text-slate-300">Bin ➔ Hex:</strong> Fasse die Bits von rechts nach links in 4er-Blöcke (Nibbles) zusammen und wandle jeden Block in sein Hex-Äquivalent um (0-9, A-F).</li>
-                    <li><strong class="text-slate-300">Hex ➔ Dez:</strong> Multipliziere jede Ziffer mit 16 hoch ihrer Position (von rechts bei 0 beginnend) und addiere die Ergebnisse.</li>
+                    <li><strong class="text-gray-400">Dez ➔ Bin:</strong> Teile die Zahl fortlaufend durch 2. Die Reste von unten nach oben gelesen ergeben die Binärzahl.</li>
+                    <li><strong class="text-gray-400">Bin ➔ Hex:</strong> Fasse die Bits von rechts nach links in 4er-Blöcke (Nibbles) zusammen und wandle jeden Block in sein Hex-Äquivalent um (0-9, A-F).</li>
+                    <li><strong class="text-gray-400">Hex ➔ Dez:</strong> Multipliziere jede Ziffer mit 16 hoch ihrer Position (von rechts bei 0 beginnend) und addiere die Ergebnisse.</li>
                 </ul>
             </div>
 
@@ -134,9 +135,9 @@
             inputBin.disabled = false;
             inputHex.disabled = false;
 
-            inputDec.classList.remove('bg-slate-800', 'text-slate-300');
-            inputBin.classList.remove('bg-slate-800', 'text-slate-300');
-            inputHex.classList.remove('bg-slate-800', 'text-slate-300');
+            inputDec.classList.remove('bg-gray-900', 'text-gray-400');
+            inputBin.classList.remove('bg-gray-900', 'text-gray-400');
+            inputHex.classList.remove('bg-gray-900', 'text-gray-400');
 
             inputDec.classList.remove('border-red-500', 'border-green-500');
             inputBin.classList.remove('border-red-500', 'border-green-500');
@@ -148,17 +149,17 @@
             if (givenBase === 'dec') {
                 inputDec.value = currentNumber.toString(10);
                 inputDec.disabled = true;
-                inputDec.classList.add('bg-slate-800', 'text-slate-300');
+                inputDec.classList.add('bg-gray-900', 'text-gray-400');
                 inputBin.focus();
             } else if (givenBase === 'bin') {
                 inputBin.value = currentNumber.toString(2);
                 inputBin.disabled = true;
-                inputBin.classList.add('bg-slate-800', 'text-slate-300');
+                inputBin.classList.add('bg-gray-900', 'text-gray-400');
                 inputDec.focus();
             } else if (givenBase === 'hex') {
                 inputHex.value = currentNumber.toString(16).toUpperCase();
                 inputHex.disabled = true;
-                inputHex.classList.add('bg-slate-800', 'text-slate-300');
+                inputHex.classList.add('bg-gray-900', 'text-gray-400');
                 inputDec.focus();
             }
         }

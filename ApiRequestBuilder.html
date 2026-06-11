@@ -9,27 +9,28 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <header class="w-full bg-black/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <a href="ap.html" class="p-2 rounded-lg bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
@@ -38,7 +39,7 @@
                     <span class="text-green-400">🌐</span> API-Request-Builder
                 </h1>
             </div>
-            <div class="text-sm text-slate-300 mono">Mini-Postman</div>
+            <div class="text-sm text-gray-400 mono">Mini-Postman</div>
         </div>
     </header>
 
@@ -49,7 +50,7 @@
         <div class="glass-card rounded-3xl p-6">
             <div class="flex flex-col md:flex-row gap-4 mb-6">
                 <!-- Method Select -->
-                <select id="methodSelect" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 font-bold md:w-32 transition-colors">
+                <select id="methodSelect" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 font-bold md:w-32 transition-colors">
                     <option value="GET" class="text-blue-400">GET</option>
                     <option value="POST" class="text-green-400">POST</option>
                     <option value="PUT" class="text-orange-400">PUT</option>
@@ -58,10 +59,10 @@
 
                 <!-- URL Input -->
                 <div class="flex-grow flex">
-                    <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-slate-700 bg-slate-800 text-slate-300 mono text-sm">
+                    <span class="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-gray-700 bg-gray-900 text-gray-400 mono text-sm">
                         https://api.mock.local
                     </span>
-                    <input type="text" id="urlInput" value="/users" placeholder="/endpoint" class="flex-grow bg-slate-900 border border-slate-700 rounded-r-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 transition-colors mono">
+                    <input type="text" id="urlInput" value="/users" placeholder="/endpoint" class="flex-grow bg-black border border-gray-700 rounded-r-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 transition-colors mono">
                 </div>
 
                 <!-- Send Button -->
@@ -72,39 +73,39 @@
             </div>
 
             <!-- Tabs -->
-            <div class="flex border-b border-slate-700 mb-4">
+            <div class="flex border-b border-gray-700 mb-4">
                 <button class="tab-btn active px-4 py-2 text-green-400 border-b-2 border-green-400 font-medium" data-target="headers">Headers</button>
-                <button class="tab-btn px-4 py-2 text-slate-300 hover:text-slate-200 border-b-2 border-transparent font-medium transition-colors" data-target="body">Body (JSON)</button>
+                <button class="tab-btn px-4 py-2 text-gray-400 hover:text-gray-300 border-b-2 border-transparent font-medium transition-colors" data-target="body">Body (JSON)</button>
             </div>
 
             <!-- Tab Contents -->
             <div id="headers" class="tab-content block space-y-3">
                 <div class="flex gap-2">
-                    <input type="text" value="Content-Type" readonly class="w-1/3 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-300 text-sm focus:outline-none">
-                    <input type="text" value="application/json" readonly class="flex-grow bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-300 text-sm focus:outline-none">
+                    <input type="text" value="Content-Type" readonly class="w-1/3 bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-400 text-sm focus:outline-none">
+                    <input type="text" value="application/json" readonly class="flex-grow bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-400 text-sm focus:outline-none">
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" value="Authorization" class="w-1/3 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Key">
-                    <input type="text" value="Bearer mock-token-123" class="flex-grow bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Value">
+                    <input type="text" value="Authorization" class="w-1/3 bg-black border border-gray-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Key">
+                    <input type="text" value="Bearer mock-token-123" class="flex-grow bg-black border border-gray-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500 placeholder-slate-600" placeholder="Value">
                 </div>
             </div>
 
             <div id="body" class="tab-content hidden">
-                <textarea id="bodyInput" rows="6" class="w-full bg-[#0d1117] border border-slate-700 rounded-lg p-4 text-green-300 mono text-sm focus:outline-none focus:border-green-500 transition-colors resize-y" placeholder="{\n  &quot;key&quot;: &quot;value&quot;\n}"></textarea>
+                <textarea id="bodyInput" rows="6" class="w-full bg-[#0d1117] border border-gray-700 rounded-lg p-4 text-green-300 mono text-sm focus:outline-none focus:border-green-500 transition-colors resize-y" placeholder="{\n  &quot;key&quot;: &quot;value&quot;\n}"></textarea>
                 <p class="text-xs text-slate-500 mt-2">Wird nur bei POST und PUT simuliert berücksichtigt.</p>
             </div>
         </div>
 
         <!-- Response Section -->
         <div class="glass-card rounded-3xl flex flex-col overflow-hidden min-h-[300px]">
-            <div class="bg-slate-800/80 px-6 py-3 border-b border-slate-700 flex justify-between items-center">
+            <div class="bg-gray-900/80 px-6 py-3 border-b border-gray-700 flex justify-between items-center">
                 <span class="font-semibold text-white flex items-center gap-2">
-                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     Response
                 </span>
                 <div class="flex gap-4 text-sm mono">
-                    <span id="statusBadge" class="px-2 py-1 rounded bg-slate-700 text-slate-300">Status: ---</span>
-                    <span id="timeBadge" class="px-2 py-1 rounded bg-slate-700 text-slate-300">Time: -- ms</span>
+                    <span id="statusBadge" class="px-2 py-1 rounded bg-slate-700 text-gray-400">Status: ---</span>
+                    <span id="timeBadge" class="px-2 py-1 rounded bg-slate-700 text-gray-400">Time: -- ms</span>
                 </div>
             </div>
 
@@ -115,7 +116,7 @@
                     <span class="text-green-400 font-medium animate-pulse">Sende Request...</span>
                 </div>
 
-                <pre><code id="responseOutput" class="mono text-sm text-slate-300">Drücke "Senden" um eine Mock-Anfrage auszuführen...</code></pre>
+                <pre><code id="responseOutput" class="mono text-sm text-gray-400">Drücke "Senden" um eine Mock-Anfrage auszuführen...</code></pre>
             </div>
         </div>
 
@@ -162,12 +163,12 @@
                 // Remove active from all
                 tabBtns.forEach(b => {
                     b.classList.remove('active', 'text-green-400', 'border-green-400');
-                    b.classList.add('text-slate-300', 'border-transparent');
+                    b.classList.add('text-gray-400', 'border-transparent');
                 });
                 tabContents.forEach(c => c.classList.add('hidden'));
 
                 // Add active to clicked
-                btn.classList.remove('text-slate-300', 'border-transparent');
+                btn.classList.remove('text-gray-400', 'border-transparent');
                 btn.classList.add('active', 'text-green-400', 'border-green-400');
                 document.getElementById(btn.dataset.target).classList.remove('hidden');
             });
@@ -188,7 +189,7 @@
             // UI Feedback
             loadingOverlay.classList.remove('hidden');
             sendBtn.disabled = true;
-            statusBadge.className = 'px-2 py-1 rounded bg-slate-700 text-slate-300';
+            statusBadge.className = 'px-2 py-1 rounded bg-slate-700 text-gray-400';
             statusBadge.textContent = 'Status: Pending';
             timeBadge.textContent = 'Time: -- ms';
 

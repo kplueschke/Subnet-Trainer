@@ -10,17 +10,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         #network-container {
             width: 100%;
@@ -29,10 +30,10 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col">
         <div class="mb-8">
-            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück zu BGP
             </a>
@@ -42,13 +43,13 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Netzplan-Rechner (MPM)
             </h1>
-            <p class="mt-4 text-slate-300">Gib Vorgänge, Dauer und Vorgänger ein. Der kritische Pfad wird rot markiert.</p>
+            <p class="mt-4 text-gray-400">Gib Vorgänge, Dauer und Vorgänger ein. Der kritische Pfad wird rot markiert.</p>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-6 flex-grow">
             <!-- Input Area -->
             <div class="glass-card rounded-3xl p-6 lg:col-span-1 flex flex-col h-full">
-                <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Vorgänge</h3>
+                <h3 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2">Vorgänge</h3>
 
                 <div class="overflow-y-auto flex-grow mb-4 pr-2" id="tasksList">
                     <!-- Dynamic inputs -->
@@ -61,32 +62,32 @@
                     <button onclick="calculateAndRender()" class="w-full px-4 py-3 rounded bg-orange-600 hover:bg-orange-500 transition-colors font-bold shadow-lg shadow-indigo-500/20">
                         Netzplan Berechnen & Zeichnen
                     </button>
-                    <button onclick="loadExample()" class="w-full px-4 py-2 rounded border border-slate-600 hover:bg-slate-800 transition-colors text-xs text-slate-300">
+                    <button onclick="loadExample()" class="w-full px-4 py-2 rounded border border-slate-600 hover:bg-gray-900 transition-colors text-xs text-gray-400">
                         Beispiel laden
                     </button>
                 </div>
             </div>
 
             <!-- Graph Area -->
-            <div class="glass-card rounded-3xl p-6 lg:col-span-2 flex flex-col relative bg-slate-900/50">
+            <div class="glass-card rounded-3xl p-6 lg:col-span-2 flex flex-col relative bg-black/50">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-xl font-bold text-white">Netzplan (Knoten = Vorgang)</h3>
                     <div class="flex gap-4 text-xs font-bold">
                         <span class="text-red-400">🔴 Kritischer Pfad (GP = 0)</span>
-                        <span class="text-slate-300">🔵 Unkritisch (GP > 0)</span>
+                        <span class="text-gray-400">🔵 Unkritisch (GP > 0)</span>
                     </div>
                 </div>
 
                 <!-- Legend explanation for the node format -->
-                <div class="bg-slate-800 rounded p-2 mb-4 text-xs font-mono text-center flex justify-center gap-4 border border-slate-700">
+                <div class="bg-gray-900 rounded p-2 mb-4 text-xs font-mono text-center flex justify-center gap-4 border border-gray-700">
                     <div>FAZ = Frühester Anfang<br>FEZ = Frühestes Ende</div>
                     <div class="border-l border-slate-600 pl-4">D = Dauer<br>Name = Vorgangsname</div>
                     <div class="border-l border-slate-600 pl-4">SAZ = Spätester Anfang<br>SEZ = Spätestes Ende</div>
                     <div class="border-l border-slate-600 pl-4">GP = Gesamtpuffer<br>FP = Freier Puffer</div>
                 </div>
 
-                <div id="network-container" class="flex-grow border border-slate-700 rounded-lg bg-slate-900"></div>
-                <div id="error-msg" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-400 font-bold hidden bg-slate-900 p-4 rounded shadow-lg border border-red-500 text-center"></div>
+                <div id="network-container" class="flex-grow border border-gray-700 rounded-lg bg-black"></div>
+                <div id="error-msg" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-400 font-bold hidden bg-black p-4 rounded shadow-lg border border-red-500 text-center"></div>
             </div>
         </div>
     </div>
@@ -106,22 +107,22 @@
 
             tasks.forEach((t, i) => {
                 const div = document.createElement('div');
-                div.className = 'bg-slate-800 p-3 rounded mb-3 border border-slate-700 relative group';
+                div.className = 'bg-gray-900 p-3 rounded mb-3 border border-gray-700 relative group';
                 div.innerHTML = `
                     <button onclick="removeTask(${i})" class="absolute top-2 right-2 text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
                     <div class="grid grid-cols-2 gap-2 mb-2">
                         <div>
-                            <label class="text-xs text-slate-300 block mb-1">ID</label>
-                            <input type="text" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-sm font-bold text-white uppercase" value="${t.id}" onchange="updateTask(${i}, 'id', this.value.toUpperCase())">
+                            <label class="text-xs text-gray-400 block mb-1">ID</label>
+                            <input type="text" class="w-full bg-black border border-slate-600 rounded px-2 py-1 text-sm font-bold text-white uppercase" value="${t.id}" onchange="updateTask(${i}, 'id', this.value.toUpperCase())">
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 block mb-1">Dauer</label>
-                            <input type="number" min="0" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-sm text-white" value="${t.duration}" onchange="updateTask(${i}, 'duration', parseInt(this.value)||0)">
+                            <label class="text-xs text-gray-400 block mb-1">Dauer</label>
+                            <input type="number" min="0" class="w-full bg-black border border-slate-600 rounded px-2 py-1 text-sm text-white" value="${t.duration}" onchange="updateTask(${i}, 'duration', parseInt(this.value)||0)">
                         </div>
                     </div>
                     <div>
-                        <label class="text-xs text-slate-300 block mb-1">Vorgänger (kommasepariert)</label>
-                        <input type="text" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-sm text-white uppercase" value="${t.predecessors.join(', ')}" onchange="updateTask(${i}, 'predecessors', this.value.toUpperCase().split(',').map(s=>s.trim()).filter(s=>s))">
+                        <label class="text-xs text-gray-400 block mb-1">Vorgänger (kommasepariert)</label>
+                        <input type="text" class="w-full bg-black border border-slate-600 rounded px-2 py-1 text-sm text-white uppercase" value="${t.predecessors.join(', ')}" onchange="updateTask(${i}, 'predecessors', this.value.toUpperCase().split(',').map(s=>s.trim()).filter(s=>s))">
                     </div>
                 `;
                 container.appendChild(div);

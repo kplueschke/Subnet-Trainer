@@ -1,0 +1,9 @@
+127.0.0.1 - - [11/Jun/2026 16:53:35] code 404, message File not found
+127.0.0.1 - - [11/Jun/2026 16:53:35] "GET /robots.txt HTTP/1.1" 404 -
+127.0.0.1 - - [11/Jun/2026 16:53:39] "GET /index.html HTTP/1.0" 200 -
+127.0.0.1 - - [11/Jun/2026 16:53:46] code 404, message File not found
+127.0.0.1 - - [11/Jun/2026 16:53:46] "GET /robots.txt HTTP/1.1" 404 -
+127.0.0.1 - - [11/Jun/2026 16:53:50] "GET /CmdEmulator.html HTTP/1.0" 200 -
+127.0.0.1 - - [11/Jun/2026 16:55:39] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [11/Jun/2026 16:57:32] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [11/Jun/2026 16:57:33] "GET /CmdEmulator.html HTTP/1.1" 200 -

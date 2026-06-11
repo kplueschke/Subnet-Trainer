@@ -10,17 +10,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
             border-color: rgba(99, 102, 241, 0.6);
@@ -35,17 +36,17 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Back Button -->
         <div class="mb-6">
-            <a href="ap.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="ap.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -55,10 +56,10 @@
 
         <!-- Header -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
                 UML-Ablauf-Simulator
             </h1>
-            <p class="mt-4 text-base text-slate-300 max-w-2xl mx-auto">
+            <p class="mt-4 text-base text-gray-400 max-w-2xl mx-auto">
                 Trainiere das Erstellen von UML-Aktivitätendiagrammen aus C-Code und umgekehrt.
             </p>
         </div>
@@ -69,8 +70,8 @@
             <div class="glass-card rounded-3xl p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="catalog-selector" class="block text-sm font-medium text-slate-300 mb-2">Ablauf wählen</label>
-                        <select id="catalog-selector" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
+                        <label for="catalog-selector" class="block text-sm font-medium text-gray-400 mb-2">Ablauf wählen</label>
+                        <select id="catalog-selector" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:border-indigo-500 transition-colors">
                             <option value="linear">Linearer EVA-Ablauf</option>
                             <option value="simple-if">Einfache Verzweigung (if)</option>
                             <option value="if-else">Verzweigung (if-else)</option>
@@ -81,10 +82,10 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-300 mb-2">Trainingsmodus</label>
-                        <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Trainingsmodus</label>
+                        <div class="flex bg-gray-900 rounded-lg p-1 border border-gray-700">
                             <button id="mode-code-to-diagram" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium bg-indigo-600 text-white shadow transition-all">Code zu Diagramm</button>
-                            <button id="mode-diagram-to-code" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium text-slate-300 hover:text-slate-200 transition-all">Diagramm zu Code</button>
+                            <button id="mode-diagram-to-code" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium text-gray-400 hover:text-gray-300 transition-all">Diagramm zu Code</button>
                         </div>
                     </div>
                 </div>
@@ -94,16 +95,16 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Task Column -->
                 <div class="glass-card rounded-3xl p-6 flex flex-col h-full">
-                    <h2 class="text-xl font-semibold mb-4 text-white flex items-center justify-between border-b border-slate-700 pb-2">
+                    <h2 class="text-xl font-semibold mb-4 text-white flex items-center justify-between border-b border-gray-700 pb-2">
                         <span>Aufgabe</span>
                     </h2>
 
-                    <div id="task-content" class="flex-grow flex items-center justify-center min-h-[300px] bg-slate-900/50 rounded-xl p-4 border border-slate-800">
+                    <div id="task-content" class="flex-grow flex items-center justify-center min-h-[300px] bg-black/50 rounded-xl p-4 border border-gray-800">
                         <!-- Dynamic content (Code or Diagram) injected here -->
                     </div>
 
                     <div class="mt-6 text-center">
-                        <p class="text-sm text-slate-300 mb-4" id="task-instruction">Zeichne das UML-Aktivitätendiagramm dazu auf Papier.</p>
+                        <p class="text-sm text-gray-400 mb-4" id="task-instruction">Zeichne das UML-Aktivitätendiagramm dazu auf Papier.</p>
                         <button id="show-solution-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors w-full sm:w-auto shadow-lg shadow-indigo-500/20">
                             Lösung anzeigen
                         </button>
@@ -113,24 +114,24 @@
                 <!-- Solution Column -->
                 <div class="glass-card rounded-3xl p-6 flex flex-col h-full relative overflow-hidden" id="solution-container">
                     <!-- Overlay to hide solution initially -->
-                    <div id="solution-overlay" class="absolute inset-0 bg-slate-800/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300">
+                    <div id="solution-overlay" class="absolute inset-0 bg-gray-900/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300">
                         <svg class="w-12 h-12 text-slate-500 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                         </svg>
-                        <h3 class="text-xl font-bold text-slate-300 mb-2">Lösung verborgen</h3>
-                        <p class="text-slate-300 max-w-sm">Bearbeite die Aufgabe zuerst selbst, bevor du die Lösung zur Kontrolle aufdeckst.</p>
+                        <h3 class="text-xl font-bold text-gray-400 mb-2">Lösung verborgen</h3>
+                        <p class="text-gray-400 max-w-sm">Bearbeite die Aufgabe zuerst selbst, bevor du die Lösung zur Kontrolle aufdeckst.</p>
                     </div>
 
-                    <h2 class="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-2">Lösungskontrolle</h2>
+                    <h2 class="text-xl font-semibold mb-4 text-white border-b border-gray-700 pb-2">Lösungskontrolle</h2>
 
                     <div id="solution-content" class="flex-grow flex flex-col min-h-[300px]">
                         <!-- Dynamic solution (Diagram or Code) injected here -->
                     </div>
 
                     <!-- Interactive Checklist (Only shown in Code -> Diagram mode) -->
-                    <div id="checklist-container" class="mt-6 bg-slate-900/50 rounded-xl p-4 border border-slate-800 hidden">
-                        <h4 class="text-sm font-semibold text-indigo-400 uppercase tracking-wide mb-3">Selbstkontrolle</h4>
-                        <ul class="space-y-2 text-sm text-slate-300">
+                    <div id="checklist-container" class="mt-6 bg-black/50 rounded-xl p-4 border border-gray-800 hidden">
+                        <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">Selbstkontrolle</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
                             <li class="flex items-start gap-3">
                                 <input type="checkbox" class="mt-1 w-4 h-4 rounded border-slate-600 text-indigo-600 focus:ring-indigo-500 bg-slate-700 cursor-pointer">
                                 <span>Haben alle <strong>Aktionsknoten</strong> (Rechtecke) abgerundete Ecken?</span>
@@ -231,7 +232,7 @@
         }
 
         function formatCode(codeStr) {
-            return `<pre class="w-full h-full p-4 overflow-auto mono text-sm text-green-400 bg-black/50 rounded-lg border border-slate-700 whitespace-pre-wrap"><code>${codeStr}</code></pre>`;
+            return `<pre class="w-full h-full p-4 overflow-auto mono text-sm text-green-400 bg-black/50 rounded-lg border border-gray-700 whitespace-pre-wrap"><code>${codeStr}</code></pre>`;
         }
 
         async function renderDiagram(diagramStr, container) {
@@ -258,7 +259,7 @@
                 taskInstruction.innerText = "Gib deinen Mermaid Code hier ein:";
 
                 const defaultMermaid = "stateDiagram-v2\n    direction TB\n    [*] --> Start\n    Start --> [*]";
-                taskContent.innerHTML = `<textarea id="custom-mermaid-input" class="w-full h-full min-h-[300px] p-4 font-mono text-sm text-green-400 bg-black/50 rounded-lg border border-slate-700 focus:outline-none focus:border-indigo-500 resize-none">${defaultMermaid}</textarea>`;
+                taskContent.innerHTML = `<textarea id="custom-mermaid-input" class="w-full h-full min-h-[300px] p-4 font-mono text-sm text-green-400 bg-black/50 rounded-lg border border-gray-700 focus:outline-none focus:border-indigo-500 resize-none">${defaultMermaid}</textarea>`;
 
                 const customInput = document.getElementById('custom-mermaid-input');
                 renderDiagram(customInput.value, solutionContent);
@@ -285,10 +286,10 @@
             if (currentMode === 'code-to-diagram') {
                 // UI Toggles
                 btnCodeToDiag.classList.add('text-white', 'bg-indigo-600', 'shadow');
-                btnCodeToDiag.classList.remove('text-slate-300', 'bg-transparent');
+                btnCodeToDiag.classList.remove('text-gray-400', 'bg-transparent');
 
                 btnDiagToCode.classList.remove('text-white', 'bg-indigo-600', 'shadow');
-                btnDiagToCode.classList.add('text-slate-300', 'bg-transparent');
+                btnDiagToCode.classList.add('text-gray-400', 'bg-transparent');
 
                 taskInstruction.innerText = "Zeichne das UML-Aktivitätendiagramm dazu auf Papier.";
                 checklistContainer.classList.remove('hidden');
@@ -300,10 +301,10 @@
             } else {
                 // UI Toggles
                 btnDiagToCode.classList.add('text-white', 'bg-indigo-600', 'shadow');
-                btnDiagToCode.classList.remove('text-slate-300', 'bg-transparent');
+                btnDiagToCode.classList.remove('text-gray-400', 'bg-transparent');
 
                 btnCodeToDiag.classList.remove('text-white', 'bg-indigo-600', 'shadow');
-                btnCodeToDiag.classList.add('text-slate-300', 'bg-transparent');
+                btnCodeToDiag.classList.add('text-gray-400', 'bg-transparent');
 
                 taskInstruction.innerText = "Überlege dir die C-Syntax zu diesem Ablauf.";
                 checklistContainer.classList.add('hidden');

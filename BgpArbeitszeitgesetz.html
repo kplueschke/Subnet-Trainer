@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .shift-block {
             cursor: pointer;
@@ -45,10 +46,10 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-5xl relative z-10">
         <div class="mb-8">
-            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück zu BGP
             </a>
@@ -58,7 +59,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Arbeitszeitgesetz-Inspektor
             </h1>
-            <p class="mt-4 text-slate-300">Klicke auf die Schichten oder Pausen im Plan, die gegen das Arbeitszeitgesetz (ArbZG) verstoßen.</p>
+            <p class="mt-4 text-gray-400">Klicke auf die Schichten oder Pausen im Plan, die gegen das Arbeitszeitgesetz (ArbZG) verstoßen.</p>
         </div>
 
         <div class="flex flex-col md:flex-row gap-6">
@@ -67,57 +68,57 @@
 
                 <div class="space-y-4">
                     <!-- Montag -->
-                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="font-bold text-orange-400 mb-2">Montag</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit</span>
                                 08:00 - 12:00
                             </div>
-                            <div class="shift-block bg-slate-900 p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, true, 'Verstoß: Pause zu kurz! Nach 6h Arbeit sind min. 30 Minuten gesetzlich vorgeschrieben (ArbZG §4).', 'pause_mo')">
-                                <span class="block text-xs text-slate-300">Pause</span>
+                            <div class="shift-block bg-black p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, true, 'Verstoß: Pause zu kurz! Nach 6h Arbeit sind min. 30 Minuten gesetzlich vorgeschrieben (ArbZG §4).', 'pause_mo')">
+                                <span class="block text-xs text-gray-400">Pause</span>
                                 15 Min
                             </div>
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit</span>
                                 12:15 - 16:15
                             </div>
                         </div>
                     </div>
 
                     <!-- Dienstag -->
-                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="font-bold text-orange-400 mb-2">Dienstag</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit</span>
                                 09:00 - 13:00
                             </div>
-                            <div class="shift-block bg-slate-900 p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Pause</span>
+                            <div class="shift-block bg-black p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, false, 'Alles okay.')">
+                                <span class="block text-xs text-gray-400">Pause</span>
                                 30 Min
                             </div>
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, true, 'Verstoß: Arbeitszeit > 10h! Maximale tägliche Arbeitszeit darf 10h nicht überschreiten (ArbZG §3).', 'work_di')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit</span>
                                 13:30 - 20:30
                             </div>
                         </div>
                     </div>
 
                     <!-- Mittwoch -->
-                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
                         <div class="font-bold text-orange-400 mb-2">Mittwoch</div>
                         <div class="flex flex-wrap gap-2">
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, true, 'Verstoß: Ruhezeit < 11h! Zwischen Dienstag 20:30 und Mittwoch 06:00 liegen nur 9.5h. Gesetzlich sind 11h vorgeschrieben (ArbZG §5).', 'rest_mi')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit (Frühschicht)</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit (Frühschicht)</span>
                                 06:00 - 10:00
                             </div>
-                            <div class="shift-block bg-slate-900 p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Pause</span>
+                            <div class="shift-block bg-black p-2 rounded border border-slate-600 w-24 text-center" onclick="checkViolation(this, false, 'Alles okay.')">
+                                <span class="block text-xs text-gray-400">Pause</span>
                                 45 Min
                             </div>
                             <div class="shift-block bg-slate-700 p-2 rounded border border-slate-600 flex-grow text-center" onclick="checkViolation(this, false, 'Alles okay.')">
-                                <span class="block text-xs text-slate-300">Arbeitszeit</span>
+                                <span class="block text-xs text-gray-400">Arbeitszeit</span>
                                 10:45 - 14:00
                             </div>
                         </div>
