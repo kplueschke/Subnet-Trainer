@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep Compiling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .mono { font-family: 'Fira Code', monospace; }
+        .switch { width: 60px; height: 100px; background: #334155; border-radius: 5px; position: relative; border: 2px solid #1e293b; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); cursor: pointer; }
+        .switch-toggle { width: 50px; height: 40px; background: #ef4444; position: absolute; bottom: 5px; left: 3px; border-radius: 3px; transition: bottom 0.2s, background 0.2s; box-shadow: 0 4px 0 #991b1b; }
+        .switch.on .switch-toggle { bottom: 50px; background: #22c55e; box-shadow: 0 -4px 0 #166534; }
+        .led { width: 15px; height: 15px; border-radius: 50%; background: #475569; margin: 0 auto 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+        .led.on { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+        .led.error { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .shaking { animation: bombShake 0.1s infinite; }
+        @keyframes bombShake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, 0px); } }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-5xl flex-grow flex flex-col">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Keep Compiling...</h1>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 flex-grow">
+            <!-- Manual / Documentation Side -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col max-h-[80vh] overflow-y-auto">
+                <h2 class="text-xl font-bold text-rose-400 mb-4 border-b border-rose-500/30 pb-2">Hardware Recovery Manual</h2>
+                <div class="text-sm text-slate-300 space-y-4">
+                    <p><strong>Warning:</strong> Improper sequence will cause immediate kernel panic and system destruction.</p>
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mono text-xs">
+                        <p class="text-indigo-400 mb-2">// SECTION 1: POWER INITIALIZATION</p>
+                        <p>If the system timer is currently displaying an EVEN number of seconds when you begin, toggle Switch A to the ON position. Otherwise, leave it OFF.</p>
+                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 2: NETWORK BYPASS</p>
+                        <p>Switch B must only be activated AFTER Switch D has been toggled, but BEFORE Switch C.</p>
+                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 3: MEMORY FLUSH</p>
+                        <p>Switch C is highly volatile. Toggle it ON only if Switch A is currently OFF. If Switch A is ON, Switch C must remain OFF.</p>
+                        <p class="mt-2 text-indigo-400 mb-2">// SECTION 4: CLOCK SYNC</p>
+                        <p>Always activate Switch D first, unless the instruction in Section 1 explicitly states otherwise.</p>
+                    </div>
+                    <p class="text-rose-300 italic text-xs mt-4">Translate carefully. "Even" = Gerade, "Odd" = Ungerade. "Before" = Vorher, "After" = Nachher.</p>
+                </div>
+            </div>
+
+            <!-- The Bomb / Server Interface Side -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-center items-center relative" id="server-module">
+
+                <div id="start-screen" class="absolute inset-0 bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl z-20">
+                    <h2 class="text-4xl font-bold text-red-500 mb-4">CRITICAL FAILURE</h2>
+                    <p class="text-slate-300 mb-6 text-center px-8">Der Server stürzt ab. Lies das englische Handbuch genau durch, um die Schalter in der korrekten Reihenfolge umzulegen.</p>
+                    <button id="start-btn" class="px-8 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-colors">Emergency Boot</button>
+                </div>
+
+                <div class="bg-black border-4 border-slate-700 rounded-xl p-8 w-full max-w-md relative">
+                    <!-- Timer -->
+                    <div class="bg-red-950 border-2 border-red-900 rounded p-4 mb-8 text-center">
+                        <span id="timer" class="font-mono text-5xl font-bold text-red-500 tracking-widest" style="text-shadow: 0 0 10px #ef4444;">60.00</span>
+                    </div>
+
+                    <!-- Switches -->
+                    <div class="flex justify-between px-4">
+                        <div class="flex flex-col items-center">
+                            <div class="led" id="led-a"></div>
+                            <div class="switch" id="sw-a" data-id="A">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="mt-2 font-mono font-bold text-slate-400">SW-A</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="led" id="led-b"></div>
+                            <div class="switch" id="sw-b" data-id="B">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="mt-2 font-mono font-bold text-slate-400">SW-B</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="led" id="led-c"></div>
+                            <div class="switch" id="sw-c" data-id="C">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="mt-2 font-mono font-bold text-slate-400">SW-C</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="led" id="led-d"></div>
+                            <div class="switch" id="sw-d" data-id="D">
+                                <div class="switch-toggle"></div>
+                            </div>
+                            <span class="mt-2 font-mono font-bold text-slate-400">SW-D</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-4">
+                    <button id="verify-btn" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white font-mono rounded-xl transition-colors disabled:opacity-50">COMMIT CHANGES</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const timerEl = document.getElementById('timer');
+        const startBtn = document.getElementById('start-btn');
+        const verifyBtn = document.getElementById('verify-btn');
+        const serverModule = document.getElementById('server-module');
+        const switches = document.querySelectorAll('.switch');
+
+        let isPlaying = false;
+        let timeRemaining = 60000; // ms
+        let timerInterval;
+        let lastTime = 0;
+        let startSecondsEven = false;
+        let sequenceLog = [];
+
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            isPlaying = true;
+            timeRemaining = 60000; // Reset to 60s
+            sequenceLog = [];
+
+            // Randomize starting time slightly to force dynamic reading
+            timeRemaining -= Math.floor(Math.random() * 5000);
+            const initialSeconds = Math.floor(timeRemaining / 1000);
+            startSecondsEven = (initialSeconds % 2 === 0);
+
+            // Reset switches
+            switches.forEach(s => {
+                s.classList.remove('on');
+                document.getElementById('led-' + s.dataset.id.toLowerCase()).className = 'led';
+            });
+
+            lastTime = performance.now();
+            requestAnimationFrame(updateTimer);
+        }
+
+        function updateTimer(currentTime) {
+            if(!isPlaying) return;
+            const delta = currentTime - lastTime;
+            lastTime = currentTime;
+            timeRemaining -= delta;
+
+            if(timeRemaining <= 0) {
+                timeRemaining = 0;
+                explode();
+                return;
+            }
+
+            if(timeRemaining < 10000) {
+                serverModule.classList.add('shaking');
+            } else {
+                serverModule.classList.remove('shaking');
+            }
+
+            const secs = Math.floor(timeRemaining / 1000);
+            const ms = Math.floor((timeRemaining % 1000) / 10);
+            timerEl.innerText = `${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+
+            requestAnimationFrame(updateTimer);
+        }
+
+        switches.forEach(sw => {
+            sw.addEventListener('click', () => {
+                if(!isPlaying) return;
+                const id = sw.dataset.id;
+                const isCurrentlyOn = sw.classList.contains('on');
+
+                if(!isCurrentlyOn) {
+                    sw.classList.add('on');
+                    document.getElementById(`led-${id.toLowerCase()}`).classList.add('on');
+                    sequenceLog.push(id);
+                } else {
+                    sw.classList.remove('on');
+                    document.getElementById(`led-${id.toLowerCase()}`).classList.remove('on');
+                    sequenceLog = sequenceLog.filter(item => item !== id); // Remove from log if turned off
+                }
+            });
+        });
+
+        verifyBtn.addEventListener('click', () => {
+            if(!isPlaying) return;
+            // Validate logic based on manual
+            const state = {
+                A: document.getElementById('sw-a').classList.contains('on'),
+                B: document.getElementById('sw-b').classList.contains('on'),
+                C: document.getElementById('sw-c').classList.contains('on'),
+                D: document.getElementById('sw-d').classList.contains('on')
+            };
+
+            let isValid = true;
+            let errorMsg = "";
+
+            // Section 1: A should be ON if start time was even, OFF otherwise.
+            if (startSecondsEven && !state.A) { isValid = false; errorMsg = "Section 1 violation: Switch A should be ON (timer was even)."; }
+            if (!startSecondsEven && state.A) { isValid = false; errorMsg = "Section 1 violation: Switch A should be OFF (timer was odd)."; }
+
+            // Section 3: C ON only if A is OFF.
+            if (state.A && state.C) { isValid = false; errorMsg = "Section 3 violation: Switch C cannot be ON if A is ON."; }
+
+            // Sequence checks (B after D, B before C) - only if they are turned on
+            if (state.B) {
+                if (!state.D) { isValid = false; errorMsg = "Section 2 violation: Switch B turned on, but D is not on."; }
+                else {
+                    const idxB = sequenceLog.indexOf('B');
+                    const idxD = sequenceLog.indexOf('D');
+                    if (idxB < idxD) { isValid = false; errorMsg = "Section 2 violation: B was toggled BEFORE D."; }
+                }
+
+                if (state.C) {
+                    const idxB = sequenceLog.indexOf('B');
+                    const idxC = sequenceLog.indexOf('C');
+                    if (idxB > idxC) { isValid = false; errorMsg = "Section 2 violation: B was toggled AFTER C."; }
+                }
+            }
+
+            // Section 4: D must be first, unless A is turned on (because A is based on section 1 which says 'begin' with it)
+            if (state.D) {
+                const idxD = sequenceLog.indexOf('D');
+                if (idxD !== 0) {
+                    if (state.A && sequenceLog.indexOf('A') === 0 && idxD === 1) {
+                        // This is fine, A was first
+                    } else {
+                        isValid = false; errorMsg = "Section 4 violation: D was not activated first.";
+                    }
+                }
+            }
+
+            // Simplistic win condition: All required switches must be on
+            // Required: D is always required implicitly by section 4? Let's say yes.
+            if(!state.D) { isValid = false; errorMsg = "System requires Switch D to be engaged."; }
+
+            if(isValid) {
+                defused();
+            } else {
+                timeRemaining = Math.max(0, timeRemaining - 15000); // Penalty
+                switches.forEach(s => {
+                    document.getElementById('led-' + s.dataset.id.toLowerCase()).classList.add('error');
+                    setTimeout(() => document.getElementById('led-' + s.dataset.id.toLowerCase()).classList.remove('error'), 500);
+                });
+                alert("KERNEL PANIC: " + errorMsg + "\n-15 Seconds Penalty!");
+            }
+        });
+
+        function explode() {
+            isPlaying = false;
+            serverModule.classList.remove('shaking');
+            timerEl.innerText = "00.00";
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('start-screen').innerHTML = `
+                <h2 class="text-5xl font-bold text-red-500 mb-4">SERVER CRASHED</h2>
+                <p class="text-white mb-6">Die falschen Anweisungen wurden befolgt.</p>
+                <button onclick="location.reload()" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl">Neustart</button>
+            `;
+        }
+
+        function defused() {
+            isPlaying = false;
+            serverModule.classList.remove('shaking');
+            timerEl.style.color = "#22c55e";
+            timerEl.style.textShadow = "0 0 10px #22c55e";
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('start-screen').style.backgroundColor = "rgba(15, 23, 42, 0.9)";
+            document.getElementById('start-screen').innerHTML = `
+                <h2 class="text-4xl font-bold text-green-400 mb-4">SYSTEM STABILIZED</h2>
+                <p class="text-white mb-6">Du hast die englische Dokumentation unter Stress korrekt verstanden und angewandt.</p>
+                <button onclick="location.reload()" class="px-8 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl">Nächste Schicht</button>
+            `;
+        }
+
+        startBtn.addEventListener('click', startGame);
+
+    </script>
+</body>
+</html>

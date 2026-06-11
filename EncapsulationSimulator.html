@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .shield-icon {
@@ -57,7 +58,7 @@
                     <span class="text-teal-400">🛡️</span> Kapselungs-Simulator
                 </h1>
             </div>
-            <div class="text-sm text-slate-400">Datenverstecken (Information Hiding)</div>
+            <div class="text-sm text-slate-300">Datenverstecken (Information Hiding)</div>
         </div>
     </header>
 
@@ -66,7 +67,7 @@
 
         <!-- Left: Class Definition -->
         <div class="w-full lg:w-1/2 flex flex-col gap-6">
-            <div class="glass-card rounded-2xl p-6 flex-grow">
+            <div class="glass-card rounded-3xl p-6 flex-grow">
                 <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                     Klasse: BankKonto
@@ -117,14 +118,14 @@
 
         <!-- Right: Access Simulation -->
         <div class="w-full lg:w-1/2 flex flex-col gap-6">
-            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex-grow flex flex-col">
                 <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
                     Zugriffs-Simulator
                 </h2>
 
                 <div class="mb-4">
-                    <label class="block text-sm text-slate-400 mb-2">Von wo greifst du zu?</label>
+                    <label class="block text-sm text-slate-300 mb-2">Von wo greifst du zu?</label>
                     <div class="flex gap-2">
                         <button class="context-btn active flex-1 bg-slate-800 hover:bg-slate-700 border border-teal-500 text-white px-3 py-2 rounded-lg transition-colors text-sm font-medium" data-context="main">
                             Externe Klasse (Program.cs)
@@ -202,7 +203,7 @@
         Object.values(selects).forEach(select => {
             select.addEventListener('change', () => {
                 resetIcons();
-                log(`Zugriffsmodifizierer geändert.`, 'text-slate-400');
+                log(`Zugriffsmodifizierer geändert.`, 'text-slate-300');
             });
         });
 

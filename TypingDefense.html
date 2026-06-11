@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing-Defense</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #game-canvas { width: 100%; height: 60vh; background: #000; border-radius: 1rem; border: 1px solid #334155; }
+        .base { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 40px; background: #3b82f6; border-radius: 10px 10px 0 0; }
+        .laser { position: absolute; width: 4px; height: 15px; background: #60a5fa; box-shadow: 0 0 10px #60a5fa; }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col relative z-10">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Typing-Defense</h1>
+            <div class="text-xl font-mono">Score: <span id="score" class="text-indigo-400">0</span></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 mb-4 flex-grow flex flex-col relative">
+            <div class="text-center mb-2">
+                <p class="text-slate-400 text-sm">Gegner kommen mit deutschen Begriffen. Tippe die <span class="text-indigo-400 font-bold">englische Übersetzung</span>, um zu feuern!</p>
+            </div>
+
+            <div class="relative flex-grow flex flex-col">
+                <!-- Using HTML/CSS for objects instead of raw canvas for easier text rendering -->
+                <div id="game-area" class="relative flex-grow bg-slate-900 rounded-xl overflow-hidden border border-slate-700">
+                    <div class="base"></div>
+                    <!-- Enemies added here -->
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-col items-center">
+                <div class="text-xs text-slate-500 mb-1 uppercase">Dein Input (Englisch):</div>
+                <input type="text" id="type-input" autocomplete="off" class="w-full max-w-md bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-center text-xl text-white font-mono focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Type translation here..." disabled>
+            </div>
+
+            <div id="start-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-2xl z-20">
+                <h2 class="text-3xl font-bold text-white mb-4">Bereit zur Verteidigung?</h2>
+                <button id="start-btn" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors">Start Game</button>
+            </div>
+
+            <div id="game-over" class="absolute inset-0 bg-red-900/90 backdrop-blur-md flex flex-col items-center justify-center rounded-2xl z-30 hidden">
+                <h2 class="text-5xl font-bold text-white mb-4">GAME OVER</h2>
+                <p class="text-xl text-red-200 mb-6">Die Basis wurde zerstört.</p>
+                <button onclick="location.reload()" class="px-8 py-3 bg-white text-red-900 font-bold rounded-xl transition-colors hover:bg-slate-200">Neustart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dict = [
+            { de: "Schleife", en: "loop" },
+            { de: "Vererbung", en: "inheritance" },
+            { de: "Schnittstelle", en: "interface" },
+            { de: "Datenbank", en: "database" },
+            { de: "Ausführung", en: "execution" },
+            { de: "Abfrage", en: "query" },
+            { de: "Speicher", en: "memory" },
+            { de: "Netzwerk", en: "network" },
+            { de: "Taste", en: "key" },
+            { de: "Fehler", en: "error" }
+        ];
+
+        const gameArea = document.getElementById('game-area');
+        const input = document.getElementById('type-input');
+        const scoreEl = document.getElementById('score');
+        const startOverlay = document.getElementById('start-overlay');
+        const startBtn = document.getElementById('start-btn');
+        const gameOverScreen = document.getElementById('game-over');
+
+        let isPlaying = false;
+        let score = 0;
+        let enemies = [];
+        let lasers = [];
+        let gameLoopId;
+        let spawnIntervalId;
+        let enemySpeed = 0.5;
+        let spawnRate = 3000;
+
+        function startGame() {
+            startOverlay.classList.add('hidden');
+            input.disabled = false;
+            input.focus();
+            isPlaying = true;
+            score = 0;
+            scoreEl.innerText = score;
+            enemies = [];
+            lasers = [];
+            gameArea.querySelectorAll('.enemy-ship, .laser').forEach(e => e.remove());
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+            spawnIntervalId = setInterval(spawnEnemy, spawnRate);
+        }
+
+        function spawnEnemy() {
+            if(!isPlaying) return;
+            const wordPair = dict[Math.floor(Math.random() * dict.length)];
+
+            const el = document.createElement('div');
+            el.className = 'enemy-ship absolute text-center bg-red-900/50 border border-red-500 text-red-100 px-3 py-1 rounded text-sm font-mono';
+            el.innerText = wordPair.de;
+
+            // Random X position
+            const w = gameArea.clientWidth;
+            const x = Math.max(10, Math.min(Math.random() * w, w - 100));
+
+            el.style.left = x + 'px';
+            el.style.top = '0px';
+
+            gameArea.appendChild(el);
+
+            enemies.push({
+                el: el,
+                de: wordPair.de,
+                en: wordPair.en,
+                x: x,
+                y: 0
+            });
+        }
+
+        function shootLaser(targetEnemy) {
+            const base = gameArea.querySelector('.base');
+            const baseX = base.offsetLeft + base.offsetWidth / 2;
+            const baseY = gameArea.clientHeight - base.offsetHeight;
+
+            const el = document.createElement('div');
+            el.className = 'laser';
+            el.style.left = baseX + 'px';
+            el.style.top = baseY + 'px';
+            gameArea.appendChild(el);
+
+            lasers.push({
+                el: el,
+                x: baseX,
+                y: baseY,
+                target: targetEnemy
+            });
+
+            // Immediately mark enemy as destroyed so it can't be targeted again
+            targetEnemy.destroyed = true;
+        }
+
+        input.addEventListener('input', (e) => {
+            if(!isPlaying) return;
+            const val = e.target.value.toLowerCase().trim();
+
+            // Find active enemy matching translation
+            const target = enemies.find(en => !en.destroyed && en.en === val);
+
+            if (target) {
+                shootLaser(target);
+                input.value = ''; // clear input
+                score += 10;
+                scoreEl.innerText = score;
+
+                // Increase difficulty slightly
+                if(score % 50 === 0) {
+                    enemySpeed += 0.1;
+                    clearInterval(spawnIntervalId);
+                    spawnRate = Math.max(1000, spawnRate - 200);
+                    spawnIntervalId = setInterval(spawnEnemy, spawnRate);
+                }
+            }
+        });
+
+        function gameLoop() {
+            if(!isPlaying) return;
+
+            const h = gameArea.clientHeight;
+
+            // Move enemies
+            for(let i = enemies.length -1; i >= 0; i--) {
+                const en = enemies[i];
+                if(!en.destroyed) {
+                    en.y += enemySpeed;
+                    en.el.style.top = en.y + 'px';
+
+                    if(en.y > h - 40) { // Hit base
+                        gameOver();
+                        return;
+                    }
+                }
+            }
+
+            // Move lasers
+            for(let i = lasers.length -1; i >= 0; i--) {
+                const l = lasers[i];
+                const target = l.target;
+
+                // Simple homing logic
+                const dx = (target.x + target.el.offsetWidth/2) - l.x;
+                const dy = target.y - l.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+
+                if (dist < 20) {
+                    // Hit
+                    target.el.remove();
+                    enemies = enemies.filter(e => e !== target);
+                    l.el.remove();
+                    lasers.splice(i, 1);
+                } else {
+                    const speed = 10;
+                    l.x += (dx/dist) * speed;
+                    l.y += (dy/dist) * speed;
+                    l.el.style.left = l.x + 'px';
+                    l.el.style.top = l.y + 'px';
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(gameLoopId);
+            clearInterval(spawnIntervalId);
+            input.disabled = true;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        startBtn.addEventListener('click', startGame);
+
+        // Keep focus on input
+        document.addEventListener('click', () => {
+            if(isPlaying) input.focus();
+        });
+    </script>
+</body>
+</html>

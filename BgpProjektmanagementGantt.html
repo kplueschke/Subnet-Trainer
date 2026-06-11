@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .gantt-grid {
@@ -67,10 +68,10 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Projektmanagement-Gantt-Bauer
             </h1>
-            <p class="mt-4 text-slate-400">Ordne die Projektphasen zeitlich so an, dass logische Abhängigkeiten (Kritischer Pfad) nicht verletzt werden.</p>
+            <p class="mt-4 text-slate-300">Ordne die Projektphasen zeitlich so an, dass logische Abhängigkeiten (Kritischer Pfad) nicht verletzt werden.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-6 mb-8 border border-orange-500/30">
+        <div class="glass-card rounded-3xl p-6 mb-8 border border-orange-500/30">
             <h3 class="text-xl font-bold mb-2 text-indigo-300">Projektbeschreibung: "Neues Firmen-Intranet"</h3>
             <p class="text-sm text-slate-300">
                 Ordne die Phasen im Gantt-Diagramm an (Klick auf die Kästchen, um Wochen zu markieren).<br><br>
@@ -82,7 +83,7 @@
             </p>
         </div>
 
-        <div class="glass-card rounded-2xl p-6 overflow-x-auto">
+        <div class="glass-card rounded-3xl p-6 overflow-x-auto">
             <div class="gantt-grid w-full min-w-[800px] border border-slate-700 rounded-lg overflow-hidden" id="gantt">
                 <!-- Header Row -->
                 <div class="gantt-cell gantt-header">Projektphase</div>

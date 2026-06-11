@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .snippet {
@@ -61,7 +62,7 @@
                     <span class="text-yellow-400">🧩</span> Code-Snippet-Puzzle
                 </h1>
             </div>
-            <div class="text-sm text-slate-400">Algorithmus-Training</div>
+            <div class="text-sm text-slate-300">Algorithmus-Training</div>
         </div>
     </header>
 
@@ -69,10 +70,10 @@
     <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
 
         <!-- Controls -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="glass-card rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <h2 class="text-xl font-bold text-white mb-1">Aufgabe: Bubble Sort</h2>
-                <p class="text-sm text-slate-400">Bringe die Codezeilen in die richtige Reihenfolge, um ein C#-Array zu sortieren.</p>
+                <p class="text-sm text-slate-300">Bringe die Codezeilen in die richtige Reihenfolge, um ein C#-Array zu sortieren.</p>
             </div>
             <div class="flex gap-3">
                 <button id="checkBtn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-yellow-600/20">
@@ -91,7 +92,7 @@
         </div>
 
         <!-- Puzzle Container -->
-        <div class="glass-card rounded-2xl p-6 bg-[#0d1117] border-slate-700">
+        <div class="glass-card rounded-3xl p-6 bg-[#0d1117] border-slate-700">
             <div class="text-sm text-slate-500 mono mb-4 border-b border-slate-800 pb-2">
                 <span class="text-blue-400">void</span> <span class="text-yellow-200">BubbleSort</span>(<span class="text-blue-400">int</span>[] arr)<br>{
             </div>
