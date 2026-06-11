@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation Rhythm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #track { height: 60vh; background: #1e293b; border-radius: 1rem; position: relative; overflow: hidden; border: 2px solid #334155; }
+        .target-line { position: absolute; left: 100px; top: 0; bottom: 0; width: 4px; background: #818cf8; box-shadow: 0 0 15px #818cf8; z-index: 10; }
+        .note { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2rem; font-family: 'Fira Code', monospace; color: #94a3b8; display: flex; transition: color 0.2s; white-space: nowrap; }
+        .syllable { margin: 0 2px; }
+        .syllable.stressed { color: #f8fafc; font-weight: bold; position: relative; }
+        .syllable.stressed::after { content: ''; position: absolute; bottom: -5px; left: 0; right: 0; height: 3px; background: #fbbf24; border-radius: 2px; }
+        .feedback { position: absolute; left: 100px; top: 20%; transform: translate(-50%, -50%); font-size: 2rem; font-weight: bold; opacity: 0; pointer-events: none; }
+        .feedback.show { animation: popOut 0.5s forwards; }
+        @keyframes popOut { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 50% { transform: translate(-50%, -70%) scale(1.2); opacity: 1; } 100% { transform: translate(-50%, -100%) scale(1); opacity: 0; } }
+        .hit-effect { position: absolute; left: 100px; top: 0; bottom: 0; width: 4px; background: white; opacity: 0; pointer-events: none; z-index: 11; }
+        .hit-effect.active { animation: flash 0.2s; }
+        @keyframes flash { 0% { opacity: 0.8; box-shadow: 0 0 20px white; } 100% { opacity: 0; box-shadow: none; } }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col relative z-10">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Pronunciation Rhythm</h1>
+            <div class="flex gap-4">
+                <div class="text-lg font-mono">Combo: <span id="combo" class="text-indigo-400">0</span></div>
+                <div class="text-lg font-mono">Score: <span id="score" class="text-yellow-400">0</span></div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 flex-grow flex flex-col relative">
+            <p class="text-slate-400 text-center mb-4 text-sm">Drücke die <span class="text-indigo-400 font-bold">Leertaste</span>, wenn die <span class="text-yellow-400 font-bold">betonte Silbe</span> die Ziellinie überquert!</p>
+
+            <div id="track">
+                <div class="target-line"></div>
+                <div class="hit-effect" id="hit-effect"></div>
+                <div class="feedback" id="feedback">PERFECT!</div>
+                <!-- Notes will spawn here -->
+
+                <div id="start-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+                    <button id="start-btn" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors">Start Track</button>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button id="hit-btn" class="px-12 py-4 bg-slate-700 hover:bg-slate-600 active:bg-indigo-600 border-b-4 border-slate-800 active:border-indigo-800 text-white font-bold rounded-xl transition-colors md:hidden">HIT (Space)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // syllables array, stressedIndex is 0-based
+        const dictionary = [
+            { word: "develop", syllables: ["de", "VEL", "op"], stressed: 1 },
+            { word: "parameter", syllables: ["pa", "RAM", "e", "ter"], stressed: 1 },
+            { word: "execute", syllables: ["EX", "e", "cute"], stressed: 0 },
+            { word: "component", syllables: ["com", "PO", "nent"], stressed: 1 },
+            { word: "architecture", syllables: ["AR", "chi", "tec", "ture"], stressed: 0 },
+            { word: "variable", syllables: ["VAR", "i", "a", "ble"], stressed: 0 },
+            { word: "inheritance", syllables: ["in", "HER", "i", "tance"], stressed: 1 },
+            { word: "database", syllables: ["DA", "ta", "base"], stressed: 0 },
+            { word: "analysis", syllables: ["a", "NAL", "y", "sis"], stressed: 1 }
+        ];
+
+        const track = document.getElementById('track');
+        const scoreEl = document.getElementById('score');
+        const comboEl = document.getElementById('combo');
+        const feedbackEl = document.getElementById('feedback');
+        const hitEffect = document.getElementById('hit-effect');
+        const startBtn = document.getElementById('start-btn');
+        const startOverlay = document.getElementById('start-overlay');
+        const hitBtn = document.getElementById('hit-btn');
+
+        const targetX = 100; // X coordinate of the target line
+        const hitWindow = 40; // Pixels leeway (+/-)
+
+        let isPlaying = false;
+        let score = 0;
+        let combo = 0;
+        let activeNotes = [];
+        let gameLoopId;
+        let speed = 3; // px per frame
+        let spawnRate = 2500;
+        let lastSpawn = 0;
+
+        function startGame() {
+            startOverlay.classList.add('hidden');
+            isPlaying = true;
+            score = 0;
+            combo = 0;
+            updateStats();
+            activeNotes.forEach(n => n.el.remove());
+            activeNotes = [];
+            lastSpawn = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnNote() {
+            const data = dictionary[Math.floor(Math.random() * dictionary.length)];
+            const el = document.createElement('div');
+            el.className = 'note';
+
+            // Build syllable DOM
+            data.syllables.forEach((syl, idx) => {
+                const span = document.createElement('span');
+                span.className = 'syllable ' + (idx === data.stressed ? 'stressed' : '');
+                span.innerText = syl;
+                el.appendChild(span);
+            });
+
+            const startX = track.clientWidth + 50;
+            el.style.left = startX + 'px';
+            track.appendChild(el);
+
+            activeNotes.push({
+                el: el,
+                x: startX,
+                data: data,
+                hit: false,
+                passed: false
+            });
+        }
+
+        function handleHit() {
+            if(!isPlaying) return;
+
+            hitEffect.classList.remove('active');
+            void hitEffect.offsetWidth; // trigger reflow
+            hitEffect.classList.add('active');
+
+            let hitSomething = false;
+
+            for(let i=0; i<activeNotes.length; i++) {
+                const n = activeNotes[i];
+                if(n.hit || n.passed) continue;
+
+                // Find center of the stressed syllable
+                const stressedSpan = n.el.children[n.data.stressed];
+                const spanRect = stressedSpan.getBoundingClientRect();
+                const trackRect = track.getBoundingClientRect();
+
+                // Calculate position relative to track
+                const stressedCenter = (spanRect.left - trackRect.left) + (spanRect.width / 2);
+
+                const dist = Math.abs(stressedCenter - targetX);
+
+                if (dist <= hitWindow) {
+                    // HIT
+                    hitSomething = true;
+                    n.hit = true;
+                    combo++;
+
+                    let points = 0;
+                    if(dist < hitWindow / 3) {
+                        showFeedback("PERFECT!", "#22c55e");
+                        points = 30;
+                    } else if(dist < hitWindow * 0.6) {
+                        showFeedback("GREAT", "#3b82f6");
+                        points = 20;
+                    } else {
+                        showFeedback("GOOD", "#eab308");
+                        points = 10;
+                    }
+
+                    score += points * Math.max(1, Math.floor(combo/5));
+                    n.el.style.color = "#4ade80"; // Turn word green
+                    n.el.style.transform = "translateY(-50%) scale(1.1)";
+                    updateStats();
+                    break; // only hit one note per press
+                }
+            }
+
+            if(!hitSomething) {
+                // MISS (Pressed too early/late when no note is near)
+                breakCombo();
+            }
+        }
+
+        function breakCombo() {
+            combo = 0;
+            updateStats();
+            showFeedback("MISS", "#ef4444");
+        }
+
+        function showFeedback(text, color) {
+            feedbackEl.innerText = text;
+            feedbackEl.style.color = color;
+            feedbackEl.classList.remove('show');
+            void feedbackEl.offsetWidth;
+            feedbackEl.classList.add('show');
+        }
+
+        function updateStats() {
+            scoreEl.innerText = score;
+            comboEl.innerText = combo;
+
+            if(combo > 10) speed = 5;
+            else if(combo > 5) speed = 4;
+            else speed = 3;
+        }
+
+        function gameLoop(timestamp) {
+            if(!isPlaying) return;
+
+            if (timestamp - lastSpawn > spawnRate) {
+                spawnNote();
+                lastSpawn = timestamp;
+            }
+
+            for(let i=0; i<activeNotes.length; i++) {
+                const n = activeNotes[i];
+                n.x -= speed;
+                n.el.style.left = n.x + 'px';
+
+                // Check if passed without hitting
+                if(!n.hit && !n.passed) {
+                    const stressedSpan = n.el.children[n.data.stressed];
+                    const spanRect = stressedSpan.getBoundingClientRect();
+                    const trackRect = track.getBoundingClientRect();
+                    const stressedRight = (spanRect.right - trackRect.left);
+
+                    if (stressedRight < targetX - hitWindow) {
+                        n.passed = true;
+                        n.el.style.color = "#ef4444";
+                        breakCombo();
+                    }
+                }
+
+                // Cleanup
+                if (n.x < -200) {
+                    n.el.remove();
+                    activeNotes.splice(i, 1);
+                    i--;
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.code === 'Space') {
+                e.preventDefault();
+                handleHit();
+            }
+        });
+
+        hitBtn.addEventListener('click', handleHit);
+        startBtn.addEventListener('click', startGame);
+
+    </script>
+</body>
+</html>

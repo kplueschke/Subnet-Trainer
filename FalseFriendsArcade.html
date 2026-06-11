@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"False Friends"-Arcade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #game-area { position: relative; height: 60vh; width: 100%; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); background: rgba(15, 23, 42, 0.5); }
+        .falling-word { position: absolute; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.5rem; color: white; font-weight: bold; cursor: pointer; user-select: none; transition: transform 0.1s; }
+        .falling-word:active { transform: scale(0.95); }
+        .bucket { position: absolute; bottom: 0; width: 50%; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; border-top: 2px solid rgba(255,255,255,0.2); }
+        #bucket-false { left: 0; background: linear-gradient(to top, rgba(239, 68, 68, 0.2), transparent); border-right: 1px solid rgba(255,255,255,0.1); }
+        #bucket-true { right: 0; background: linear-gradient(to top, rgba(34, 197, 94, 0.2), transparent); border-left: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">"False Friends"-Arcade</h1>
+            <div class="text-xl font-mono">Score: <span id="score" class="text-indigo-400">0</span></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 mb-6 flex-grow flex flex-col">
+            <p class="text-slate-400 mb-4 text-center">Tippe auf das fallende Wort und sortiere es: Ist die Übersetzung ein <span class="text-red-400 font-bold">False Friend</span> (Falscher Freund) oder eine <span class="text-green-400 font-bold">True Cognate</span> (Echte Verwandtschaft)? Beeile dich!</p>
+
+            <div class="flex justify-center mb-4 gap-4">
+                <button id="start-btn" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors">Start Game</button>
+            </div>
+
+            <div id="game-area" class="flex-grow">
+                <div id="bucket-false" class="bucket">False Friend (A)</div>
+                <div id="bucket-true" class="bucket">True Cognate (D)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { en: "actual", de: "tatsächlich (nicht aktuell)", isFalse: true },
+            { en: "become", de: "werden (nicht bekommen)", isFalse: true },
+            { en: "fabric", de: "Stoff (nicht Fabrik)", isFalse: true },
+            { en: "gift", de: "Geschenk (nicht Gift)", isFalse: true },
+            { en: "brave", de: "mutig (nicht brav)", isFalse: true },
+            { en: "system", de: "System", isFalse: false },
+            { en: "computer", de: "Computer", isFalse: false },
+            { en: "digital", de: "digital", isFalse: false },
+            { en: "logic", de: "Logik", isFalse: false },
+            { en: "network", de: "Netzwerk", isFalse: false }
+        ];
+
+        const gameArea = document.getElementById('game-area');
+        const scoreEl = document.getElementById('score');
+        const startBtn = document.getElementById('start-btn');
+        let score = 0;
+        let gameInterval;
+        let activeWords = [];
+        let isPlaying = false;
+        let spawnRate = 2000;
+        let fallSpeed = 1;
+
+        function startGame() {
+            if (isPlaying) return;
+            isPlaying = true;
+            score = 0;
+            scoreEl.innerText = score;
+            spawnRate = 2000;
+            fallSpeed = 1;
+            activeWords.forEach(w => w.el.remove());
+            activeWords = [];
+            startBtn.disabled = true;
+            startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            gameInterval = setInterval(spawnWord, spawnRate);
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnWord() {
+            if (!isPlaying) return;
+            const wordData = words[Math.floor(Math.random() * words.length)];
+            const el = document.createElement('div');
+            el.className = 'falling-word';
+            el.innerText = wordData.en;
+
+            // Random horizontal position, but keep it within bounds
+            const maxX = gameArea.clientWidth - 100; // approx width
+            const startX = Math.max(0, Math.min(Math.random() * gameArea.clientWidth, maxX));
+
+            el.style.left = startX + 'px';
+            el.style.top = '0px';
+
+            gameArea.appendChild(el);
+
+            const wordObj = { el, data: wordData, y: 0, x: startX };
+            activeWords.push(wordObj);
+
+            // Click handling for mobile/mouse
+            el.onclick = () => {
+                if(!isPlaying) return;
+                wordObj.selected = true;
+                el.style.borderColor = '#6366f1';
+                el.style.boxShadow = '0 0 10px #6366f1';
+            };
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!isPlaying) return;
+            const selectedWord = activeWords.find(w => w.selected);
+            if (!selectedWord) return;
+
+            if (e.key.toLowerCase() === 'a') {
+                checkWord(selectedWord, true);
+            } else if (e.key.toLowerCase() === 'd') {
+                checkWord(selectedWord, false);
+            }
+        });
+
+        function checkWord(wordObj, userSaysFalse) {
+            if (wordObj.data.isFalse === userSaysFalse) {
+                score += 10;
+                showFeedback(wordObj, "Correct!", "#22c55e");
+                // Increase difficulty
+                if(score % 50 === 0) {
+                    fallSpeed += 0.5;
+                    clearInterval(gameInterval);
+                    spawnRate = Math.max(500, spawnRate - 200);
+                    gameInterval = setInterval(spawnWord, spawnRate);
+                }
+            } else {
+                score = Math.max(0, score - 5);
+                showFeedback(wordObj, "Wrong!", "#ef4444");
+            }
+            scoreEl.innerText = score;
+            wordObj.el.remove();
+            activeWords = activeWords.filter(w => w !== wordObj);
+        }
+
+        function showFeedback(wordObj, text, color) {
+            const feedback = document.createElement('div');
+            feedback.innerText = text;
+            feedback.style.position = 'absolute';
+            feedback.style.left = wordObj.x + 'px';
+            feedback.style.top = wordObj.y + 'px';
+            feedback.style.color = color;
+            feedback.style.fontWeight = 'bold';
+            feedback.style.transition = 'all 0.5s';
+            gameArea.appendChild(feedback);
+
+            setTimeout(() => {
+                feedback.style.top = (wordObj.y - 20) + 'px';
+                feedback.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => feedback.remove(), 500);
+        }
+
+        function gameLoop() {
+            if (!isPlaying) return;
+            const bucketHeight = 100;
+            const gameHeight = gameArea.clientHeight;
+
+            for (let i = activeWords.length - 1; i >= 0; i--) {
+                const w = activeWords[i];
+                w.y += fallSpeed;
+                w.el.style.top = w.y + 'px';
+
+                if (w.y > gameHeight - bucketHeight - 30) {
+                    // Touched the buckets without sorting
+                    score = Math.max(0, score - 5);
+                    scoreEl.innerText = score;
+                    w.el.remove();
+                    activeWords.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        startBtn.addEventListener('click', startGame);
+    </script>
+</body>
+</html>

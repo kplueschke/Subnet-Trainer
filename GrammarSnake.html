@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Snake</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; overflow: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        #game-canvas { background-color: #1e293b; border-radius: 0.5rem; display: block; margin: 0 auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col relative z-10">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Zurück
+            </a>
+            <h1 class="text-2xl font-bold text-white">Grammar Snake</h1>
+            <div class="text-xl font-mono">Score: <span id="score" class="text-lime-400">0</span></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 mb-4 flex-grow flex flex-col">
+            <p class="text-slate-400 mb-4 text-center">Steuere die Schlange (Pfeiltasten). Friss die Wörter in der <span class="text-lime-400 font-bold">richtigen Reihenfolge</span>, um den englischen Satz zu bilden.</p>
+
+            <div class="bg-slate-900 rounded-xl p-3 mb-4 text-center min-h-[50px] flex items-center justify-center border border-slate-700">
+                <span id="current-sentence" class="text-xl font-mono text-white"></span>
+            </div>
+
+            <div class="relative flex-grow flex justify-center items-center">
+                <canvas id="game-canvas" width="600" height="400"></canvas>
+
+                <div id="start-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-xl z-20" style="width: 600px; height: 400px; margin: 0 auto;">
+                    <h2 class="text-3xl font-bold text-white mb-4">Grammar Snake</h2>
+                    <button id="start-btn" class="px-8 py-3 bg-lime-600 hover:bg-lime-500 text-white font-bold rounded-xl transition-colors">Start Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sentences = [
+            ["The", "server", "was", "rebooted", "successfully."],
+            ["Data", "is", "transmitted", "over", "the", "network."],
+            ["A", "new", "patch", "has", "been", "deployed."],
+            ["Bugs", "are", "fixed", "by", "the", "developers."],
+            ["The", "database", "will", "be", "migrated", "tomorrow."]
+        ];
+
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const sentenceEl = document.getElementById('current-sentence');
+        const startBtn = document.getElementById('start-btn');
+        const startOverlay = document.getElementById('start-overlay');
+
+        const gridSize = 20;
+        const width = canvas.width;
+        const height = canvas.height;
+
+        let snake = [];
+        let dx = gridSize;
+        let dy = 0;
+        let foodItems = []; // Array of {x, y, word, index}
+        let currentSentenceArr = [];
+        let targetWordIndex = 0;
+        let collectedWords = [];
+        let score = 0;
+        let gameLoopId;
+        let isPlaying = false;
+        let speed = 150;
+
+        function initGame() {
+            snake = [
+                {x: 160, y: 200},
+                {x: 140, y: 200},
+                {x: 120, y: 200}
+            ];
+            dx = gridSize;
+            dy = 0;
+            score = 0;
+            speed = 150;
+            scoreEl.innerText = score;
+            collectedWords = [];
+            targetWordIndex = 0;
+            loadNewSentence();
+        }
+
+        function loadNewSentence() {
+            const r = Math.floor(Math.random() * sentences.length);
+            currentSentenceArr = [...sentences[r]];
+            targetWordIndex = 0;
+            collectedWords = [];
+            updateSentenceDisplay();
+            spawnFood();
+        }
+
+        function updateSentenceDisplay() {
+            let displayStr = collectedWords.join(" ") + " ";
+            // Show target word hint as greyed out
+            if (targetWordIndex < currentSentenceArr.length) {
+                displayStr += `<span class="text-slate-600">___ (${currentSentenceArr[targetWordIndex]})</span>`;
+            }
+            sentenceEl.innerHTML = displayStr;
+        }
+
+        function spawnFood() {
+            foodItems = [];
+            // Spawn the correct word and a few wrong ones (from other sentences)
+            const targetWord = currentSentenceArr[targetWordIndex];
+
+            // Add correct word
+            addFoodItem(targetWord, true);
+
+            // Add 2 random decoy words
+            for(let i=0; i<2; i++) {
+                const randomSent = sentences[Math.floor(Math.random()*sentences.length)];
+                const randomWord = randomSent[Math.floor(Math.random()*randomSent.length)];
+                if(randomWord !== targetWord) {
+                    addFoodItem(randomWord, false);
+                }
+            }
+        }
+
+        function addFoodItem(word, isCorrect) {
+            let x, y, valid;
+            do {
+                valid = true;
+                x = Math.floor(Math.random() * ((width-60) / gridSize)) * gridSize + 30; // keep away from edges
+                y = Math.floor(Math.random() * ((height-40) / gridSize)) * gridSize + 20;
+
+                // check collision with snake
+                for (let s of snake) {
+                    if (s.x === x && s.y === y) valid = false;
+                }
+                // check collision with other food (approximate width based on word length)
+                for (let f of foodItems) {
+                    if (Math.abs(f.x - x) < 60 && Math.abs(f.y - y) < 20) valid = false;
+                }
+            } while (!valid);
+
+            foodItems.push({x, y, word, isCorrect});
+        }
+
+        function main() {
+            if (!isPlaying) return;
+            setTimeout(function() {
+                requestAnimationFrame(main);
+                clearCanvas();
+                moveSnake();
+                checkFoodCollision();
+                drawFood();
+                drawSnake();
+            }, speed);
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        function drawSnake() {
+            snake.forEach((part, index) => {
+                ctx.fillStyle = index === 0 ? '#84cc16' : '#a3e635'; // head vs body
+                ctx.fillRect(part.x, part.y, gridSize, gridSize);
+                ctx.strokeStyle = '#3f6212';
+                ctx.strokeRect(part.x, part.y, gridSize, gridSize);
+            });
+        }
+
+        function moveSnake() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+            // Wall collision (wrap around or die? Let's wrap around for easier gameplay)
+            if (head.x >= width) head.x = 0;
+            else if (head.x < 0) head.x = width - gridSize;
+            if (head.y >= height) head.y = 0;
+            else if (head.y < 0) head.y = height - gridSize;
+
+            // Self collision
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            snake.unshift(head);
+            // We only pop if we didn't eat food this tick (handled in checkFoodCollision)
+            let ate = false;
+            // The actual pop logic is managed based on the food check
+        }
+
+        function checkFoodCollision() {
+            const head = snake[0];
+            let ateIndex = -1;
+
+            // Check collision with words. Words are drawn wider than 1 grid cell.
+            for (let i = 0; i < foodItems.length; i++) {
+                const f = foodItems[i];
+                ctx.font = "14px 'Fira Code'";
+                const textWidth = ctx.measureText(f.word).width;
+
+                // Simple AABB collision (head rect vs text rect)
+                if (head.x < f.x + textWidth &&
+                    head.x + gridSize > f.x &&
+                    head.y < f.y + 10 && // text approx height above y
+                    head.y + gridSize > f.y - 14) {
+                    ateIndex = i;
+                    break;
+                }
+            }
+
+            if (ateIndex !== -1) {
+                const eaten = foodItems[ateIndex];
+                if (eaten.isCorrect) {
+                    // Correct!
+                    score += 10;
+                    scoreEl.innerText = score;
+                    collectedWords.push(eaten.word);
+                    targetWordIndex++;
+
+                    if (targetWordIndex >= currentSentenceArr.length) {
+                        // Sentence complete
+                        score += 50;
+                        scoreEl.innerText = score;
+                        loadNewSentence();
+                        speed = Math.max(50, speed - 10); // speed up
+                    } else {
+                        spawnFood();
+                    }
+                    // Snake grows (we don't pop)
+                } else {
+                    // Wrong word!
+                    score = Math.max(0, score - 5);
+                    scoreEl.innerText = score;
+                    // Shrink or visual penalty
+                    snake.pop(); // pop twice to shrink
+                    if(snake.length < 2) {
+                        gameOver();
+                        return;
+                    }
+                    snake.pop();
+                    spawnFood(); // respawn same target
+                }
+            } else {
+                snake.pop(); // normal movement
+            }
+        }
+
+        function drawFood() {
+            foodItems.forEach(f => {
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = "bold 16px 'Fira Code'";
+                ctx.fillText(f.word, f.x, f.y);
+            });
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            ctx.fillStyle = "rgba(0,0,0,0.7)";
+            ctx.fillRect(0,0,width,height);
+            ctx.fillStyle = "white";
+            ctx.font = "30px Inter";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Over!", width/2, height/2 - 20);
+            ctx.font = "20px Inter";
+            ctx.fillText(`Score: ${score}`, width/2, height/2 + 20);
+
+            setTimeout(() => {
+                startOverlay.classList.remove('hidden');
+                startBtn.innerText = "Play Again";
+            }, 1000);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if(!isPlaying) return;
+            // Prevent scrolling with arrows
+            if([37, 38, 39, 40].includes(e.keyCode)) e.preventDefault();
+
+            const goingUp = dy === -gridSize;
+            const goingDown = dy === gridSize;
+            const goingRight = dx === gridSize;
+            const goingLeft = dx === -gridSize;
+
+            if (e.key === 'ArrowLeft' && !goingRight) { dx = -gridSize; dy = 0; }
+            if (e.key === 'ArrowUp' && !goingDown) { dx = 0; dy = -gridSize; }
+            if (e.key === 'ArrowRight' && !goingLeft) { dx = gridSize; dy = 0; }
+            if (e.key === 'ArrowDown' && !goingUp) { dx = 0; dy = gridSize; }
+        });
+
+        startBtn.addEventListener('click', () => {
+            startOverlay.classList.add('hidden');
+            ctx.textAlign = "left"; // reset
+            initGame();
+            isPlaying = true;
+            main();
+        });
+
+    </script>
+</body>
+</html>
