@@ -19,11 +19,12 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .factor-btn {
@@ -54,13 +55,13 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Betriebswirtschaftliche Produktionsfaktoren
             </h1>
-            <p class="mt-4 text-slate-400">Interaktive Übersicht nach Gutenberg. Klicke auf die Elemente im Menü, um Details und Beispiele zu sehen.</p>
+            <p class="mt-4 text-slate-300">Interaktive Übersicht nach Gutenberg. Klicke auf die Elemente im Menü, um Details und Beispiele zu sehen.</p>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-6 flex-grow">
 
             <!-- Navigation -->
-            <div class="glass-card rounded-2xl p-6 lg:col-span-1 h-fit">
+            <div class="glass-card rounded-3xl p-6 lg:col-span-1 h-fit">
                 <h3 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Kategorien</h3>
 
                 <div class="space-y-2">
@@ -87,7 +88,7 @@
             </div>
 
             <!-- Content Area -->
-            <div class="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col relative min-h-[500px]">
+            <div class="glass-card rounded-3xl p-6 lg:col-span-2 flex flex-col relative min-h-[500px]">
                 <div id="content-area" class="flex-grow">
                     <!-- Default: Tree Diagram -->
                     <div id="view-all" class="w-full h-full flex flex-col">
@@ -198,7 +199,7 @@
                     subContainer.innerHTML += `
                         <div class="bg-slate-900 p-4 rounded border border-slate-700">
                             <h5 class="font-bold text-indigo-300 mb-1">📌 ${s.title}</h5>
-                            <p class="text-sm text-slate-400">${s.desc}</p>
+                            <p class="text-sm text-slate-300">${s.desc}</p>
                         </div>
                     `;
                 });

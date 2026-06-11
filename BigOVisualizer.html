@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
@@ -84,7 +85,7 @@
                     <span class="text-red-400">📈</span> Big-O-Visualizer
                 </h1>
             </div>
-            <div class="text-sm text-slate-400">Zeitkomplexität</div>
+            <div class="text-sm text-slate-300">Zeitkomplexität</div>
         </div>
     </header>
 
@@ -92,7 +93,7 @@
     <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
 
         <!-- Controls -->
-        <div class="glass-card rounded-2xl p-6">
+        <div class="glass-card rounded-3xl p-6">
             <div class="flex flex-col md:flex-row items-center gap-6">
                 <div class="w-full md:w-2/3">
                     <div class="flex justify-between items-center mb-2">
@@ -130,9 +131,9 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <!-- O(log n) -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex flex-col">
                 <h3 class="text-lg font-bold text-blue-400 mb-1">O(log n)</h3>
-                <p class="text-xs text-slate-400 mb-4 h-8">Logarithmisch. Z.B. Binary Search. Extrem effizient bei großen Daten.</p>
+                <p class="text-xs text-slate-300 mb-4 h-8">Logarithmisch. Z.B. Binary Search. Extrem effizient bei großen Daten.</p>
                 <div class="relative flex-grow">
                     <div class="absolute -left-2 -top-2 text-xs text-slate-500">Ops</div>
                     <div id="chartLogN" class="bar-container w-full">
@@ -143,9 +144,9 @@
             </div>
 
             <!-- O(n) -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex flex-col">
                 <h3 class="text-lg font-bold text-green-400 mb-1">O(n)</h3>
-                <p class="text-xs text-slate-400 mb-4 h-8">Linear. Z.B. Einfache for-Schleife. Wächst proportional zur Eingabe.</p>
+                <p class="text-xs text-slate-300 mb-4 h-8">Linear. Z.B. Einfache for-Schleife. Wächst proportional zur Eingabe.</p>
                 <div class="relative flex-grow">
                     <div id="chartN" class="bar-container w-full">
                         <!-- Bars injected via JS -->
@@ -155,9 +156,9 @@
             </div>
 
             <!-- O(n^2) -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex flex-col">
                 <h3 class="text-lg font-bold text-red-400 mb-1">O(n²)</h3>
-                <p class="text-xs text-slate-400 mb-4 h-8">Quadratisch. Z.B. Bubble Sort (verschachtelte Schleifen). Schlecht skalierbar.</p>
+                <p class="text-xs text-slate-300 mb-4 h-8">Quadratisch. Z.B. Bubble Sort (verschachtelte Schleifen). Schlecht skalierbar.</p>
                 <div class="relative flex-grow">
                     <div id="chartN2" class="bar-container w-full">
                         <!-- Bars injected via JS -->

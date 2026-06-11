@@ -11,14 +11,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .pattern-block {
@@ -53,7 +54,7 @@
                     <span class="text-purple-400">📐</span> Design-Pattern-Matcher
                 </h1>
             </div>
-            <div class="text-sm text-slate-400">Architektur-Training</div>
+            <div class="text-sm text-slate-300">Architektur-Training</div>
         </div>
     </header>
 
@@ -63,9 +64,9 @@
         <!-- Left: Scenarios & Check -->
         <div class="w-full lg:w-1/2 flex flex-col gap-6">
 
-            <div class="glass-card rounded-2xl p-6">
+            <div class="glass-card rounded-3xl p-6">
                 <h2 class="text-xl font-bold text-white mb-2">Szenarien</h2>
-                <p class="text-sm text-slate-400 mb-6">Wähle unten ein Entwurfsmuster (Pattern) aus und klicke auf das passende Szenario, um sie zuzuordnen.</p>
+                <p class="text-sm text-slate-300 mb-6">Wähle unten ein Entwurfsmuster (Pattern) aus und klicke auf das passende Szenario, um sie zuzuordnen.</p>
 
                 <div id="scenariosContainer" class="space-y-4">
                     <!-- Scenarios injected via JS -->
@@ -79,7 +80,7 @@
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6">
+            <div class="glass-card rounded-3xl p-6">
                 <h2 class="text-lg font-bold text-white mb-4">Verfügbare Patterns</h2>
                 <div id="patternsContainer" class="grid grid-cols-2 gap-3">
                     <!-- Patterns injected via JS -->
@@ -90,12 +91,12 @@
 
         <!-- Right: UML Visualization -->
         <div class="w-full lg:w-1/2 flex flex-col">
-            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col border-slate-700 bg-slate-800/30">
+            <div class="glass-card rounded-3xl p-6 flex-grow flex flex-col border-slate-700 bg-slate-800/30">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
                     UML-Struktur (Vorschau)
                 </h2>
-                <div id="umlContainer" class="flex-grow flex items-center justify-center bg-slate-900 rounded-xl border border-slate-700 p-4 overflow-auto text-slate-400 text-sm italic">
+                <div id="umlContainer" class="flex-grow flex items-center justify-center bg-slate-900 rounded-xl border border-slate-700 p-4 overflow-auto text-slate-300 text-sm italic">
                     Wähle ein Pattern aus, um das Klassendiagramm zu sehen.
                 </div>
             </div>
@@ -164,7 +165,7 @@
                 el.dataset.id = s.id;
 
                 el.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-400 font-bold flex-shrink-0 border-2 border-slate-600 match-indicator">
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold flex-shrink-0 border-2 border-slate-600 match-indicator">
                         ?
                     </div>
                     <p class="text-sm text-slate-300 leading-relaxed pt-1">${s.text}</p>

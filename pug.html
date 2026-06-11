@@ -10,20 +10,21 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 20px -8px rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px) scale(1.01);
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
         }
     </style>
 </head>
@@ -37,14 +38,14 @@
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
-                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                 IT-Ausbildung Workspace
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
                 IT-Ausbildung Lernwerkzeuge
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-400 max-w-xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-xl mx-auto">
                 Lernwerkzeuge für PUG (Politik und Gesellschaft)
             </p>
         </div>
@@ -65,8 +66,8 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
             <!-- Empty State Card -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col justify-center items-center text-center group h-full min-h-[250px]">
-                <div class="w-12 h-12 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 text-xl font-bold mb-4 opacity-50">
+            <div class="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center group h-full min-h-[250px]">
+                <div class="w-12 h-12 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-300 text-xl font-bold mb-4 opacity-50">
                     ⏳
                 </div>
                 <h3 class="text-lg font-semibold text-slate-300 mb-2">In Planung</h3>
@@ -77,13 +78,6 @@
 
             </div>
         </section>
-
-        <!-- Tech Info Tag -->
-        <div class="mt-auto text-center pt-8">
-            <span class="mono text-xs text-slate-500 bg-slate-900/50 px-3 py-1.5 rounded-md border border-slate-800/60">
-                Lokal autonom • 100% Client-Side • HTML & CSS
-            </span>
-        </div>
 
     </div>
 

@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -31,7 +32,7 @@
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -43,7 +44,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600 mb-4">
                 PoE-Leistungsbudget-Rechner
             </h1>
-            <p class="text-slate-400 max-w-2xl mx-auto">
+            <p class="text-slate-300 max-w-2xl mx-auto">
                 Ermittle das benötigte Power over Ethernet (PoE) Budget für verschiedene IP-Kameras und finde den passenden IEEE-Standard für deinen Switch.
             </p>
         </div>
@@ -51,7 +52,7 @@
         <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto items-stretch">
 
             <!-- Device Selection -->
-            <div class="w-full lg:w-1/2 glass-card rounded-2xl p-6 flex flex-col">
+            <div class="w-full lg:w-1/2 glass-card rounded-3xl p-6 flex flex-col">
                 <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
                     <h2 class="text-xl font-bold text-white">Geräte hinzufügen</h2>
                     <span class="bg-slate-800 text-slate-300 text-xs px-2 py-1 rounded border border-slate-600 mono" id="device-count">0 Geräte</span>
@@ -62,7 +63,7 @@
                     <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
                         <div>
                             <div class="font-bold text-white flex items-center gap-2">📷 Standard IP-Kamera</div>
-                            <div class="text-xs text-slate-400 mt-1">Typischer Verbrauch: 5 Watt</div>
+                            <div class="text-xs text-slate-300 mt-1">Typischer Verbrauch: 5 Watt</div>
                         </div>
                         <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-std" data-power="5" data-name="Standard IP-Kamera">
                             + Hinzufügen
@@ -73,7 +74,7 @@
                     <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
                         <div>
                             <div class="font-bold text-white flex items-center gap-2">🔦 IR-Kamera (Nachtsicht)</div>
-                            <div class="text-xs text-slate-400 mt-1">Max. Verbrauch: 12 Watt</div>
+                            <div class="text-xs text-slate-300 mt-1">Max. Verbrauch: 12 Watt</div>
                         </div>
                         <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-ir" data-power="12" data-name="IR-Kamera">
                             + Hinzufügen
@@ -84,7 +85,7 @@
                     <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 flex justify-between items-center">
                         <div>
                             <div class="font-bold text-white flex items-center gap-2">🔄 PTZ-Kamera (Heizung)</div>
-                            <div class="text-xs text-slate-400 mt-1">Max. Verbrauch: 24 Watt</div>
+                            <div class="text-xs text-slate-300 mt-1">Max. Verbrauch: 24 Watt</div>
                         </div>
                         <button class="btn-add px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors" data-type="cam-ptz" data-power="24" data-name="PTZ-Kamera">
                             + Hinzufügen
@@ -92,7 +93,7 @@
                     </div>
                 </div>
 
-                <h3 class="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wider">Inventarliste</h3>
+                <h3 class="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Inventarliste</h3>
                 <div id="inventory-list" class="flex-grow bg-slate-900 rounded-xl p-4 border border-slate-700 overflow-y-auto max-h-[200px] flex flex-col gap-2">
                     <div class="text-center text-slate-500 text-sm mt-4 italic" id="empty-msg">Noch keine Geräte ausgewählt.</div>
                     <!-- Items added here -->
@@ -101,7 +102,7 @@
             </div>
 
             <!-- Analysis Dashboard -->
-            <div class="w-full lg:w-1/2 glass-card rounded-2xl p-6 flex flex-col">
+            <div class="w-full lg:w-1/2 glass-card rounded-3xl p-6 flex flex-col">
                 <h2 class="text-xl font-bold text-white mb-6 border-b border-slate-700 pb-4">Budget & Standards</h2>
 
                 <!-- Total Power -->
@@ -117,7 +118,7 @@
                     <div>
                         <div class="flex justify-between items-end mb-1">
                             <span class="font-bold text-white">PoE (802.3af)</span>
-                            <span class="text-xs text-slate-400">Max 15.4W pro Port</span>
+                            <span class="text-xs text-slate-300">Max 15.4W pro Port</span>
                         </div>
                         <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-slate-600 bar-transition w-0" id="bar-af"></div>
@@ -129,7 +130,7 @@
                     <div>
                         <div class="flex justify-between items-end mb-1">
                             <span class="font-bold text-white">PoE+ (802.3at)</span>
-                            <span class="text-xs text-slate-400">Max 30W pro Port</span>
+                            <span class="text-xs text-slate-300">Max 30W pro Port</span>
                         </div>
                         <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-slate-600 bar-transition w-0" id="bar-at"></div>
@@ -141,7 +142,7 @@
                     <div>
                         <div class="flex justify-between items-end mb-1">
                             <span class="font-bold text-white">PoE++ (802.3bt)</span>
-                            <span class="text-xs text-slate-400">Max 60W (Typ 3) / 90W (Typ 4)</span>
+                            <span class="text-xs text-slate-300">Max 60W (Typ 3) / 90W (Typ 4)</span>
                         </div>
                         <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden">
                             <div class="h-full bg-slate-600 bar-transition w-0" id="bar-bt"></div>
