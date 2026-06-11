@@ -244,7 +244,7 @@
             e.stopPropagation();
             this.classList.remove('border-blue-400', 'bg-blue-900/30');
 
-            if (draggedSeqItem !== this) {
+            if (draggedSeqItem && draggedSeqItem !== this) {
                 const container = this.parentNode;
                 const items = Array.from(container.children);
                 const draggedIndex = items.indexOf(draggedSeqItem);
