@@ -11,19 +11,20 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 20px -8px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
         }
         /* Custom styles for mermaid diagrams if needed */
         .mermaid {
@@ -54,10 +55,10 @@
 
         <!-- Header -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
                 UML-Ablauf-Simulator
             </h1>
-            <p class="mt-4 text-base text-slate-400 max-w-2xl mx-auto">
+            <p class="mt-4 text-base text-slate-300 max-w-2xl mx-auto">
                 Trainiere das Erstellen von UML-Aktivitätendiagrammen aus C-Code und umgekehrt.
             </p>
         </div>
@@ -65,10 +66,10 @@
         <!-- App Container -->
         <div class="flex flex-col gap-6" id="app-container">
             <!-- Controls -->
-            <div class="glass-card rounded-2xl p-6">
+            <div class="glass-card rounded-3xl p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="catalog-selector" class="block text-sm font-medium text-slate-400 mb-2">Ablauf wählen</label>
+                        <label for="catalog-selector" class="block text-sm font-medium text-slate-300 mb-2">Ablauf wählen</label>
                         <select id="catalog-selector" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
                             <option value="linear">Linearer EVA-Ablauf</option>
                             <option value="simple-if">Einfache Verzweigung (if)</option>
@@ -80,10 +81,10 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-400 mb-2">Trainingsmodus</label>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Trainingsmodus</label>
                         <div class="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
                             <button id="mode-code-to-diagram" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium bg-indigo-600 text-white shadow transition-all">Code zu Diagramm</button>
-                            <button id="mode-diagram-to-code" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-all">Diagramm zu Code</button>
+                            <button id="mode-diagram-to-code" class="flex-1 py-1.5 px-3 rounded-md text-sm font-medium text-slate-300 hover:text-slate-200 transition-all">Diagramm zu Code</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +93,7 @@
             <!-- Main Training Area -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Task Column -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col h-full">
+                <div class="glass-card rounded-3xl p-6 flex flex-col h-full">
                     <h2 class="text-xl font-semibold mb-4 text-white flex items-center justify-between border-b border-slate-700 pb-2">
                         <span>Aufgabe</span>
                     </h2>
@@ -102,7 +103,7 @@
                     </div>
 
                     <div class="mt-6 text-center">
-                        <p class="text-sm text-slate-400 mb-4" id="task-instruction">Zeichne das UML-Aktivitätendiagramm dazu auf Papier.</p>
+                        <p class="text-sm text-slate-300 mb-4" id="task-instruction">Zeichne das UML-Aktivitätendiagramm dazu auf Papier.</p>
                         <button id="show-solution-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-colors w-full sm:w-auto shadow-lg shadow-indigo-500/20">
                             Lösung anzeigen
                         </button>
@@ -110,14 +111,14 @@
                 </div>
 
                 <!-- Solution Column -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col h-full relative overflow-hidden" id="solution-container">
+                <div class="glass-card rounded-3xl p-6 flex flex-col h-full relative overflow-hidden" id="solution-container">
                     <!-- Overlay to hide solution initially -->
                     <div id="solution-overlay" class="absolute inset-0 bg-slate-800/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300">
                         <svg class="w-12 h-12 text-slate-500 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                         </svg>
                         <h3 class="text-xl font-bold text-slate-300 mb-2">Lösung verborgen</h3>
-                        <p class="text-slate-400 max-w-sm">Bearbeite die Aufgabe zuerst selbst, bevor du die Lösung zur Kontrolle aufdeckst.</p>
+                        <p class="text-slate-300 max-w-sm">Bearbeite die Aufgabe zuerst selbst, bevor du die Lösung zur Kontrolle aufdeckst.</p>
                     </div>
 
                     <h2 class="text-xl font-semibold mb-4 text-white border-b border-slate-700 pb-2">Lösungskontrolle</h2>
@@ -284,10 +285,10 @@
             if (currentMode === 'code-to-diagram') {
                 // UI Toggles
                 btnCodeToDiag.classList.add('text-white', 'bg-indigo-600', 'shadow');
-                btnCodeToDiag.classList.remove('text-slate-400', 'bg-transparent');
+                btnCodeToDiag.classList.remove('text-slate-300', 'bg-transparent');
 
                 btnDiagToCode.classList.remove('text-white', 'bg-indigo-600', 'shadow');
-                btnDiagToCode.classList.add('text-slate-400', 'bg-transparent');
+                btnDiagToCode.classList.add('text-slate-300', 'bg-transparent');
 
                 taskInstruction.innerText = "Zeichne das UML-Aktivitätendiagramm dazu auf Papier.";
                 checklistContainer.classList.remove('hidden');
@@ -299,10 +300,10 @@
             } else {
                 // UI Toggles
                 btnDiagToCode.classList.add('text-white', 'bg-indigo-600', 'shadow');
-                btnDiagToCode.classList.remove('text-slate-400', 'bg-transparent');
+                btnDiagToCode.classList.remove('text-slate-300', 'bg-transparent');
 
                 btnCodeToDiag.classList.remove('text-white', 'bg-indigo-600', 'shadow');
-                btnCodeToDiag.classList.add('text-slate-400', 'bg-transparent');
+                btnCodeToDiag.classList.add('text-slate-300', 'bg-transparent');
 
                 taskInstruction.innerText = "Überlege dir die C-Syntax zu diesem Ablauf.";
                 checklistContainer.classList.add('hidden');

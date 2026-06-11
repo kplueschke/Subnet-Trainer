@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
     </style>
@@ -37,7 +38,7 @@
                     <span class="text-blue-400">📦</span> OOP-Klassen-Generator
                 </h1>
             </div>
-            <div class="text-sm text-slate-400 mono">C# Boilerplate</div>
+            <div class="text-sm text-slate-300 mono">C# Boilerplate</div>
         </div>
     </header>
 
@@ -48,18 +49,18 @@
         <div class="w-full lg:w-1/2 flex flex-col gap-6">
 
             <!-- Class Config -->
-            <div class="glass-card rounded-2xl p-6">
+            <div class="glass-card rounded-3xl p-6">
                 <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     Klassendefinition
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-400 mb-1">Klassenname</label>
+                        <label class="block text-sm text-slate-300 mb-1">Klassenname</label>
                         <input type="text" id="classNameInput" value="Person" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
                     </div>
                     <div>
-                        <label class="block text-sm text-slate-400 mb-1">Sichtbarkeit (Class)</label>
+                        <label class="block text-sm text-slate-300 mb-1">Sichtbarkeit (Class)</label>
                         <select id="classAccessSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
                             <option value="public">public</option>
                             <option value="internal">internal</option>
@@ -69,7 +70,7 @@
             </div>
 
             <!-- Attributes Config -->
-            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex-grow flex flex-col">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold text-white flex items-center gap-2">
                         <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -86,7 +87,7 @@
             </div>
 
             <!-- Methods Config -->
-            <div class="glass-card rounded-2xl p-6 flex-grow flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex-grow flex flex-col">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold text-white flex items-center gap-2">
                         <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
@@ -106,13 +107,13 @@
 
         <!-- Output Panel (Right) -->
         <div class="w-full lg:w-1/2 flex flex-col">
-            <div class="glass-card rounded-2xl p-0 flex flex-col h-full overflow-hidden border-slate-700">
+            <div class="glass-card rounded-3xl p-0 flex flex-col h-full overflow-hidden border-slate-700">
                 <div class="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
                     <span class="text-sm font-medium text-slate-300 mono flex items-center gap-2">
                         <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M24 10.933v2.134h-2.132v2.133h-2.134v2.134h-2.133v2.133H15.47v2.133h-6.936v-2.133H6.402v-2.133H4.268v-2.134H2.134V13.067H0v-2.134h2.134V8.802h2.134V6.668h2.134V4.534h2.133V2.401h6.936v2.133h2.133v2.133h2.133v2.134h2.132v2.133H24zM2.134 10.933v2.134h2.134v2.133h2.134v2.134h2.133v2.133h6.936v-2.133h2.133v-2.134h2.133v-2.133h2.132V10.933h-2.132V8.802h-2.133V6.668h-2.133V4.534H8.535v2.134H6.402v2.134H4.268v2.131H2.134zM10.669 8.802v6.4h2.665v-6.4h-2.665z"/></svg>
                         Generierter C#-Code
                     </span>
-                    <button id="copyBtn" class="text-slate-400 hover:text-white transition-colors" title="Code kopieren">
+                    <button id="copyBtn" class="text-slate-300 hover:text-white transition-colors" title="Code kopieren">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </button>
                 </div>
@@ -163,10 +164,10 @@
                         ${types.map(t => `<option value="${t}" ${prop.type === t ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
                     <input type="text" oninput="updateProp(${prop.id}, 'name', this.value)" value="${prop.name}" placeholder="Name" class="flex-grow bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                    <label class="flex items-center gap-1 text-xs text-slate-400 cursor-pointer">
+                    <label class="flex items-center gap-1 text-xs text-slate-300 cursor-pointer">
                         <input type="checkbox" onchange="updateProp(${prop.id}, 'getter', this.checked)" ${prop.getter ? 'checked' : ''} class="rounded border-slate-700 bg-slate-900"> get
                     </label>
-                    <label class="flex items-center gap-1 text-xs text-slate-400 cursor-pointer">
+                    <label class="flex items-center gap-1 text-xs text-slate-300 cursor-pointer">
                         <input type="checkbox" onchange="updateProp(${prop.id}, 'setter', this.checked)" ${prop.setter ? 'checked' : ''} class="rounded border-slate-700 bg-slate-900"> set
                     </label>
                     <button onclick="removeProp(${prop.id})" class="text-red-400 hover:text-red-300 p-1">
@@ -257,7 +258,7 @@
                         let accessors = [];
                         if (p.getter) accessors.push('get;');
                         if (p.setter) accessors.push('set;');
-                        code += `    ${access} ${type} ${name} { <span class="text-slate-400">${accessors.join(' ')}</span> }\n`;
+                        code += `    ${access} ${type} ${name} { <span class="text-slate-300">${accessors.join(' ')}</span> }\n`;
                     } else {
                         code += `    ${access} ${type} ${name};\n`;
                     }

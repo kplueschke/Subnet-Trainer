@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .draggable {
@@ -46,12 +47,12 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Ökonomisches-Prinzip-Zuordner
             </h1>
-            <p class="mt-4 text-slate-400">Ziehe die Fallbeispiele in die richtige Kategorie (Maximalprinzip oder Minimalprinzip).</p>
+            <p class="mt-4 text-slate-300">Ziehe die Fallbeispiele in die richtige Kategorie (Maximalprinzip oder Minimalprinzip).</p>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-6">
             <!-- Pool of items to drag -->
-            <div class="glass-card rounded-2xl p-6 lg:col-span-1 border-dashed border-2 border-slate-600 droppable min-h-[400px]" id="pool" ondragover="allowDrop(event)" ondrop="drop(event, 'pool')">
+            <div class="glass-card rounded-3xl p-6 lg:col-span-1 border-dashed border-2 border-slate-600 droppable min-h-[400px]" id="pool" ondragover="allowDrop(event)" ondrop="drop(event, 'pool')">
                 <h3 class="text-xl font-bold mb-4 text-center border-b border-slate-700 pb-2">Fallbeispiele</h3>
                 <div class="flex flex-col gap-3" id="items-container">
                     <!-- Items inserted via JS -->
@@ -61,16 +62,16 @@
             <!-- Target Categories -->
             <div class="lg:col-span-2 grid sm:grid-cols-2 gap-6">
                 <!-- Maximalprinzip -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-orange-500/50 transition-colors" id="maximal" ondragover="allowDrop(event)" ondrop="drop(event, 'maximal')">
+                <div class="glass-card rounded-3xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-orange-500/50 transition-colors" id="maximal" ondragover="allowDrop(event)" ondrop="drop(event, 'maximal')">
                     <h3 class="text-xl font-bold mb-2 text-orange-400">Maximalprinzip</h3>
-                    <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Mit <strong>gegebenem Aufwand</strong> (Mitteln) einen <strong>möglichst großen Ertrag</strong> (Ziel) erzielen.</p>
+                    <p class="text-xs text-slate-300 mb-4 pb-2 border-b border-slate-700">Mit <strong>gegebenem Aufwand</strong> (Mitteln) einen <strong>möglichst großen Ertrag</strong> (Ziel) erzielen.</p>
                     <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="maximal-list"></div>
                 </div>
 
                 <!-- Minimalprinzip -->
-                <div class="glass-card rounded-2xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-cyan-500/50 transition-colors" id="minimal" ondragover="allowDrop(event)" ondrop="drop(event, 'minimal')">
+                <div class="glass-card rounded-3xl p-6 flex flex-col droppable border-2 border-slate-700 hover:border-cyan-500/50 transition-colors" id="minimal" ondragover="allowDrop(event)" ondrop="drop(event, 'minimal')">
                     <h3 class="text-xl font-bold mb-2 text-red-400">Minimalprinzip</h3>
-                    <p class="text-xs text-slate-400 mb-4 pb-2 border-b border-slate-700">Ein <strong>vorgegebenes Ziel</strong> (Ertrag) mit <strong>möglichst geringem Aufwand</strong> (Mitteln) erreichen.</p>
+                    <p class="text-xs text-slate-300 mb-4 pb-2 border-b border-slate-700">Ein <strong>vorgegebenes Ziel</strong> (Ertrag) mit <strong>möglichst geringem Aufwand</strong> (Mitteln) erreichen.</p>
                     <div class="flex-grow flex flex-col gap-3 min-h-[200px]" id="minimal-list"></div>
                 </div>
             </div>

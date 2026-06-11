@@ -10,14 +10,15 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .truth-table th, .truth-table td {
@@ -49,7 +50,7 @@
                     <span class="text-pink-400">🔢</span> Wahrheitstabellen-Interaktor
                 </h1>
             </div>
-            <div class="text-sm text-slate-400">Logik in C#</div>
+            <div class="text-sm text-slate-300">Logik in C#</div>
         </div>
     </header>
 
@@ -59,11 +60,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
             <!-- Left: Builder -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col gap-6">
+            <div class="glass-card rounded-3xl p-6 flex flex-col gap-6">
 
                 <div>
                     <h2 class="text-lg font-bold text-white mb-2">Ausdruck (Expression)</h2>
-                    <p class="text-sm text-slate-400 mb-4">Wähle eine vordefinierte Logik-Operation oder wende De Morgan an.</p>
+                    <p class="text-sm text-slate-300 mb-4">Wähle eine vordefinierte Logik-Operation oder wende De Morgan an.</p>
 
                     <select id="exprSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-pink-500 font-mono transition-colors">
                         <optgroup label="Grundlagen">
@@ -93,7 +94,7 @@
             </div>
 
             <!-- Right: Truth Table -->
-            <div class="glass-card rounded-2xl p-6 flex flex-col">
+            <div class="glass-card rounded-3xl p-6 flex flex-col">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     Wahrheitstabelle
