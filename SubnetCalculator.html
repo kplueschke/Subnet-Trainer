@@ -9,27 +9,28 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         input[type="range"] { accent-color: #4ade80; }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Header -->
     <div class="container mx-auto px-4 py-8">
         <div class="flex items-center justify-between mb-8">
-            <a href="index.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="index.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -40,34 +41,34 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-500 mb-4">
                 Subnet Calculator
             </h1>
-            <p class="text-slate-300 max-w-2xl mx-auto">
+            <p class="text-gray-400 max-w-2xl mx-auto">
                 Einfacher Rechner für IPv4 Subnetze.
             </p>
         </div>
 
         <div class="flex flex-col gap-8 max-w-lg mx-auto items-center w-full">
             <div class="w-full glass-card rounded-3xl p-6">
-                <div class="flex justify-between items-center mb-4 text-slate-300 font-semibold">
+                <div class="flex justify-between items-center mb-4 text-gray-400 font-semibold">
                     <label>Präfix:</label>
                     <span id="prefixVal" class="text-emerald-400 text-xl font-bold">/24</span>
                 </div>
                 <input type="range" id="cidr" min="1" max="32" value="24" oninput="calc()" class="w-full mb-8">
 
-                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700 space-y-3">
-                    <div class="flex justify-between items-center text-slate-300">
+                <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-700 space-y-3">
+                    <div class="flex justify-between items-center text-gray-400">
                         <span>Maske:</span>
                         <span id="mask" class="text-emerald-400 font-bold mono">255.255.255.0</span>
                     </div>
-                    <div class="flex justify-between items-center text-slate-300">
+                    <div class="flex justify-between items-center text-gray-400">
                         <span>Nutzbare Hosts:</span>
                         <span id="hosts" class="text-emerald-400 font-bold mono">254</span>
                     </div>
-                    <div class="flex justify-between items-center text-slate-300">
+                    <div class="flex justify-between items-center text-gray-400">
                         <span>Netze (von /24):</span>
                         <span id="subnets" class="text-emerald-400 font-bold mono">1</span>
                     </div>
 
-                    <div class="pt-3 mt-3 border-t border-slate-700/50 text-center">
+                    <div class="pt-3 mt-3 border-t border-gray-700/50 text-center">
                         <span id="binMask" class="mono text-sm text-slate-500 tracking-wider">11111111.11111111.11111111.00000000</span>
                     </div>
                 </div>

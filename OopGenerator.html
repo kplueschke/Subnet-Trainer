@@ -9,27 +9,28 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <header class="w-full bg-black/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <a href="ap.html" class="p-2 rounded-lg bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
@@ -38,7 +39,7 @@
                     <span class="text-blue-400">📦</span> OOP-Klassen-Generator
                 </h1>
             </div>
-            <div class="text-sm text-slate-300 mono">C# Boilerplate</div>
+            <div class="text-sm text-gray-400 mono">C# Boilerplate</div>
         </div>
     </header>
 
@@ -56,12 +57,12 @@
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-300 mb-1">Klassenname</label>
-                        <input type="text" id="classNameInput" value="Person" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        <label class="block text-sm text-gray-400 mb-1">Klassenname</label>
+                        <input type="text" id="classNameInput" value="Person" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
                     </div>
                     <div>
-                        <label class="block text-sm text-slate-300 mb-1">Sichtbarkeit (Class)</label>
-                        <select id="classAccessSelect" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        <label class="block text-sm text-gray-400 mb-1">Sichtbarkeit (Class)</label>
+                        <select id="classAccessSelect" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 transition-colors">
                             <option value="public">public</option>
                             <option value="internal">internal</option>
                         </select>
@@ -107,13 +108,13 @@
 
         <!-- Output Panel (Right) -->
         <div class="w-full lg:w-1/2 flex flex-col">
-            <div class="glass-card rounded-3xl p-0 flex flex-col h-full overflow-hidden border-slate-700">
-                <div class="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
-                    <span class="text-sm font-medium text-slate-300 mono flex items-center gap-2">
+            <div class="glass-card rounded-3xl p-0 flex flex-col h-full overflow-hidden border-gray-700">
+                <div class="bg-gray-900/80 px-4 py-3 border-b border-gray-700 flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-400 mono flex items-center gap-2">
                         <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M24 10.933v2.134h-2.132v2.133h-2.134v2.134h-2.133v2.133H15.47v2.133h-6.936v-2.133H6.402v-2.133H4.268v-2.134H2.134V13.067H0v-2.134h2.134V8.802h2.134V6.668h2.134V4.534h2.133V2.401h6.936v2.133h2.133v2.133h2.133v2.134h2.132v2.133H24zM2.134 10.933v2.134h2.134v2.133h2.134v2.134h2.133v2.133h6.936v-2.133h2.133v-2.134h2.133v-2.133h2.132V10.933h-2.132V8.802h-2.133V6.668h-2.133V4.534H8.535v2.134H6.402v2.134H4.268v2.131H2.134zM10.669 8.802v6.4h2.665v-6.4h-2.665z"/></svg>
                         Generierter C#-Code
                     </span>
-                    <button id="copyBtn" class="text-slate-300 hover:text-white transition-colors" title="Code kopieren">
+                    <button id="copyBtn" class="text-gray-400 hover:text-white transition-colors" title="Code kopieren">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </button>
                 </div>
@@ -155,20 +156,20 @@
             propertiesContainer.innerHTML = '';
             properties.forEach(prop => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center gap-2 bg-slate-800/50 p-2 rounded-lg border border-slate-700/50';
+                div.className = 'flex items-center gap-2 bg-gray-900/50 p-2 rounded-lg border border-gray-700/50';
                 div.innerHTML = `
-                    <select onchange="updateProp(${prop.id}, 'access', this.value)" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300 focus:outline-none">
+                    <select onchange="updateProp(${prop.id}, 'access', this.value)" class="bg-black border border-gray-700 rounded px-2 py-1 text-xs text-gray-400 focus:outline-none">
                         ${accessModifiers.map(a => `<option value="${a}" ${prop.access === a ? 'selected' : ''}>${a}</option>`).join('')}
                     </select>
-                    <select onchange="updateProp(${prop.id}, 'type', this.value)" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-blue-300 focus:outline-none w-20">
+                    <select onchange="updateProp(${prop.id}, 'type', this.value)" class="bg-black border border-gray-700 rounded px-2 py-1 text-xs text-blue-300 focus:outline-none w-20">
                         ${types.map(t => `<option value="${t}" ${prop.type === t ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
-                    <input type="text" oninput="updateProp(${prop.id}, 'name', this.value)" value="${prop.name}" placeholder="Name" class="flex-grow bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                    <label class="flex items-center gap-1 text-xs text-slate-300 cursor-pointer">
-                        <input type="checkbox" onchange="updateProp(${prop.id}, 'getter', this.checked)" ${prop.getter ? 'checked' : ''} class="rounded border-slate-700 bg-slate-900"> get
+                    <input type="text" oninput="updateProp(${prop.id}, 'name', this.value)" value="${prop.name}" placeholder="Name" class="flex-grow bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                    <label class="flex items-center gap-1 text-xs text-gray-400 cursor-pointer">
+                        <input type="checkbox" onchange="updateProp(${prop.id}, 'getter', this.checked)" ${prop.getter ? 'checked' : ''} class="rounded border-gray-700 bg-black"> get
                     </label>
-                    <label class="flex items-center gap-1 text-xs text-slate-300 cursor-pointer">
-                        <input type="checkbox" onchange="updateProp(${prop.id}, 'setter', this.checked)" ${prop.setter ? 'checked' : ''} class="rounded border-slate-700 bg-slate-900"> set
+                    <label class="flex items-center gap-1 text-xs text-gray-400 cursor-pointer">
+                        <input type="checkbox" onchange="updateProp(${prop.id}, 'setter', this.checked)" ${prop.setter ? 'checked' : ''} class="rounded border-gray-700 bg-black"> set
                     </label>
                     <button onclick="removeProp(${prop.id})" class="text-red-400 hover:text-red-300 p-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -183,24 +184,24 @@
             methodsContainer.innerHTML = '';
             methods.forEach(method => {
                 const div = document.createElement('div');
-                div.className = 'flex flex-col gap-2 bg-slate-800/50 p-2 rounded-lg border border-slate-700/50';
+                div.className = 'flex flex-col gap-2 bg-gray-900/50 p-2 rounded-lg border border-gray-700/50';
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
-                        <select onchange="updateMethod(${method.id}, 'access', this.value)" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300 focus:outline-none">
+                        <select onchange="updateMethod(${method.id}, 'access', this.value)" class="bg-black border border-gray-700 rounded px-2 py-1 text-xs text-gray-400 focus:outline-none">
                             ${accessModifiers.map(a => `<option value="${a}" ${method.access === a ? 'selected' : ''}>${a}</option>`).join('')}
                         </select>
-                        <select onchange="updateMethod(${method.id}, 'type', this.value)" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-purple-300 focus:outline-none w-20">
+                        <select onchange="updateMethod(${method.id}, 'type', this.value)" class="bg-black border border-gray-700 rounded px-2 py-1 text-xs text-purple-300 focus:outline-none w-20">
                             <option value="void" ${method.type === 'void' ? 'selected' : ''}>void</option>
                             ${types.map(t => `<option value="${t}" ${method.type === t ? 'selected' : ''}>${t}</option>`).join('')}
                         </select>
-                        <input type="text" oninput="updateMethod(${method.id}, 'name', this.value)" value="${method.name}" placeholder="MethodName" class="flex-grow bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <input type="text" oninput="updateMethod(${method.id}, 'name', this.value)" value="${method.name}" placeholder="MethodName" class="flex-grow bg-black border border-gray-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
                         <button onclick="removeMethod(${method.id})" class="text-red-400 hover:text-red-300 p-1">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-slate-500">(</span>
-                        <input type="text" oninput="updateMethod(${method.id}, 'params', this.value)" value="${method.params}" placeholder="string msg, int count..." class="flex-grow bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300 focus:outline-none">
+                        <input type="text" oninput="updateMethod(${method.id}, 'params', this.value)" value="${method.params}" placeholder="string msg, int count..." class="flex-grow bg-black border border-gray-700 rounded px-2 py-1 text-xs text-gray-400 focus:outline-none">
                         <span class="text-xs text-slate-500">)</span>
                     </div>
                 `;
@@ -258,7 +259,7 @@
                         let accessors = [];
                         if (p.getter) accessors.push('get;');
                         if (p.setter) accessors.push('set;');
-                        code += `    ${access} ${type} ${name} { <span class="text-slate-300">${accessors.join(' ')}</span> }\n`;
+                        code += `    ${access} ${type} ${name} { <span class="text-gray-400">${accessors.join(' ')}</span> }\n`;
                     } else {
                         code += `    ${access} ${type} ${name};\n`;
                     }

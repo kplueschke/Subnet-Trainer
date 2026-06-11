@@ -9,18 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
-            overflow-x: hidden;
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
         /* Encapsulation Animation Styles */
@@ -101,25 +101,25 @@
 
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <div class="container mx-auto px-4 py-8 max-w-5xl flex-grow flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Zurück
             </a>
-            <div class="text-slate-300 text-sm mono">OSI Layer 7 &rarr; 1</div>
+            <div class="text-gray-400 text-sm mono">OSI Layer 7 &rarr; 1</div>
         </div>
 
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500 mb-4">
                 PDU-Kapselungs-Animator
             </h1>
-            <p class="text-slate-300 max-w-2xl mx-auto">
+            <p class="text-gray-400 max-w-2xl mx-auto">
                 Beobachte, wie Daten vom Browser schrittweise mit Headern versehen und als Frame über das Medium gesendet werden.
             </p>
         </div>
@@ -130,33 +130,33 @@
             <div class="flex justify-between items-center mb-12 relative">
                 <div class="absolute left-0 top-1/2 w-full h-1 bg-slate-700 -z-10 -translate-y-1/2"></div>
 
-                <div class="progress-step text-slate-500 flex flex-col items-center bg-slate-900 px-2" id="step-data">
+                <div class="progress-step text-slate-500 flex flex-col items-center bg-black px-2" id="step-data">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white mb-2 shadow-lg">1</div>
                     <span class="text-xs uppercase tracking-wider">Data</span>
                 </div>
-                <div class="progress-step text-slate-500 flex flex-col items-center bg-slate-900 px-2" id="step-segment">
+                <div class="progress-step text-slate-500 flex flex-col items-center bg-black px-2" id="step-segment">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white mb-2 shadow-lg">2</div>
                     <span class="text-xs uppercase tracking-wider">Segment</span>
                 </div>
-                <div class="progress-step text-slate-500 flex flex-col items-center bg-slate-900 px-2" id="step-packet">
+                <div class="progress-step text-slate-500 flex flex-col items-center bg-black px-2" id="step-packet">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white mb-2 shadow-lg">3</div>
                     <span class="text-xs uppercase tracking-wider">Packet</span>
                 </div>
-                <div class="progress-step text-slate-500 flex flex-col items-center bg-slate-900 px-2" id="step-frame">
+                <div class="progress-step text-slate-500 flex flex-col items-center bg-black px-2" id="step-frame">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white mb-2 shadow-lg">4</div>
                     <span class="text-xs uppercase tracking-wider">Frame</span>
                 </div>
-                <div class="progress-step text-slate-500 flex flex-col items-center bg-slate-900 px-2" id="step-bits">
+                <div class="progress-step text-slate-500 flex flex-col items-center bg-black px-2" id="step-bits">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white mb-2 shadow-lg">5</div>
                     <span class="text-xs uppercase tracking-wider">Bits</span>
                 </div>
             </div>
 
             <!-- Visualization Area -->
-            <div class="flex-grow flex flex-col justify-center items-center relative min-h-[250px] bg-slate-800/30 rounded-xl border border-slate-700/50 p-6">
+            <div class="flex-grow flex flex-col justify-center items-center relative min-h-[250px] bg-gray-900/30 rounded-xl border border-gray-700/50 p-6">
 
                 <!-- Info Text -->
-                <div id="info-text" class="absolute top-6 text-center text-slate-300 max-w-lg mx-auto h-16">
+                <div id="info-text" class="absolute top-6 text-center text-gray-400 max-w-lg mx-auto h-16">
                     Klicke auf "Nächster Schritt", um die Kapselung (Encapsulation) zu starten.
                 </div>
 

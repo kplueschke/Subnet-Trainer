@@ -9,50 +9,51 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-16 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700 text-gray-400 text-xs font-medium uppercase tracking-wider mb-4">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                 IT-Ausbildung Workspace
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
                 IT-Ausbildung Lernwerkzeuge
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-gray-400 max-w-xl mx-auto">
                 Lernwerkzeuge für BGP (Betriebs- und Gesamtwirtschaftliche Prozesse)
             </p>
         </div>
 
         <!-- Back Button -->
         <div class="mb-8">
-            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -62,13 +63,13 @@
 
         <!-- Subject Section -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-700 pb-3">BGP (Betriebs- und Gesamtwirtschaftliche Prozesse)</h2>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-3">BGP (Betriebs- und Gesamtwirtschaftliche Prozesse)</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
             <!-- 1. Marktgleichgewichts-Simulator -->
             <a href="BgpMarktgleichgewicht.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         📈
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Marktgleichgewicht</h2>
@@ -76,13 +77,13 @@
                         Simulator für Angebots- und Nachfragekurven inkl. Szenarien.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Simulator für Angebots- und Nachfragekurven inkl. Szenarien.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Simulator für Angebots- und Nachfragekurven inkl. Szenarien.</p>
             </a>
 
             <!-- 2. Projektmanagement-Gantt-Bauer -->
             <a href="BgpProjektmanagementGantt.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         📊
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Gantt-Bauer</h2>
@@ -90,13 +91,13 @@
                         Ordne Projektphasen auf dem kritischen Pfad an.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Ordne Projektphasen auf dem kritischen Pfad an.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Ordne Projektphasen auf dem kritischen Pfad an.</p>
             </a>
 
             <!-- 3. Arbeitszeitgesetz-Inspektor -->
             <a href="BgpArbeitszeitgesetz.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         ⏱️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">ArbZG Inspektor</h2>
@@ -104,13 +105,13 @@
                         Finde Verstöße gegen Arbeits- und Ruhezeiten im Schichtplan.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Finde Verstöße gegen Arbeits- und Ruhezeiten im Schichtplan.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Finde Verstöße gegen Arbeits- und Ruhezeiten im Schichtplan.</p>
             </a>
 
             <!-- 4. Wirtschaftskreislauf-Interaktor -->
             <a href="BgpWirtschaftskreislauf.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🔄
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Wirtschaftskreislauf</h2>
@@ -118,13 +119,13 @@
                         Interaktives Modell der Geld- und Güterströme.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Interaktives Modell der Geld- und Güterströme.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Interaktives Modell der Geld- und Güterströme.</p>
             </a>
 
             <!-- 5. Ökonomisches-Prinzip-Zuordner -->
             <a href="BgpOekonomischesPrinzip.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         ⚖️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Ökon. Prinzip</h2>
@@ -132,13 +133,13 @@
                         Ordne Fallbeispiele dem Maximal- oder Minimalprinzip zu.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Ordne Fallbeispiele dem Maximal- oder Minimalprinzip zu.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Ordne Fallbeispiele dem Maximal- oder Minimalprinzip zu.</p>
             </a>
 
             <!-- 6. Produktionsfaktoren-Matrix -->
             <a href="BgpProduktionsfaktoren.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🏭
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Produktionsfaktoren</h2>
@@ -146,13 +147,13 @@
                         Interaktive Übersicht dispositiver und Elementarfaktoren.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Interaktive Übersicht dispositiver und Elementarfaktoren.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Interaktive Übersicht dispositiver und Elementarfaktoren.</p>
             </a>
 
             <!-- 7. SMART-Ziel-Validierer -->
             <a href="BgpSmartZiel.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🎯
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">SMART Ziele</h2>
@@ -160,13 +161,13 @@
                         Checkliste und Validierung von Projektzielen.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Checkliste und Validierung von Projektzielen.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Checkliste und Validierung von Projektzielen.</p>
             </a>
 
             <!-- 8. Magisches Dreieck -->
             <a href="BgpMagischesDreieck.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🔺
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Magisches Dreieck</h2>
@@ -174,13 +175,13 @@
                         Visualisiert Spannungsfelder von Zeit, Kosten und Qualität.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Visualisiert Spannungsfelder von Zeit, Kosten und Qualität.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Visualisiert Spannungsfelder von Zeit, Kosten und Qualität.</p>
             </a>
 
             <!-- 9. Projekt-Phasen-Navigator -->
             <a href="BgpProjektPhasen.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🗺️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Phasen-Navigator</h2>
@@ -188,13 +189,13 @@
                         Ordne Projektdokumente den korrekten Phasen zu.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Ordne Projektdokumente den korrekten Phasen zu.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Ordne Projektdokumente den korrekten Phasen zu.</p>
             </a>
 
             <!-- 10. Netzplan-Rechner -->
             <a href="BgpNetzplan.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🕸️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Netzplan-Rechner</h2>
@@ -202,13 +203,13 @@
                         Generiere MPM-Netzpläne und berechne Pufferzeiten.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Generiere MPM-Netzpläne und berechne Pufferzeiten.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Generiere MPM-Netzpläne und berechne Pufferzeiten.</p>
             </a>
 
             <!-- 11. APP-Risiko-Dashboard -->
             <a href="BgpAppRisiko.html" class="glass-card rounded-3xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         ⚠️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">APP Risiko-Dashboard</h2>
@@ -216,18 +217,18 @@
                         Analyse potenzieller Probleme mit Ursachen-Graph.
                     </p>
                 </div>
-                <p class="text-slate-300 text-sm leading-relaxed flex-grow">Analyse potenzieller Probleme mit Ursachen-Graph.</p>
+                <p class="text-gray-400 text-sm leading-relaxed flex-grow">Analyse potenzieller Probleme mit Ursachen-Graph.</p>
             </a>
 
             <!-- 12. IT-Hardware-Tycoon (Lager- & Logistik-Sim) -->
             <a href="BgpHardwareTycoon.html" class="glass-card rounded-2xl p-6 flex flex-col group cursor-pointer no-underline h-full">
                 <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-gray-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                         🏭
                     </div>
                     <h3 class="text-lg font-semibold text-white">IT-Hardware-Tycoon</h3>
                 </div>
-                <p class="text-slate-400 text-sm leading-relaxed flex-grow">Trainiert Kernprozesse wie die ABC-Analyse, Beschaffungslogistik, Priorisierung und Prozessoptimierung im Lagerwesen.</p>
+                <p class="text-gray-500 text-sm leading-relaxed flex-grow">Trainiert Kernprozesse wie die ABC-Analyse, Beschaffungslogistik, Priorisierung und Prozessoptimierung im Lagerwesen.</p>
             </a>
 
             </div>

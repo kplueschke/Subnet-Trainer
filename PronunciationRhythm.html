@@ -23,22 +23,22 @@
         @keyframes flash { 0% { opacity: 0.8; box-shadow: 0 0 20px white; } 100% { opacity: 0; box-shadow: none; } }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col relative z-10">
         <div class="mb-6 flex items-center justify-between">
-            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück
             </a>
             <h1 class="text-2xl font-bold text-white">Pronunciation Rhythm</h1>
             <div class="flex gap-4">
-                <div class="text-lg font-mono">Combo: <span id="combo" class="text-indigo-400">0</span></div>
+                <div class="text-lg font-mono">Combo: <span id="combo" class="text-gray-400">0</span></div>
                 <div class="text-lg font-mono">Score: <span id="score" class="text-yellow-400">0</span></div>
             </div>
         </div>
 
         <div class="glass-card rounded-2xl p-4 flex-grow flex flex-col relative">
-            <p class="text-slate-400 text-center mb-4 text-sm">Drücke die <span class="text-indigo-400 font-bold">Leertaste</span>, wenn die <span class="text-yellow-400 font-bold">betonte Silbe</span> die Ziellinie überquert!</p>
+            <p class="text-gray-500 text-center mb-4 text-sm">Drücke die <span class="text-gray-400 font-bold">Leertaste</span>, wenn die <span class="text-yellow-400 font-bold">betonte Silbe</span> die Ziellinie überquert!</p>
 
             <div id="track">
                 <div class="target-line"></div>
@@ -46,13 +46,13 @@
                 <div class="feedback" id="feedback">PERFECT!</div>
                 <!-- Notes will spawn here -->
 
-                <div id="start-overlay" class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+                <div id="start-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-20">
                     <button id="start-btn" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-colors">Start Track</button>
                 </div>
             </div>
 
             <div class="mt-4 text-center">
-                <button id="hit-btn" class="px-12 py-4 bg-slate-700 hover:bg-slate-600 active:bg-indigo-600 border-b-4 border-slate-800 active:border-indigo-800 text-white font-bold rounded-xl transition-colors md:hidden">HIT (Space)</button>
+                <button id="hit-btn" class="px-12 py-4 bg-slate-700 hover:bg-slate-600 active:bg-indigo-600 border-b-4 border-gray-800 active:border-indigo-800 text-white font-bold rounded-xl transition-colors md:hidden">HIT (Space)</button>
             </div>
         </div>
     </div>

@@ -9,50 +9,51 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2), 0 10px 10px -5px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-16 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 text-xs font-medium uppercase tracking-wider mb-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700 text-gray-400 text-xs font-medium uppercase tracking-wider mb-4">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                 IT-Ausbildung Workspace
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
                 IT-Ausbildung Lernwerkzeuge
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-gray-400 max-w-xl mx-auto">
                 Lernwerkzeuge für Englisch
             </p>
         </div>
 
         <!-- Back Button -->
         <div class="mb-8">
-            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -62,7 +63,7 @@
 
         <!-- Subject Section -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-700 pb-3">Englisch</h2>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-700 pb-3">Englisch</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
 
                         <!-- Card: "False Friends"-Arcade -->
@@ -72,7 +73,7 @@
                         🛑
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">"False Friends"-Arcade</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Ein schnelles Reaktionsspiel. Englische Begriffe fallen auf dem Bildschirm von oben nach unten. Sortiere sie in die richtigen Übersetzungs-Eimer.
                     </p>
                 </div>
@@ -90,7 +91,7 @@
                         📚
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">IT-Vokabel-Tinder</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Eine moderne Karteikarten-App. Swipe nach rechts (gewusst) oder links (nicht gewusst). Inklusive Import-Funktion für neue Vokabeln.
                     </p>
                 </div>
@@ -108,7 +109,7 @@
                         🎫
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">"Tickets, Please"</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Du sitzt am 1st-Level-Support Schalter. Prüfe unter Zeitdruck englische Jira-Tickets auf korrekte Grammatik und IT-Vokabeln.
                     </p>
                 </div>
@@ -122,11 +123,11 @@
             <!-- Card: Negotiation RPG -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-gray-700 flex items-center justify-center text-blue-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🗣️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Negotiation RPG</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Besiege wütende englische Kunden oder sture PMs durch die Wahl passender, höflicher Business-English-Konter.
                     </p>
                 </div>
@@ -140,11 +141,11 @@
             <!-- Card: Typing-Defense -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-gray-700 flex items-center justify-center text-emerald-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         ⌨️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Typing-Defense</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Hacker-Schiffe mit deutschen IT-Begriffen greifen an. Tippe blitzschnell die englische Übersetzung, um sie zu zerstören.
                     </p>
                 </div>
@@ -162,7 +163,7 @@
                         🐍
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Grammar Snake</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Steuere die Schlange und friss englische Wörter in der richtigen Reihenfolge, um grammatikalisch korrekte passive Sätze zu bilden.
                     </p>
                 </div>
@@ -176,11 +177,11 @@
             <!-- Card: Overcooked: Email-Edition -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-orange-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         ✉️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Overcooked: Email-Edition</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Baue unter Zeitdruck aus heranrollenden Satzteilen fehlerfreie englische E-Mails zusammen.
                     </p>
                 </div>
@@ -194,11 +195,11 @@
             <!-- Card: Keep Compiling -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-gray-700 flex items-center justify-center text-rose-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         💣
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Keep Compiling</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Lies komplexe englische API-Dokumentationen unter Zeitdruck, um den abstürzenden Server zu retten.
                     </p>
                 </div>
@@ -212,11 +213,11 @@
             <!-- Card: Tech-Spellcaster -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-gray-700 flex items-center justify-center text-purple-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🧙‍♂️
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Tech-Spellcaster</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Wähle als IT-Magier blitzschnell die richtige englische Zeitform, um herannahende Bugs zu besiegen.
                     </p>
                 </div>
@@ -234,7 +235,7 @@
                         💻
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Terminal Wordle</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Knacke das Root-Passwort im Linux-Terminal. Ein Wordle-Klon mit englischen IT-Fachbegriffen.
                     </p>
                 </div>
@@ -252,7 +253,7 @@
                         ❓
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Hardware Guess-Who</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Errate die geheime IT-Komponente der KI, indem du grammatikalisch korrekte englische Ja/Nein-Fragen stellst.
                     </p>
                 </div>
@@ -266,11 +267,11 @@
             <!-- Card: Pronunciation Rhythm -->
             <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
                 <div>
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-gray-700 flex items-center justify-center text-gray-400 text-xl font-bold mb-6 group-hover:scale-110 transition-transform">
                         🎵
                     </div>
                     <h2 class="text-xl font-bold text-white mb-2">Pronunciation Rhythm</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
                         Drücke die Leertaste im perfekten Rhythmus, wenn die betonte englische Silbe die Ziellinie überquert.
                     </p>
                 </div>

@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .draggable {
             cursor: grab;
@@ -40,10 +41,10 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow">
         <div class="mb-8">
-            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="bgp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück zu BGP
             </a>
@@ -53,13 +54,13 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-500">
                 Projekt-Phasen-Navigator
             </h1>
-            <p class="mt-4 text-slate-300">Ziehe die Dokumente und Meilensteine in die korrekte Projektphase.</p>
+            <p class="mt-4 text-gray-400">Ziehe die Dokumente und Meilensteine in die korrekte Projektphase.</p>
         </div>
 
         <div class="grid lg:grid-cols-4 gap-6 mb-12">
             <!-- Phase 1: Definition -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-slate-700" id="def" ondragover="allowDrop(event)" ondrop="drop(event, 'def')">
-                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
+            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-gray-700" id="def" ondragover="allowDrop(event)" ondrop="drop(event, 'def')">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-700">
                     <div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-white">1</div>
                     <h3 class="text-lg font-bold text-white">Definition</h3>
                 </div>
@@ -67,8 +68,8 @@
             </div>
 
             <!-- Phase 2: Planung -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-slate-700" id="plan" ondragover="allowDrop(event)" ondrop="drop(event, 'plan')">
-                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
+            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-gray-700" id="plan" ondragover="allowDrop(event)" ondrop="drop(event, 'plan')">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-700">
                     <div class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/50 flex items-center justify-center text-xs font-bold">2</div>
                     <h3 class="text-lg font-bold text-orange-400">Planung</h3>
                 </div>
@@ -76,8 +77,8 @@
             </div>
 
             <!-- Phase 3: Durchführung -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-slate-700" id="do" ondragover="allowDrop(event)" ondrop="drop(event, 'do')">
-                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
+            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-gray-700" id="do" ondragover="allowDrop(event)" ondrop="drop(event, 'do')">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-700">
                     <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-red-400 border border-cyan-500/50 flex items-center justify-center text-xs font-bold">3</div>
                     <h3 class="text-lg font-bold text-red-400">Durchführung</h3>
                 </div>
@@ -85,8 +86,8 @@
             </div>
 
             <!-- Phase 4: Abschluss -->
-            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-slate-700" id="end" ondragover="allowDrop(event)" ondrop="drop(event, 'end')">
-                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700">
+            <div class="glass-card rounded-3xl p-4 flex flex-col droppable border border-gray-700" id="end" ondragover="allowDrop(event)" ondrop="drop(event, 'end')">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-700">
                     <div class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 border border-green-500/50 flex items-center justify-center text-xs font-bold">4</div>
                     <h3 class="text-lg font-bold text-green-400">Abschluss</h3>
                 </div>
@@ -136,7 +137,7 @@
             shuffled.forEach(d => {
                 const el = document.createElement('div');
                 el.id = d.id;
-                el.className = 'draggable px-4 py-2 bg-slate-800 rounded-lg border border-slate-600 text-sm shadow-md hover:border-indigo-400 transition-colors w-max';
+                el.className = 'draggable px-4 py-2 bg-gray-900 rounded-lg border border-slate-600 text-sm shadow-md hover:border-indigo-400 transition-colors w-max';
                 el.draggable = true;
                 el.innerText = d.text;
                 el.dataset.target = d.target;
@@ -171,7 +172,7 @@
 
             // Remove status classes
             draggedElement.classList.remove('border-green-500', 'border-red-500', 'bg-green-900/30', 'bg-red-900/30');
-            draggedElement.classList.add('border-slate-600', 'bg-slate-800');
+            draggedElement.classList.add('border-slate-600', 'bg-gray-900');
 
             if (targetId === 'pool') {
                 document.getElementById('items-container').appendChild(draggedElement);
@@ -208,7 +209,7 @@
             const checkList = (listId, expectedTarget) => {
                 const list = document.getElementById(listId);
                 Array.from(list.children).forEach(item => {
-                    item.classList.remove('border-slate-600', 'bg-slate-800');
+                    item.classList.remove('border-slate-600', 'bg-gray-900');
                     if(item.dataset.target === expectedTarget) {
                         item.classList.add('border-green-500', 'bg-green-900/30');
                     } else {

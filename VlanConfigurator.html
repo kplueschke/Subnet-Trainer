@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
         .port {
@@ -46,12 +47,12 @@
         .vlan-none { fill: #475569; stroke: #475569; color: #94a3b8; } /* Slate */
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -63,7 +64,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 mb-4">
                 VLAN-Konfigurator
             </h1>
-            <p class="text-slate-300 max-w-2xl mx-auto">
+            <p class="text-gray-400 max-w-2xl mx-auto">
                 Konfiguriere Switch-Ports als Access (VLAN-Zuweisung) oder Trunk (Alle VLANs). Teste danach die Kommunikation zwischen den PCs.
             </p>
         </div>
@@ -74,22 +75,22 @@
             <div class="w-full lg:w-1/3 glass-card rounded-3xl p-6 flex flex-col gap-6">
 
                 <div>
-                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Port Konfiguration</h2>
-                    <p class="text-sm text-slate-300 mb-4">Klicke auf einen Port im Diagramm, um ihn zu konfigurieren.</p>
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-gray-700 pb-2">Port Konfiguration</h2>
+                    <p class="text-sm text-gray-400 mb-4">Klicke auf einen Port im Diagramm, um ihn zu konfigurieren.</p>
 
-                    <div id="port-config-panel" class="hidden bg-slate-800 border border-slate-600 rounded-xl p-4">
+                    <div id="port-config-panel" class="hidden bg-gray-900 border border-slate-600 rounded-xl p-4">
                         <div class="font-bold text-white mb-2" id="selected-port-name">Port ausgewählt</div>
 
-                        <label class="block text-sm font-medium text-slate-300 mb-1 mt-3">Modus</label>
-                        <select id="port-mode" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500 mb-3">
+                        <label class="block text-sm font-medium text-gray-400 mb-1 mt-3">Modus</label>
+                        <select id="port-mode" class="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500 mb-3">
                             <option value="none">Kein Modus</option>
                             <option value="access">Access</option>
                             <option value="trunk">Trunk (802.1Q)</option>
                         </select>
 
                         <div id="vlan-select-container" class="hidden">
-                            <label class="block text-sm font-medium text-slate-300 mb-1">VLAN ID</label>
-                            <select id="port-vlan" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                            <label class="block text-sm font-medium text-gray-400 mb-1">VLAN ID</label>
+                            <select id="port-vlan" class="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-purple-500">
                                 <option value="10">VLAN 10 (Sales)</option>
                                 <option value="20">VLAN 20 (IT)</option>
                                 <option value="30">VLAN 30 (HR)</option>
@@ -103,16 +104,16 @@
                 </div>
 
                 <div>
-                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Ping Test</h2>
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-gray-700 pb-2">Ping Test</h2>
                     <div class="flex gap-2 mb-2">
-                        <select id="ping-src" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
+                        <select id="ping-src" class="flex-1 bg-gray-900 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
                             <option value="PC1">PC1</option>
                             <option value="PC2">PC2</option>
                             <option value="PC3">PC3</option>
                             <option value="PC4">PC4</option>
                         </select>
-                        <span class="flex items-center text-slate-300">➡️</span>
-                        <select id="ping-dst" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
+                        <span class="flex items-center text-gray-400">➡️</span>
+                        <select id="ping-dst" class="flex-1 bg-gray-900 border border-slate-600 rounded-lg px-2 py-2 text-white text-sm">
                             <option value="PC1">PC1</option>
                             <option value="PC2" selected>PC2</option>
                             <option value="PC3">PC3</option>
@@ -127,7 +128,7 @@
 
                 <div class="mt-auto">
                     <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Legende</h3>
-                    <div class="flex flex-col gap-1 text-sm text-slate-300">
+                    <div class="flex flex-col gap-1 text-sm text-gray-400">
                         <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span> VLAN 10 (Sales)</div>
                         <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-500"></span> VLAN 20 (IT)</div>
                         <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-green-500"></span> VLAN 30 (HR)</div>
@@ -137,7 +138,7 @@
             </div>
 
             <!-- Interactive SVG Diagram -->
-            <div class="w-full lg:w-2/3 glass-card rounded-3xl p-6 overflow-x-auto flex justify-center items-center min-h-[500px] bg-slate-900/50">
+            <div class="w-full lg:w-2/3 glass-card rounded-3xl p-6 overflow-x-auto flex justify-center items-center min-h-[500px] bg-black/50">
                 <svg width="600" height="400" viewBox="0 0 600 400" id="network-svg">
                     <!-- Background Grid -->
                     <defs>
@@ -339,7 +340,7 @@
 
             if (src === dst) {
                 resultEl.textContent = "Quelle und Ziel sind identisch.";
-                resultEl.className = "mt-3 text-sm font-bold text-center text-slate-300";
+                resultEl.className = "mt-3 text-sm font-bold text-center text-gray-400";
                 return;
             }
 

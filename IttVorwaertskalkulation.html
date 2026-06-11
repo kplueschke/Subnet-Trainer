@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .glass-card:hover {
             border-color: rgba(99, 102, 241, 0.6);
@@ -35,17 +36,17 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <!-- Background Decorative Elements -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-gray-500/5 via-transparent to-transparent blur-3xl pointer-events-none"></div>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 py-8 max-w-6xl relative z-10 flex-grow flex flex-col justify-start">
 
         <!-- Back Button -->
         <div class="mb-8">
-            <a href="itt.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 w-max">
+            <a href="itt.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700 w-max">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -58,7 +59,7 @@
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
                 Vorwärtskalkulation
             </h1>
-            <p class="mt-4 text-base md:text-lg text-slate-300 max-w-2xl mx-auto">
+            <p class="mt-4 text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
                 Übe die Schritte der Vorwärtskalkulation. Berechne den Listenverkaufspreis ausgehend vom Listeneinkaufspreis.
             </p>
         </div>
@@ -68,16 +69,16 @@
             <!-- Left Column: Input and Exercise -->
             <div class="glass-card rounded-3xl p-6 flex flex-col gap-6">
 
-                <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+                <div class="flex justify-between items-center border-b border-gray-700 pb-4">
                     <h2 class="text-2xl font-bold text-white">Aufgabe</h2>
                     <button id="btnNewScenario" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium transition-colors text-sm">
                         Neues Szenario
                     </button>
                 </div>
 
-                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+                <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-700/50">
                     <h3 class="text-lg font-semibold text-indigo-300 mb-3">Gegebene Werte:</h3>
-                    <ul id="givenValuesList" class="space-y-2 text-slate-300 mono text-sm grid grid-cols-2 gap-x-4">
+                    <ul id="givenValuesList" class="space-y-2 text-gray-400 mono text-sm grid grid-cols-2 gap-x-4">
                         <!-- Populated by JS -->
                     </ul>
                 </div>
@@ -85,7 +86,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-slate-700 text-slate-300 text-sm">
+                            <tr class="border-b border-gray-700 text-gray-400 text-sm">
                                 <th class="pb-2 font-medium">Position</th>
                                 <th class="pb-2 font-medium text-right">%</th>
                                 <th class="pb-2 font-medium text-right">Wert (€)</th>
@@ -98,7 +99,7 @@
                     </table>
                 </div>
 
-                <div class="flex justify-end gap-4 pt-4 border-t border-slate-700">
+                <div class="flex justify-end gap-4 pt-4 border-t border-gray-700">
                      <button id="btnCheck" class="px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors">
                         Eingaben prüfen
                     </button>
@@ -111,8 +112,8 @@
 
             <!-- Right Column: Solution Details -->
             <div class="glass-card rounded-3xl p-6 flex flex-col gap-6" id="solutionContainer" style="display: none;">
-                 <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-4">Schritt-für-Schritt Lösung</h2>
-                 <div id="solutionSteps" class="space-y-4 text-sm text-slate-300">
+                 <h2 class="text-2xl font-bold text-white border-b border-gray-700 pb-4">Schritt-für-Schritt Lösung</h2>
+                 <div id="solutionSteps" class="space-y-4 text-sm text-gray-400">
                     <!-- Populated by JS -->
                  </div>
             </div>
@@ -232,7 +233,7 @@
 
             SCHEMA.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = 'border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors';
+                tr.className = 'border-b border-gray-700/50 hover:bg-gray-900/30 transition-colors';
 
                 let percentCol = '-';
                 if (item.type === 'percent' || item.type === 'percent_imH') {
@@ -240,17 +241,17 @@
                 }
 
                 // First value given
-                let inputHtml = `<input type="number" step="0.01" id="input_${item.id}" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1 text-right text-white focus:outline-none focus:border-indigo-500" placeholder="0,00">`;
+                let inputHtml = `<input type="number" step="0.01" id="input_${item.id}" class="w-full bg-black border border-slate-600 rounded px-2 py-1 text-right text-white focus:outline-none focus:border-indigo-500" placeholder="0,00">`;
 
                 if (item.id === 'lep') {
-                     inputHtml = `<input type="number" id="input_${item.id}" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-right text-slate-300" value="${currentScenario.lep}" disabled>`;
+                     inputHtml = `<input type="number" id="input_${item.id}" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-right text-gray-400" value="${currentScenario.lep}" disabled>`;
                 } else if (item.id === 'bk') {
-                     inputHtml = `<input type="number" id="input_${item.id}" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 text-right text-slate-300" value="${currentScenario.bk}" disabled>`;
+                     inputHtml = `<input type="number" id="input_${item.id}" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-right text-gray-400" value="${currentScenario.bk}" disabled>`;
                 }
 
                 tr.innerHTML = `
-                    <td class="py-2 ${item.op === '=' ? 'font-semibold text-indigo-300' : 'text-slate-300'}">${item.label}</td>
-                    <td class="py-2 text-right text-slate-300">${percentCol}</td>
+                    <td class="py-2 ${item.op === '=' ? 'font-semibold text-indigo-300' : 'text-gray-400'}">${item.label}</td>
+                    <td class="py-2 text-right text-gray-400">${percentCol}</td>
                     <td class="py-2 text-right w-32">${inputHtml}</td>
                     <td class="py-2 text-center" id="status_${item.id}"></td>
                 `;
@@ -306,21 +307,21 @@
             const steps = [
                 `<b>Listeneinkaufspreis:</b> ${formatCurrency(expectedValues.lep)}`,
                 `<b>- Liefererrabatt (${currentScenario.lr}%):</b> ${formatCurrency(expectedValues.lep)} * ${currentScenario.lr / 100} = <b>${formatCurrency(expectedValues.lr_val)}</b>`,
-                `<b>= Zieleinkaufspreis:</b> ${formatCurrency(expectedValues.lep)} - ${formatCurrency(expectedValues.lr_val)} = <b class="text-indigo-400">${formatCurrency(expectedValues.zep)}</b>`,
+                `<b>= Zieleinkaufspreis:</b> ${formatCurrency(expectedValues.lep)} - ${formatCurrency(expectedValues.lr_val)} = <b class="text-gray-400">${formatCurrency(expectedValues.zep)}</b>`,
                 `<b>- Liefererskonto (${currentScenario.ls}%):</b> ${formatCurrency(expectedValues.zep)} * ${currentScenario.ls / 100} = <b>${formatCurrency(expectedValues.ls_val)}</b>`,
-                `<b>= Bareinkaufspreis:</b> ${formatCurrency(expectedValues.zep)} - ${formatCurrency(expectedValues.ls_val)} = <b class="text-indigo-400">${formatCurrency(expectedValues.bep)}</b>`,
+                `<b>= Bareinkaufspreis:</b> ${formatCurrency(expectedValues.zep)} - ${formatCurrency(expectedValues.ls_val)} = <b class="text-gray-400">${formatCurrency(expectedValues.bep)}</b>`,
                 `<b>+ Bezugskosten:</b> <b>${formatCurrency(expectedValues.bk)}</b>`,
-                `<b>= Bezugspreis:</b> ${formatCurrency(expectedValues.bep)} + ${formatCurrency(expectedValues.bk)} = <b class="text-indigo-400">${formatCurrency(expectedValues.bp)}</b>`,
+                `<b>= Bezugspreis:</b> ${formatCurrency(expectedValues.bep)} + ${formatCurrency(expectedValues.bk)} = <b class="text-gray-400">${formatCurrency(expectedValues.bp)}</b>`,
                 `<b>+ Handlungskosten (${currentScenario.hk}%):</b> ${formatCurrency(expectedValues.bp)} * ${currentScenario.hk / 100} = <b>${formatCurrency(expectedValues.hk_val)}</b>`,
-                `<b>= Selbstkosten:</b> ${formatCurrency(expectedValues.bp)} + ${formatCurrency(expectedValues.hk_val)} = <b class="text-indigo-400">${formatCurrency(expectedValues.sk)}</b>`,
+                `<b>= Selbstkosten:</b> ${formatCurrency(expectedValues.bp)} + ${formatCurrency(expectedValues.hk_val)} = <b class="text-gray-400">${formatCurrency(expectedValues.sk)}</b>`,
                 `<b>+ Gewinn (${currentScenario.g}%):</b> ${formatCurrency(expectedValues.sk)} * ${currentScenario.g / 100} = <b>${formatCurrency(expectedValues.g_val)}</b>`,
-                `<b>= Barverkaufspreis:</b> ${formatCurrency(expectedValues.sk)} + ${formatCurrency(expectedValues.g_val)} = <b class="text-indigo-400">${formatCurrency(expectedValues.bvp)}</b>`,
+                `<b>= Barverkaufspreis:</b> ${formatCurrency(expectedValues.sk)} + ${formatCurrency(expectedValues.g_val)} = <b class="text-gray-400">${formatCurrency(expectedValues.bvp)}</b>`,
                 `<div class="p-2 bg-indigo-900/30 rounded border border-indigo-500/30 mt-2"><b>Achtung: Im-Hundert-Rechnung!</b><br>
                 Der Zielverkaufspreis ist 100%, der Skonto ist ${currentScenario.ks}%. Der Barverkaufspreis entspricht also ${100 - currentScenario.ks}%.<br>
                 Zielverkaufspreis = Barverkaufspreis / (1 - ${currentScenario.ks/100}) = ${formatCurrency(expectedValues.bvp)} / ${1 - currentScenario.ks/100}
                 </div>`,
                 `<b>+ Kundenskonto (${currentScenario.ks}%):</b> ${formatCurrency(expectedValues.zvp)} - ${formatCurrency(expectedValues.bvp)} = <b>${formatCurrency(expectedValues.ks_val)}</b>`,
-                `<b>= Zielverkaufspreis:</b> <b class="text-indigo-400">${formatCurrency(expectedValues.zvp)}</b>`,
+                `<b>= Zielverkaufspreis:</b> <b class="text-gray-400">${formatCurrency(expectedValues.zvp)}</b>`,
                 `<div class="p-2 bg-indigo-900/30 rounded border border-indigo-500/30 mt-2"><b>Achtung: Im-Hundert-Rechnung!</b><br>
                 Der Listenverkaufspreis ist 100%, der Rabatt ist ${currentScenario.kr}%. Der Zielverkaufspreis entspricht also ${100 - currentScenario.kr}%.<br>
                 Listenverkaufspreis = Zielverkaufspreis / (1 - ${currentScenario.kr/100}) = ${formatCurrency(expectedValues.zvp)} / ${1 - currentScenario.kr/100}

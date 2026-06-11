@@ -15,10 +15,10 @@
         .chat-error { background: #7f1d1d; color: #fecaca; border: 1px solid #dc2626; border-bottom-left-radius: 0; align-self: flex-start; }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
     <div class="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
         <div class="mb-6 flex items-center justify-between">
-            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+            <a href="englisch.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Zurück
             </a>
@@ -27,13 +27,13 @@
 
         <div class="glass-card rounded-2xl p-4 flex-grow flex flex-col mb-4 overflow-hidden relative">
 
-            <div id="start-overlay" class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+            <div id="start-overlay" class="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center z-20">
                 <h2 class="text-3xl font-bold text-teal-400 mb-4">Wer bin ich? (Hardware)</h2>
-                <p class="text-slate-300 mb-6 max-w-md text-center">Ich habe mir eine IT-Komponente ausgedacht. Stelle grammatikalisch korrekte englische Ja/Nein-Fragen (z.B. "Does it...", "Is it..."), um sie zu erraten!</p>
+                <p class="text-gray-400 mb-6 max-w-md text-center">Ich habe mir eine IT-Komponente ausgedacht. Stelle grammatikalisch korrekte englische Ja/Nein-Fragen (z.B. "Does it...", "Is it..."), um sie zu erraten!</p>
                 <button id="start-btn" class="px-8 py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl transition-colors">Start Game</button>
             </div>
 
-            <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4">
+            <div class="flex items-center justify-between border-b border-gray-700 pb-2 mb-4">
                 <div class="flex items-center gap-3">
                     <div class="text-3xl">🤖</div>
                     <div>
@@ -41,7 +41,7 @@
                         <div class="text-xs text-teal-400 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span> Online</div>
                     </div>
                 </div>
-                <div class="text-sm text-slate-400">Versuche: <span id="attempts">0</span>/10</div>
+                <div class="text-sm text-gray-500">Versuche: <span id="attempts">0</span>/10</div>
             </div>
 
             <div id="chat-box" class="flex-grow flex flex-col overflow-y-auto mb-4 space-y-2 pr-2">
@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex gap-2">
-                <input type="text" id="chat-input" class="flex-grow bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 transition-colors" placeholder="Ask a yes/no question in English..." disabled>
+                <input type="text" id="chat-input" class="flex-grow bg-gray-900 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 transition-colors" placeholder="Ask a yes/no question in English..." disabled>
                 <button id="send-btn" class="px-6 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl transition-colors disabled:opacity-50" disabled>Send</button>
             </div>
             <div class="text-xs text-slate-500 mt-2 text-center">To guess the item, type: "Is it a [name]?"</div>

@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
         .signal-line {
             position: absolute;
@@ -56,13 +57,13 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <header class="w-full bg-black/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <a href="ap.html" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700">
+                <a href="ap.html" class="p-2 rounded-lg bg-gray-900 hover:bg-slate-700 text-gray-400 transition-colors border border-gray-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
@@ -71,7 +72,7 @@
                     <span class="text-orange-400">🎭</span> Polymorphie-Schaltzentrale
                 </h1>
             </div>
-            <div class="text-sm text-slate-300">Vielgestaltigkeit</div>
+            <div class="text-sm text-gray-400">Vielgestaltigkeit</div>
         </div>
     </header>
 
@@ -80,7 +81,7 @@
 
         <!-- Explanation -->
         <div class="glass-card rounded-3xl p-6 text-center">
-            <p class="text-slate-300 max-w-3xl mx-auto">
+            <p class="text-gray-400 max-w-3xl mx-auto">
                 <strong>Polymorphie</strong> bedeutet "Vielgestaltigkeit". Wir können eine Liste von verschiedenen Objekten (Hund, Katze, Faxgerät) haben, die alle eine gemeinsame Basisklasse oder ein Interface (<span class="mono text-orange-300">IEmpfaenger</span>) teilen. Wir rufen auf allen die <em>gleiche</em> Methode (<span class="mono text-blue-400">Reagieren()</span>) auf, aber jedes Objekt verhält sich <em>unterschiedlich</em>.
             </p>
         </div>
@@ -94,7 +95,7 @@
                     <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                     <span>CALL</span>
                 </button>
-                <div class="mt-4 bg-slate-800 border border-slate-700 px-4 py-2 rounded-lg mono text-sm text-slate-300 z-20 shadow-lg">
+                <div class="mt-4 bg-gray-900 border border-gray-700 px-4 py-2 rounded-lg mono text-sm text-gray-400 z-20 shadow-lg">
                     <span class="text-blue-400">foreach</span> (<span class="text-teal-300">IEmpfaenger</span> e <span class="text-blue-400">in</span> liste)<br>
                     &nbsp;&nbsp;e.<span class="text-yellow-200">Reagieren</span>();
                 </div>
@@ -108,10 +109,10 @@
                     <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-3xl rounded-bl-none font-bold text-center shadow-lg border-2 border-slate-200">
                         "Wuff! Wuff!" 🐕
                     </div>
-                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-dog">
+                    <div class="w-20 h-20 bg-gray-900 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-dog">
                         🐕
                     </div>
-                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                    <div class="mt-3 bg-black border border-gray-700 px-3 py-1 rounded text-xs mono text-teal-300">
                         class Hund
                     </div>
                 </div>
@@ -121,10 +122,10 @@
                     <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-3xl rounded-b-none font-bold text-center shadow-lg border-2 border-slate-200">
                         "Hallo, wer da?" 👤
                     </div>
-                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-human">
+                    <div class="w-20 h-20 bg-gray-900 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-human">
                         👨‍💼
                     </div>
-                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                    <div class="mt-3 bg-black border border-gray-700 px-3 py-1 rounded text-xs mono text-teal-300">
                         class Mensch
                     </div>
                 </div>
@@ -134,10 +135,10 @@
                     <div class="reaction-bubble absolute bottom-full mb-4 bg-white text-slate-900 px-4 py-2 rounded-3xl rounded-br-none font-bold text-center shadow-lg border-2 border-slate-200">
                         *Piep krrrrz* 📠
                     </div>
-                    <div class="w-20 h-20 bg-slate-800 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-fax">
+                    <div class="w-20 h-20 bg-gray-900 border-2 border-slate-600 rounded-3xl flex items-center justify-center text-4xl shadow-lg relative z-20" id="target-fax">
                         📠
                     </div>
-                    <div class="mt-3 bg-slate-900 border border-slate-700 px-3 py-1 rounded text-xs mono text-teal-300">
+                    <div class="mt-3 bg-black border border-gray-700 px-3 py-1 rounded text-xs mono text-teal-300">
                         class FaxGeraet
                     </div>
                 </div>

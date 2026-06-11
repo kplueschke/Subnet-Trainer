@@ -9,18 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
-            overflow: hidden; /* Prevent scrolling during game */
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
         #game-area {
@@ -63,12 +63,12 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col">
+<body class="text-gray-300 min-h-screen flex flex-col">
 
     <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -81,7 +81,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-orange-500 mb-2">
                 Firewall-Regel-Türsteher
             </h1>
-            <p class="text-slate-300">Entscheide innerhalb von Sekunden: ALLOW oder DROP basierend auf der ACL.</p>
+            <p class="text-gray-400">Entscheide innerhalb von Sekunden: ALLOW oder DROP basierend auf der ACL.</p>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-6 flex-grow">
@@ -89,17 +89,17 @@
             <!-- ACL Rules -->
             <div class="w-full lg:w-1/3 glass-card rounded-3xl p-6 flex flex-col h-full">
                 <h2 class="text-xl font-bold text-white mb-4">Active ACL</h2>
-                <div class="bg-slate-900 rounded-xl p-4 mono text-sm flex-grow overflow-y-auto border border-slate-700">
+                <div class="bg-black rounded-xl p-4 mono text-sm flex-grow overflow-y-auto border border-gray-700">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="text-slate-500 border-b border-slate-700">
+                            <tr class="text-slate-500 border-b border-gray-700">
                                 <th class="pb-2">ID</th>
                                 <th class="pb-2">Proto</th>
                                 <th class="pb-2">Port</th>
                                 <th class="pb-2 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="acl-table" class="text-slate-300">
+                        <tbody id="acl-table" class="text-gray-400">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -113,16 +113,16 @@
                     <div class="firewall-wall" id="firewall"></div>
 
                     <!-- Start Overlay -->
-                    <div id="start-screen" class="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center z-20 backdrop-blur-sm">
+                    <div id="start-screen" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-20 backdrop-blur-sm">
                         <h2 class="text-2xl font-bold text-white mb-4">Bereit?</h2>
-                        <p class="text-slate-300 mb-8 max-w-md text-center">Ein IP-Paket nähert sich. Du hast nur kurz Zeit, die ACL zu prüfen und zu entscheiden.</p>
+                        <p class="text-gray-400 mb-8 max-w-md text-center">Ein IP-Paket nähert sich. Du hast nur kurz Zeit, die ACL zu prüfen und zu entscheiden.</p>
                         <button id="btn-start" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all transform hover:scale-105">
                             Spiel Starten
                         </button>
                     </div>
 
                     <!-- Game Over Overlay -->
-                    <div id="game-over-screen" class="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center z-20 backdrop-blur-sm hidden">
+                    <div id="game-over-screen" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-20 backdrop-blur-sm hidden">
                         <h2 class="text-3xl font-bold text-red-500 mb-2">Game Over!</h2>
                         <p class="text-xl text-white mb-6">Dein Score: <span id="final-score" class="font-bold text-blue-400">0</span></p>
                         <button id="btn-restart" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
@@ -142,7 +142,7 @@
                 </div>
 
                 <!-- Timer Bar -->
-                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="w-full h-2 bg-gray-900 rounded-full overflow-hidden">
                     <div id="timer-bar" class="h-full bg-blue-500 w-full" style="transition: width 0.1s linear;"></div>
                 </div>
 
@@ -194,7 +194,7 @@
         const tbody = document.getElementById('acl-table');
         aclRules.forEach(rule => {
             tbody.innerHTML += `
-                <tr class="border-b border-slate-800">
+                <tr class="border-b border-gray-800">
                     <td class="py-2">${rule.id}</td>
                     <td>${rule.proto}</td>
                     <td>${rule.port}</td>
@@ -212,10 +212,10 @@
             currentExpectedAction = pData.expected;
 
             currentPacketEl = document.createElement('div');
-            currentPacketEl.className = 'packet bg-slate-800 border-2 border-slate-600 p-3 rounded-lg shadow-lg flex flex-col items-center justify-center mono text-xs';
+            currentPacketEl.className = 'packet bg-gray-900 border-2 border-slate-600 p-3 rounded-lg shadow-lg flex flex-col items-center justify-center mono text-xs';
             currentPacketEl.innerHTML = `
                 <span class="text-blue-400 font-bold mb-1">${pData.proto}</span>
-                <span class="text-slate-300">Port: ${pData.port}</span>
+                <span class="text-gray-400">Port: ${pData.port}</span>
             `;
 
             packetPos = 0;

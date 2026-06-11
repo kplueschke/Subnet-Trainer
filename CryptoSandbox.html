@@ -9,17 +9,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            background-image: radial-gradient(circle at top, #1e293b, #0f172a);
+            background-color: #050505;
+            background-image: radial-gradient(circle at top, #111111, #000000);
         }
         .mono {
             font-family: 'Fira Code', monospace;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
         .matrix-bg {
@@ -31,12 +32,12 @@
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col justify-between">
+<body class="text-gray-300 min-h-screen flex flex-col justify-between">
 
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <a href="its.html" class="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+            <a href="its.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -48,7 +49,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-lime-500 mb-4">
                 Verschlüsselungs-Sandkasten
             </h1>
-            <p class="text-slate-300 max-w-2xl mx-auto">
+            <p class="text-gray-400 max-w-2xl mx-auto">
                 Beobachte live, wie Klartext durch symmetrische (z.B. AES) und asymmetrische (RSA) Algorithmen transformiert wird.
             </p>
         </div>
@@ -58,44 +59,44 @@
             <!-- Controls Sidebar -->
             <div class="w-full lg:w-1/3 glass-card rounded-3xl p-6 flex flex-col gap-6">
                 <div>
-                    <h2 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Verfahren</h2>
-                    <select id="algo-select" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 mb-4">
+                    <h2 class="text-lg font-bold text-white mb-4 border-b border-gray-700 pb-2">Verfahren</h2>
+                    <select id="algo-select" class="w-full bg-black border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 mb-4">
                         <option value="sym">Symmetrisch (Simulation AES-ähnlich)</option>
                         <option value="asym">Asymmetrisch (Simulation RSA-ähnlich)</option>
                     </select>
                 </div>
 
                 <!-- Keys for Symmetric -->
-                <div id="sym-keys" class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                <div id="sym-keys" class="bg-gray-900/50 rounded-xl p-4 border border-gray-700">
                     <div class="flex items-center gap-2 mb-2 text-emerald-400 font-bold">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                         Shared Secret Key
                     </div>
-                    <input type="text" id="sym-key-input" value="SuperSecretKey123" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white mono text-sm mb-2" placeholder="Schlüssel eingeben">
-                    <p class="text-xs text-slate-300">Sender und Empfänger nutzen denselben Schlüssel.</p>
+                    <input type="text" id="sym-key-input" value="SuperSecretKey123" class="w-full bg-black border border-slate-600 rounded-lg px-3 py-2 text-white mono text-sm mb-2" placeholder="Schlüssel eingeben">
+                    <p class="text-xs text-gray-400">Sender und Empfänger nutzen denselben Schlüssel.</p>
                 </div>
 
                 <!-- Keys for Asymmetric -->
                 <div id="asym-keys" class="hidden flex flex-col gap-4">
-                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                    <div class="bg-gray-900/50 rounded-xl p-4 border border-gray-700">
                         <div class="flex items-center gap-2 mb-2 text-blue-400 font-bold">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
                             Public Key (Empfänger)
                         </div>
-                        <div class="text-xs mono bg-slate-900 p-2 rounded text-blue-300 break-all mb-2">
+                        <div class="text-xs mono bg-black p-2 rounded text-blue-300 break-all mb-2">
                             -----BEGIN PUBLIC KEY-----<br>MIGfMA0GCSqGSIb3...<br>-----END PUBLIC KEY-----
                         </div>
-                        <p class="text-xs text-slate-300">Wird vom Sender zum Verschlüsseln benutzt.</p>
+                        <p class="text-xs text-gray-400">Wird vom Sender zum Verschlüsseln benutzt.</p>
                     </div>
-                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                    <div class="bg-gray-900/50 rounded-xl p-4 border border-gray-700">
                         <div class="flex items-center gap-2 mb-2 text-red-400 font-bold">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                             Private Key (Empfänger)
                         </div>
-                        <div class="text-xs mono bg-slate-900 p-2 rounded text-red-300 break-all mb-2">
+                        <div class="text-xs mono bg-black p-2 rounded text-red-300 break-all mb-2">
                             -----BEGIN PRIVATE KEY-----<br>MIICdwIBADANBgk...<br>-----END PRIVATE KEY-----
                         </div>
-                        <p class="text-xs text-slate-300">Bleibt geheim. Wird zum Entschlüsseln benutzt.</p>
+                        <p class="text-xs text-gray-400">Bleibt geheim. Wird zum Entschlüsseln benutzt.</p>
                     </div>
                 </div>
 
@@ -107,10 +108,10 @@
                 <!-- Sender Box -->
                 <div class="glass-card rounded-3xl p-6 border-l-4 border-l-emerald-500">
                     <h3 class="font-bold text-white mb-2">Sender (Alice)</h3>
-                    <p class="text-xs text-slate-300 mb-4" id="sender-desc">Verschlüsselt mit dem Shared Key.</p>
+                    <p class="text-xs text-gray-400 mb-4" id="sender-desc">Verschlüsselt mit dem Shared Key.</p>
 
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Klartext</label>
-                    <textarea id="input-text" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Tippe eine geheime Nachricht..."></textarea>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Klartext</label>
+                    <textarea id="input-text" rows="3" class="w-full bg-black border border-gray-700 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Tippe eine geheime Nachricht..."></textarea>
                 </div>
 
                 <!-- Network Channel -->
@@ -119,7 +120,7 @@
                         <div class="w-0.5 h-full bg-slate-700"></div>
                     </div>
                     <div class="glass-card matrix-bg z-10 rounded-xl p-4 w-full max-w-md border border-slate-600 shadow-xl text-center">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Internet (Unsicherer Kanal)</h4>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Internet (Unsicherer Kanal)</h4>
                         <div id="cipher-text" class="mono text-sm text-lime-400 break-all h-16 overflow-y-auto">
                             <!-- Ciphertext appears here -->
                         </div>
@@ -129,10 +130,10 @@
                 <!-- Receiver Box -->
                 <div class="glass-card rounded-3xl p-6 border-l-4 border-l-blue-500">
                     <h3 class="font-bold text-white mb-2">Empfänger (Bob)</h3>
-                    <p class="text-xs text-slate-300 mb-4" id="receiver-desc">Entschlüsselt mit dem Shared Key.</p>
+                    <p class="text-xs text-gray-400 mb-4" id="receiver-desc">Entschlüsselt mit dem Shared Key.</p>
 
-                    <label class="block text-sm font-medium text-slate-300 mb-1">Entschlüsselter Text</label>
-                    <div id="decrypted-text" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white min-h-[5rem] whitespace-pre-wrap">
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Entschlüsselter Text</label>
+                    <div id="decrypted-text" class="w-full bg-black border border-gray-700 rounded-xl p-3 text-white min-h-[5rem] whitespace-pre-wrap">
                     </div>
                 </div>
 
